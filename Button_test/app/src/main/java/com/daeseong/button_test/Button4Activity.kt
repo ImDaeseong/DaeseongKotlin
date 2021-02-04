@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 class Button4Activity : AppCompatActivity() {
 
-    private val TAG: String = Button4Activity::class.java.simpleName;
+    private val tag: String = Button4Activity::class.java.simpleName;
 
     private var button4 : Button? = null;
 
@@ -19,7 +19,7 @@ class Button4Activity : AppCompatActivity() {
         button4 = findViewById<Button>(R.id.button4)
         button4!!.setOnClickListener {
 
-            //Log.e(TAG, "button4_Click")
+            //Log.e(tag, "button4_Click")
 
             Toast.makeText(this@Button4Activity, "button4_Click", Toast.LENGTH_SHORT).show()
         }

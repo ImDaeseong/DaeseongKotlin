@@ -9,7 +9,7 @@ import android.widget.Toast
 
 class Button6Activity : AppCompatActivity(), View.OnClickListener {
 
-    private val TAG: String = Button6Activity::class.java.simpleName;
+    private val tag: String = Button6Activity::class.java.simpleName;
 
     private var button10 : Button? = null;
     private var button11 : Button? = null;
@@ -30,7 +30,7 @@ class Button6Activity : AppCompatActivity(), View.OnClickListener {
         if (v != null) {
 
             //var btn = v as Button;
-            //Log.e(TAG, btn.text as String)
+            //Log.e(tag, btn.text as String)
 
             when (v.id) {
 

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Button3Activity : AppCompatActivity() {
 
-    private val TAG: String = Button3Activity::class.java.simpleName;
+    private val tag: String = Button3Activity::class.java.simpleName;
 
     private var button3 : Button? = null;
 
@@ -23,7 +23,7 @@ class Button3Activity : AppCompatActivity() {
 
     private fun button3Click(): View.OnClickListener? = View.OnClickListener {
 
-        //Log.e(TAG, "button3_Click")
+        //Log.e(tag, "button3_Click")
 
         Toast.makeText(this@Button3Activity, "button3_Click", Toast.LENGTH_SHORT).show()
     }

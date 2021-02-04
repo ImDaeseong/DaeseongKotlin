@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() , View.OnClickListener {
 
-    private val TAG: String = MainActivity::class.java.simpleName;
+    private val tag: String = MainActivity::class.java.simpleName;
 
     private var button1 : Button? = null;
     private var button2 : Button? = null;
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
 
                 R.id.button1 -> {
 
-                    //Log.e(TAG, "button1_Click")
+                    //Log.e(tag, "button1_Click")
 
                     val intent = Intent(this, Button1Activity::class.java)
                     startActivity(intent)
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
 
                 R.id.button2 -> {
 
-                    //Log.e(TAG, "button2_Click")
+                    //Log.e(tag, "button2_Click")
 
                     val intent = Intent(this, Button2Activity::class.java)
                     startActivity(intent)
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
 
                 R.id.button3 -> {
 
-                    Log.e(TAG, "button3_Click")
+                    //Log.e(tag, "button3_Click")
 
                     val intent = Intent(this, Button3Activity::class.java)
                     startActivity(intent)
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
 
                 R.id.button4 -> {
 
-                    //Log.e(TAG, "button4_Click")
+                    //Log.e(tag, "button4_Click")
 
                     val intent = Intent(this, Button4Activity::class.java)
                     startActivity(intent)
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
 
                 R.id.button5 -> {
 
-                    //Log.e(TAG, "button5_Click")
+                    //Log.e(tag, "button5_Click")
 
                     val intent = Intent(this, Button5Activity::class.java)
                     startActivity(intent)
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
 
                 R.id.button6 -> {
 
-                    //Log.e(TAG, "button6_Click")
+                    //Log.e(tag, "button6_Click")
 
                     val intent = Intent(this, Button6Activity::class.java)
                     startActivity(intent)

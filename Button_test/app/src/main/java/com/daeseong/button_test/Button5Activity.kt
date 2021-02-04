@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Button5Activity : AppCompatActivity() {
 
-    private val TAG: String = Button5Activity::class.java.simpleName;
+    private val tag: String = Button5Activity::class.java.simpleName;
 
     private var button5 : Button? = null;
     private var button6 : Button? = null;
@@ -47,7 +47,7 @@ class Button5Activity : AppCompatActivity() {
         if (view != null) {
 
             //var btn = view as Button;
-            //Log.e(TAG, btn.text as String)
+            //Log.e(tag, btn.text as String)
 
             when (view.id) {
 

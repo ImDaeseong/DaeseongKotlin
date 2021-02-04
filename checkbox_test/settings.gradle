@@ -1,0 +1,2 @@
+rootProject.name='checkbox_test'
+include ':app'

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Button2Activity : AppCompatActivity() {
 
-    private val TAG: String = Button2Activity::class.java.simpleName;
+    private val tag: String = Button2Activity::class.java.simpleName;
 
     private var button2 : Button? = null;
 
@@ -21,7 +21,7 @@ class Button2Activity : AppCompatActivity() {
         button2 = findViewById<Button>(R.id.button2)
         button2!!.setOnClickListener(View.OnClickListener {
 
-            //Log.e(TAG, "button2_Click")
+            //Log.e(tag, "button2_Click")
 
             Toast.makeText(this@Button2Activity, "button2_Click", Toast.LENGTH_SHORT).show()
         })

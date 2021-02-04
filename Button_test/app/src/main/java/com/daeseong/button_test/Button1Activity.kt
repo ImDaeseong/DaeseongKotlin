@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Button1Activity : AppCompatActivity() {
 
-    private val TAG: String = Button1Activity::class.java.simpleName;
+    private val tag: String = Button1Activity::class.java.simpleName;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +18,7 @@ class Button1Activity : AppCompatActivity() {
 
     fun button1Click(v: View?) {
 
-        //Log.e(TAG, "button1_Click")
+        //Log.e(tag, "button1_Click")
 
         Toast.makeText(this@Button1Activity, "button1_Click", Toast.LENGTH_SHORT).show()
     }
