@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.daeseong.Button1Activity
 
 
 class Button1Activity : AppCompatActivity() {

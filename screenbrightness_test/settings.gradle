@@ -1,0 +1,2 @@
+rootProject.name='screenbrightness_test'
+include ':app'
