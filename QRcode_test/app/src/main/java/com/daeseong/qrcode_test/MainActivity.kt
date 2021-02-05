@@ -1,10 +1,15 @@
 package com.daeseong.qrcode_test
 
+import android.Manifest
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -18,6 +23,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        checkPermission()
 
         button1 = findViewById<Button>(R.id.button1)
         button1!!.setOnClickListener(this);
@@ -61,6 +68,42 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     val intent = Intent(this, Main4Activity::class.java)
                     startActivity(intent)
                 }
+            }
+        }
+
+    }
+
+    private fun checkPermission(): Boolean {
+
+        //마시멜로 이상일 경우만 권한 체크
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            //권한이 없는 경우 요청
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)
+                return false
+            }
+        }
+        return true
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 1) {
+
+            if (grantResults.isNotEmpty()) {
+
+                val result = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                if (!result) {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                            requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
+                        }
+                    }
+                }
+
             }
         }
 

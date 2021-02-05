@@ -8,11 +8,19 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 class Main2Activity : AppCompatActivity() {
 
-    private val tag: String = Main1Activity::class.java.simpleName;
+    private val tag: String = Main2Activity::class.java.simpleName;
 
     private var zXingScannerView: ZXingScannerView? = null
 
     private var fL1: FrameLayout? = null
+
+    private val handle: ZXingScannerView.ResultHandler =  ZXingScannerView.ResultHandler { result ->
+
+        val txt = result.text
+        val sBarcodeFormatText = result.barcodeFormat.toString()
+
+        stopScanner()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +41,7 @@ class Main2Activity : AppCompatActivity() {
 
     private fun initScanner() {
         zXingScannerView = ZXingScannerView(this)
-        zXingScannerView!!.setResultHandler(ZXingScannerViewResultHandler())
+        zXingScannerView!!.setResultHandler(handle)
         fL1!!.addView(zXingScannerView)
     }
 
@@ -44,5 +52,4 @@ class Main2Activity : AppCompatActivity() {
     private fun stopScanner() {
         zXingScannerView!!.stopCamera()
     }
-
 }
