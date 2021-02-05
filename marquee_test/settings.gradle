@@ -1,0 +1,2 @@
+rootProject.name='marquee_test'
+include ':app'
