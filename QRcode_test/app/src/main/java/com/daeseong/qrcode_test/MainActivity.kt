@@ -1,4 +1,4 @@
-package com.daeseong.barcode_test
+package com.daeseong.qrcode_test
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -40,30 +40,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 R.id.button1 -> {
 
-                    val intent = Intent(this, Qr1Activity::class.java)
+                    val intent = Intent(this, Main1Activity::class.java)
                     startActivity(intent)
                 }
 
                 R.id.button2 -> {
 
-                    val intent = Intent(this, Qr2Activity::class.java)
+                    val intent = Intent(this, Main2Activity::class.java)
                     startActivity(intent)
                 }
 
                 R.id.button3 -> {
 
-                    val intent = Intent(this, Qr3Activity::class.java)
+                    val intent = Intent(this, Main3Activity::class.java)
                     startActivity(intent)
                 }
 
                 R.id.button4 -> {
 
-                    val intent = Intent(this, Qr4Activity::class.java)
+                    val intent = Intent(this, Main4Activity::class.java)
                     startActivity(intent)
                 }
-
             }
         }
 
     }
+
 }
