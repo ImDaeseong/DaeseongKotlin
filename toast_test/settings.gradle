@@ -1,0 +1,2 @@
+rootProject.name='toast_test'
+include ':app'
