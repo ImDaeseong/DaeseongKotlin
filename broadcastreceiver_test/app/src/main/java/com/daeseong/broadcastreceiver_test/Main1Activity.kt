@@ -8,7 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+
+class Main1Activity : AppCompatActivity() {
 
     private val tag: String = MainActivity::class.java.simpleName
 
@@ -17,11 +18,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main1)
 
         initBroadcastReceiver()
-
-        startService(Intent(this, ScreenOnOffService::class.java))
     }
 
     override fun onDestroy() {
@@ -35,14 +34,27 @@ class MainActivity : AppCompatActivity() {
         broadcastReceiver = object : BroadcastReceiver() {
 
             override fun onReceive(context: Context, intent: Intent) {
-                val ntype = intent.extras!!.getInt("type")
-                val sOn = intent.extras!!.getString("screen")
-                Log.e(tag, "$ntype $sOn")
-                SendBroadcast()
+
+                if (intent.action == Intent.ACTION_SCREEN_OFF) {
+
+                    //Log.e(tag, "폰화면 꺼짐")
+                    val item = Intent("com.daeseong.Screen")
+                    item.putExtra("type", 2)
+                    item.putExtra("screen", "off")
+                    context.sendBroadcast(item)
+                } else if (intent.action == Intent.ACTION_SCREEN_ON) {
+
+                    //Log.e(tag, "폰화면 켜짐")
+                    val item = Intent("com.daeseong.Screen")
+                    item.putExtra("type", 2)
+                    item.putExtra("screen", "on")
+                    context.sendBroadcast(item)
+                }
             }
         }
         intentFilter = IntentFilter()
-        intentFilter!!.addAction("com.daeseong.Screen")
+        intentFilter!!.addAction(Intent.ACTION_SCREEN_ON)
+        intentFilter!!.addAction(Intent.ACTION_SCREEN_OFF)
         registerReceiver(broadcastReceiver, intentFilter)
     }
 
@@ -51,12 +63,5 @@ class MainActivity : AppCompatActivity() {
         if (broadcastReceiver != null) {
             unregisterReceiver(broadcastReceiver)
         }
-    }
-
-    private fun SendBroadcast() {
-
-        val intent = Intent(this, MyBroadcastReceiver::class.java)
-        intent.action = "android.intent.action.MyMessage"
-        sendBroadcast(intent)
     }
 }
