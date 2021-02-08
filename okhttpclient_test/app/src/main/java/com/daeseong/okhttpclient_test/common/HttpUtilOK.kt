@@ -1,4 +1,5 @@
-package com.daeseong.okhttpclient_test
+package com.daeseong.okhttpclient_test.common
+
 
 import okhttp3.*
 
