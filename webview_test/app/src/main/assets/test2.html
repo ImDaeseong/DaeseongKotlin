@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title>WebView 에서 Activity 호출하기 </title>
+</head>
+<body>
+    <a href="app://SendData">click</a>
+    <br><br>
+    <input type="button" value="Javascript_makeText" onClick="Call_Message('메시지 전달 테스트')" />
+    <br><br>
+    <input type="button" value="Javascript_finish" onClick="Call_Close()" />
+</body>
+<script type="text/javascript">
+    function Call_Message(message) {
+        Android.Javascript_makeText(message);
+    }
+
+    function Call_Close() {
+        Android.Javascript_finish();
+    }
+</script>
+</html>

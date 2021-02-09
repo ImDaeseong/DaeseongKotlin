@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Check1Activity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
 
-    private val tag: String = Check1Activity::class.java.simpleName;
+    private val tag: String = Check1Activity::class.java.simpleName
 
     private var checkBox1: CheckBox? = null
 

@@ -9,7 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag: String = MainActivity::class.java.simpleName;
+    private val tag: String = MainActivity::class.java.simpleName
 
     private var iv1: ImageView? = null
 

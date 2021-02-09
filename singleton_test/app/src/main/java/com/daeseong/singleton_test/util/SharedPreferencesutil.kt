@@ -7,7 +7,7 @@ import android.util.Log
 
 class SharedPreferencesutil {
 
-    private val tag: String = SharedPreferencesutil::class.java.simpleName;
+    private val tag: String = SharedPreferencesutil::class.java.simpleName
 
     private var sharedPreferences: SharedPreferences? = null
 

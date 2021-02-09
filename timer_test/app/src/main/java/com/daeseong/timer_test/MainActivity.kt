@@ -11,7 +11,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag: String = MainActivity::class.java.simpleName;
+    private val tag: String = MainActivity::class.java.simpleName
 
     private var tv1: TextView? = null
     private var btn1: Button? = null

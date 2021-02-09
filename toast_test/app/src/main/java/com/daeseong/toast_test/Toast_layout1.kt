@@ -7,7 +7,7 @@ import android.widget.Toast
 
 class Toast_layout1 {
 
-    private val tag: String = Toast_layout1::class.java.simpleName;
+    private val tag: String = Toast_layout1::class.java.simpleName
 
     private lateinit var toast: Toast
     private lateinit var tv1: TextView

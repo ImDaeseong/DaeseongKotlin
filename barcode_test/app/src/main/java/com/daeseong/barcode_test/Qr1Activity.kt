@@ -13,7 +13,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 class Qr1Activity : AppCompatActivity() , ZXingScannerView.ResultHandler {
 
-    private val tag: String = Qr1Activity::class.java.simpleName;
+    private val tag: String = Qr1Activity::class.java.simpleName
 
     private var zXingScannerView: ZXingScannerView? = null
 
@@ -21,8 +21,8 @@ class Qr1Activity : AppCompatActivity() , ZXingScannerView.ResultHandler {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr1)
 
-        zXingScannerView = ZXingScannerView(this);
-        setContentView(zXingScannerView);
+        zXingScannerView = ZXingScannerView(this)
+        setContentView(zXingScannerView)
 
 
         checkPermission()
@@ -30,13 +30,13 @@ class Qr1Activity : AppCompatActivity() , ZXingScannerView.ResultHandler {
 
     override fun handleResult(result: Result) {
 
-        Toast.makeText(this, result.text,Toast.LENGTH_LONG).show();
-        Toast.makeText(this, result.barcodeFormat.toString(),Toast.LENGTH_LONG).show();
+        Toast.makeText(this, result.text,Toast.LENGTH_LONG).show()
+        Toast.makeText(this, result.barcodeFormat.toString(),Toast.LENGTH_LONG).show()
 
         //한번 찍고 나서 멈추는걸 방지하기 위해
-        zXingScannerView!!.resumeCameraPreview(this);
+        zXingScannerView!!.resumeCameraPreview(this)
 
-        finish();
+        finish()
     }
 
 
@@ -47,11 +47,11 @@ class Qr1Activity : AppCompatActivity() , ZXingScannerView.ResultHandler {
 
             if( zXingScannerView == null) {
                 zXingScannerView = ZXingScannerView(this);
-                setContentView(zXingScannerView);
+                setContentView(zXingScannerView)
             }
 
-            zXingScannerView!!.setResultHandler(this);
-            zXingScannerView!!.startCamera();
+            zXingScannerView!!.setResultHandler(this)
+            zXingScannerView!!.startCamera()
         }
     }
 

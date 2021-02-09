@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Main3Activity : AppCompatActivity() {
 
-    private val tag: String = Main3Activity::class.java.simpleName;
+    private val tag: String = Main3Activity::class.java.simpleName
 
     private var pb1: ProgressBar? = null
     private var animator: ValueAnimator? = null

@@ -8,12 +8,12 @@ import android.widget.Button
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    private val tag: String = MainActivity::class.java.simpleName;
+    private val tag: String = MainActivity::class.java.simpleName
 
-    private var button1 : Button? = null;
-    private var button2 : Button? = null;
-    private var button3 : Button? = null;
-    private var button4 : Button? = null;
+    private var button1 : Button? = null
+    private var button2 : Button? = null
+    private var button3 : Button? = null
+    private var button4 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +24,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button3 = findViewById<Button>(R.id.button3)
         button4 = findViewById<Button>(R.id.button4)
 
-        button1!!.setOnClickListener(this);
-        button2!!.setOnClickListener(this);
-        button3!!.setOnClickListener(this);
-        button4!!.setOnClickListener(this);
+        button1!!.setOnClickListener(this)
+        button2!!.setOnClickListener(this)
+        button3!!.setOnClickListener(this)
+        button4!!.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {

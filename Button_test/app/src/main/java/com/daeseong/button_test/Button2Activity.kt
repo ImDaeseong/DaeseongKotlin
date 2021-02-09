@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Button2Activity : AppCompatActivity() {
 
-    private val tag: String = Button2Activity::class.java.simpleName;
+    private val tag: String = Button2Activity::class.java.simpleName
 
     private var button2 : Button? = null;
 

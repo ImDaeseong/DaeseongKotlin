@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag: String = MainActivity::class.java.simpleName;
+    private val tag: String = MainActivity::class.java.simpleName
 
-    private var switch1 : Switch? = null;
-    private var switch2: Switch? = null;
+    private var switch1 : Switch? = null
+    private var switch2: Switch? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +21,11 @@ class MainActivity : AppCompatActivity() {
         switch1!!.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
 
-                Log.e(tag , "isChecked");
+                Log.e(tag , "isChecked")
 
             } else {
 
-                Log.e(tag , "isUnChecked");
+                Log.e(tag , "isUnChecked")
             }
         }
 
@@ -33,11 +33,11 @@ class MainActivity : AppCompatActivity() {
         switch2!!.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
 
-                Log.e(tag , "isChecked");
+                Log.e(tag , "isChecked")
 
             } else {
 
-                Log.e(tag , "isUnChecked");
+                Log.e(tag , "isUnChecked")
             }
         }
 

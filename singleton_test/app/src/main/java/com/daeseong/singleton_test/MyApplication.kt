@@ -10,7 +10,7 @@ import com.daeseong.singleton_test.util.SharedPreferencesutil
 
 class MyApplication : Application() {
 
-    private val tag: String = MyApplication::class.java.simpleName;
+    private val tag: String = MyApplication::class.java.simpleName
 
     companion object {
         private lateinit var mContext: Context

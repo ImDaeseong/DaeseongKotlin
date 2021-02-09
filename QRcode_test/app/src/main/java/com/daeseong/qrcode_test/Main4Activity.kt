@@ -18,7 +18,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 class Main4Activity : AppCompatActivity() {
 
-    private val tag: String = Main4Activity::class.java.simpleName;
+    private val tag: String = Main4Activity::class.java.simpleName
 
     private var zXingScannerView: ZXingScannerView? = null
 
@@ -34,7 +34,7 @@ class Main4Activity : AppCompatActivity() {
             Handler().postDelayed({
 
                 //한번 찍고 나서 멈추는걸 방지하기 위해
-                zXingScannerView!!.resumeCameraPreview(this);
+                zXingScannerView!!.resumeCameraPreview(this)
 
             }, 1000)
         }
@@ -62,7 +62,7 @@ class Main4Activity : AppCompatActivity() {
         zXingScannerView = object : ZXingScannerView(this) {
             override fun createViewFinderView(context: Context?): IViewFinder? {
                 return CustomViewFinderView(context)
-                //return super.createViewFinderView(context);
+                //return super.createViewFinderView(context)
             }
         }
 

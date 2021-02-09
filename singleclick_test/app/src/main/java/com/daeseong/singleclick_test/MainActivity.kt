@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag: String = MainActivity::class.java.simpleName;
+    private val tag: String = MainActivity::class.java.simpleName
 
-    private var btn1 : Button? = null;
+    private var btn1 : Button? = null
 
     private var handler: Handler? = null
 

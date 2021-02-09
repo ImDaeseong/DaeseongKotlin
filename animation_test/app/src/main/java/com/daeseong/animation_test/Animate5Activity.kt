@@ -1,6 +1,7 @@
 package com.daeseong.animation_test
 
 import android.animation.ObjectAnimator
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.animation.AnticipateOvershootInterpolator
@@ -39,8 +40,8 @@ class Animate5Activity : AppCompatActivity() {
             val progressDrawable = progressbar1!!.progressDrawable.mutate()
             val nColor = animation.animatedValue as Int
             Log.e(tag, "nColor:" + nColor / 10)
-            //progressDrawable.setColorFilter(getResources().getColor(R.color.progressbar), PorterDuff.Mode.SRC_IN);
-            //progressbar1.setProgressDrawable(progressDrawable);
+            progressDrawable.setColorFilter(resources.getColor(R.color.progressbar), PorterDuff.Mode.SRC_IN);
+            progressbar1!!.progressDrawable = progressDrawable;
         }
     }
 }

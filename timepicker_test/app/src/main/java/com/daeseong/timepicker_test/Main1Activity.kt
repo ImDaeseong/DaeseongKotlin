@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Main1Activity : AppCompatActivity() {
 
-    private val tag: String = Main1Activity::class.java.simpleName;
+    private val tag: String = Main1Activity::class.java.simpleName
 
     private var timepicker1: TimePicker? = null
     private var nhour : Int = 0

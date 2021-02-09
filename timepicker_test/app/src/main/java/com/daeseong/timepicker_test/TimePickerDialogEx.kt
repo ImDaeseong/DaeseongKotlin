@@ -11,7 +11,7 @@ import android.widget.TimePicker
 
 class TimePickerDialogEx(context: Context) : Dialog(context) {
 
-    private val tag: String = TimePickerDialogEx::class.java.simpleName;
+    private val tag: String = TimePickerDialogEx::class.java.simpleName
 
     var BUTTON_TYPE = BUTTON_NEGATIVE
 

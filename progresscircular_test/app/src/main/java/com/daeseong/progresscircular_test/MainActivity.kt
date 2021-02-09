@@ -9,7 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag: String = MainActivity::class.java.simpleName;
+    private val tag: String = MainActivity::class.java.simpleName
 
     private var progress_circular: ProgressBar? = null
     private var tv1: TextView? = null

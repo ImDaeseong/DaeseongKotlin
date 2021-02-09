@@ -4,7 +4,7 @@ import android.util.Log
 
 class StringLib {
 
-    private val tag: String = StringLib::class.java.simpleName;
+    private val tag: String = StringLib::class.java.simpleName
 
     companion object {
         private var instance: StringLib? = null

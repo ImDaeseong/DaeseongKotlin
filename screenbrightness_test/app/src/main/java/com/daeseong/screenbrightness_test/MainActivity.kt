@@ -21,15 +21,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        seekBar1 = findViewById<SeekBar>(R.id.seekBar1);
-        tv1 = findViewById<TextView>(R.id.tv1);
+        seekBar1 = findViewById<SeekBar>(R.id.seekBar1)
+        tv1 = findViewById<TextView>(R.id.tv1)
 
-        layoutParams = window.attributes;
+        layoutParams = window.attributes
 
-        layoutParams!!.screenBrightness = 1f;
-        seekBar1!!.progress = 100;
-        //layoutParams!!.screenBrightness = 0 / 100.0f;
-        //seekBar1!!.progress = 0;
+        layoutParams!!.screenBrightness = 1f
+        seekBar1!!.progress = 100
+        //layoutParams!!.screenBrightness = 0 / 100.0f
+        //seekBar1!!.progress = 0
 
         setPercentText();
 

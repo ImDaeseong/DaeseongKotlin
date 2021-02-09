@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Main5Activity : AppCompatActivity() {
 
-    private val tag: String = Main5Activity::class.java.simpleName;
+    private val tag: String = Main5Activity::class.java.simpleName
 
     private var pb1: ProgressBar? = null
     private var progress : Long = 0

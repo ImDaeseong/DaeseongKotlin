@@ -9,13 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Button5Activity : AppCompatActivity() {
 
-    private val tag: String = Button5Activity::class.java.simpleName;
+    private val tag: String = Button5Activity::class.java.simpleName
 
-    private var button5 : Button? = null;
-    private var button6 : Button? = null;
-    private var button7 : Button? = null;
-    private var button8 : Button? = null;
-    private var button9 : Button? = null;
+    private var button5 : Button? = null
+    private var button6 : Button? = null
+    private var button7 : Button? = null
+    private var button8 : Button? = null
+    private var button9 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class Button5Activity : AppCompatActivity() {
 
         if (view != null) {
 
-            //var btn = view as Button;
+            //var btn = view as Button
             //Log.e(tag, btn.text as String)
 
             when (view.id) {

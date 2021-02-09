@@ -8,7 +8,7 @@ import android.widget.Toast
 
 class Toast_layout2(context: Context, sMsg: String) : Toast(context) {
 
-    private val tag: String = Toast_layout2::class.java.simpleName;
+    private val tag: String = Toast_layout2::class.java.simpleName
 
     private var tv1: TextView
     private var vlayout : View = View.inflate(context, R.layout.toast_layout1, null)

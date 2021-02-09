@@ -37,11 +37,11 @@ class MainActivity : AppCompatActivity() {
             val sLoadSaved = SharedPreferences_util().getValue(this, "sSaved", false) as Boolean
             val sLoadtemp = SharedPreferences_util().getValue(this, "stemp", "") as String
 
-            //Log.d(tag, "sLoadID:$sLoadID");
-            //Log.d(tag, "sLoadPassword:$sLoadPassword");
-            //Log.d(tag, "sLoadMemberNumber:$sLoadMemberNumber");
-            //Log.d(tag, "sLoadSaved:$sLoadSaved");
-            //Log.d(tag, "sLoadtemp:$sLoadtemp");
+            //Log.d(tag, "sLoadID:$sLoadID")
+            //Log.d(tag, "sLoadPassword:$sLoadPassword")
+            //Log.d(tag, "sLoadMemberNumber:$sLoadMemberNumber")
+            //Log.d(tag, "sLoadSaved:$sLoadSaved")
+            //Log.d(tag, "sLoadtemp:$sLoadtemp")
 
             editText1!!.setText(sLoadID)
             editText2!!.setText(sLoadPassword)
@@ -63,9 +63,9 @@ class MainActivity : AppCompatActivity() {
                 val sPassword = data!!.getStringExtra("sPassword")
                 val sMemberNumber = data!!.getStringExtra("sMemberNumber")
 
-                //Log.d(tag, "sID:$sID");
-                //Log.d(tag, "sPassword:$sPassword");
-                //Log.d(tag, "sMemberNumber:$sMemberNumber");
+                //Log.d(tag, "sID:$sID")
+                //Log.d(tag, "sPassword:$sPassword")
+                //Log.d(tag, "sMemberNumber:$sMemberNumber")
 
                 editText1!!.setText(sID)
                 editText2!!.setText(sPassword)
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         /*
         //단순 Activity 호출
         val intent = Intent(this, SharedPreferencesActivity::class.java)
-        startActivity(intent);
+        startActivity(intent)
         */
 
         //Activity 호출후 결과값 받음

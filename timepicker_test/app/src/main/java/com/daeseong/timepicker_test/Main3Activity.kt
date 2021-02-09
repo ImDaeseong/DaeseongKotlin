@@ -12,9 +12,9 @@ import java.util.*
 
 class Main3Activity : AppCompatActivity() {
 
-    private val tag: String = Main3Activity::class.java.simpleName;
+    private val tag: String = Main3Activity::class.java.simpleName
 
-    private var button1 : Button? = null;
+    private var button1 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

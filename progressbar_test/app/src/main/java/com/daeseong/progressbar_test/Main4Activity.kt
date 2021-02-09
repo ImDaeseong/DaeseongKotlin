@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Main4Activity : AppCompatActivity() {
 
-    private val tag: String = Main4Activity::class.java.simpleName;
+    private val tag: String = Main4Activity::class.java.simpleName
 
     private var pb1: ProgressBar? = null
 

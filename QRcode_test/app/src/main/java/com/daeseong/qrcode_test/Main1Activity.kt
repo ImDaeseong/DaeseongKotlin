@@ -14,10 +14,10 @@ import com.google.zxing.qrcode.QRCodeWriter
 
 class Main1Activity : AppCompatActivity() {
 
-    private val tag: String = Main1Activity::class.java.simpleName;
+    private val tag: String = Main1Activity::class.java.simpleName
 
     private var iv1: ImageView? = null
-    private var button1 : Button? = null;
+    private var button1 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

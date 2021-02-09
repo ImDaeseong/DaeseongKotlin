@@ -7,11 +7,11 @@ import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag: String = MainActivity::class.java.simpleName;
+    private val tag: String = MainActivity::class.java.simpleName
 
-    private var button1 : Button? = null;
-    private var button2 : Button? = null;
-    private var button3 : Button? = null;
+    private var button1 : Button? = null
+    private var button2 : Button? = null
+    private var button3 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

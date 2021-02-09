@@ -9,27 +9,27 @@ import android.widget.Toast
 
 class Button6Activity : AppCompatActivity(), View.OnClickListener {
 
-    private val tag: String = Button6Activity::class.java.simpleName;
+    private val tag: String = Button6Activity::class.java.simpleName
 
-    private var button10 : Button? = null;
-    private var button11 : Button? = null;
+    private var button10 : Button? = null
+    private var button11 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_button6)
 
         button10 = findViewById<Button>(R.id.button10)
-        button10!!.setOnClickListener(this);
+        button10!!.setOnClickListener(this)
 
         button11 = findViewById<Button>(R.id.button11)
-        button11!!.setOnClickListener(this);
+        button11!!.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
 
         if (v != null) {
 
-            //var btn = v as Button;
+            //var btn = v as Button
             //Log.e(tag, btn.text as String)
 
             when (v.id) {

@@ -11,7 +11,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 class Qr3Activity : AppCompatActivity() {
 
-    private val tag: String = Qr3Activity::class.java.simpleName;
+    private val tag: String = Qr3Activity::class.java.simpleName
 
     private var zXingScannerView: ZXingScannerView? = null
 

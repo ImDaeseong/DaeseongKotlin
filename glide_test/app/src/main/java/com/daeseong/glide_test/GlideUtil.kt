@@ -9,7 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 
 class GlideUtil {
 
-    private val tag: String = GlideUtil::class.java.simpleName;
+    private val tag: String = GlideUtil::class.java.simpleName
 
     companion object {
         private var instance: GlideUtil? = null

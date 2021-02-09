@@ -4,7 +4,7 @@ import android.util.Log
 
 class CheckDoublePressHandler {
 
-    private val tag: String = CheckDoublePressHandler::class.java.simpleName;
+    private val tag: String = CheckDoublePressHandler::class.java.simpleName
 
     private var lastTime: Long = 0
 
@@ -26,16 +26,16 @@ class CheckDoublePressHandler {
 
     fun isDoubleClick() : Boolean {
 
-        //Log.e(tag , "isDoubleClick start: $lastTime");
+        //Log.e(tag , "isDoubleClick start: $lastTime")
 
         if (System.currentTimeMillis() - lastTime <= 500) {
 
-            //Log.e(tag , "onCheckDoublePressed");
+            //Log.e(tag , "onCheckDoublePressed")
             return true
         }
         lastTime = System.currentTimeMillis()
 
-        //Log.e(tag , "isDoubleClick end: $lastTime");
+        //Log.e(tag , "isDoubleClick end: $lastTime")
 
         return false
     }

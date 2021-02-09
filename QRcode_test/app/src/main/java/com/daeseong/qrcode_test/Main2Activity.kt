@@ -8,7 +8,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 class Main2Activity : AppCompatActivity() {
 
-    private val tag: String = Main2Activity::class.java.simpleName;
+    private val tag: String = Main2Activity::class.java.simpleName
 
     private var zXingScannerView: ZXingScannerView? = null
 

@@ -53,16 +53,16 @@ class MainActivity : AppCompatActivity() {
     private fun setBatteryInfo(batteryLevel: Int) {
 
         if (batteryLevel >= 50) {
-            tvbattery!!.setTextColor(Color.GREEN);
+            tvbattery!!.setTextColor(Color.GREEN)
         }
         else if (batteryLevel >= 30) {
-            tvbattery!!.setTextColor(Color.YELLOW);
+            tvbattery!!.setTextColor(Color.YELLOW)
         }
         else {
-            tvbattery!!.setTextColor(Color.RED);
+            tvbattery!!.setTextColor(Color.RED)
         }
 
-        tvbattery!!.text = String.format("밧데리 잔량:%d%%", batteryLevel);
+        tvbattery!!.text = String.format("밧데리 잔량:%d%%", batteryLevel)
     }
 
 }

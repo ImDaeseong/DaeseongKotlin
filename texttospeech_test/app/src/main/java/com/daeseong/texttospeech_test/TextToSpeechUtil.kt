@@ -22,7 +22,7 @@ class TextToSpeechUtil(context: Context?) {
                             textToSpeech!!.language = Locale.KOREAN
                         }
                     }
-                    //textToSpeech.setLanguage(Locale.KOREAN);
+                    //textToSpeech.setLanguage(Locale.KOREAN)
                 }
             }
         } catch (e: Exception) {
@@ -40,7 +40,7 @@ class TextToSpeechUtil(context: Context?) {
                     textToSpeech!!.stop()
                 }
 
-                //textToSpeech.setSpeechRate(1.0f);//속도
+                //textToSpeech.setSpeechRate(1.0f)//속도
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     textToSpeech!!.speak(sText, TextToSpeech.QUEUE_ADD, null, null) //UtteranceProgressListener 이벤트 받지 않기 위해 null
                 } else {

@@ -35,6 +35,7 @@ class SensorInfo {
             //Log.e(tag, "onSensorChanged")
 
             if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+
                 val dX = event.values[0].toDouble()
                 val dY = event.values[1].toDouble()
                 val dZ = event.values[2].toDouble()
@@ -42,6 +43,7 @@ class SensorInfo {
                 val angleY = Math.atan2(dY, dZ) * 180 / Math.PI
                 val fFrentX = Math.abs(angleX)
                 val fFrentY = Math.abs(angleY)
+
                 if (fFrentX > 170 && fFrentY > 170) {
                     val item = Intent("com.daeseong.sensormanager_test.Front")
                     item.putExtra("front", "뒤면")
@@ -51,8 +53,11 @@ class SensorInfo {
                     item.putExtra("front", "앞면")
                     mContext!!.sendBroadcast(item)
                 }
+
             } else if (event.sensor.type == Sensor.TYPE_LIGHT) {
+
                 val fFrent = Math.abs(event.values[0])
+
                 if (fFrent == 0f) {
                     val item = Intent("com.daeseong.sensormanager_test.Front")
                     item.putExtra("front", "뒤면")
@@ -77,14 +82,17 @@ class SensorInfo {
 
         mContext = context
         sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
         if (sensorManager != null) {
             Accelsensor = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
             Lightsensor = sensorManager!!.getDefaultSensor(Sensor.TYPE_LIGHT)
+
             sensorManager!!.registerListener(
                 sensorEventListener,
                 Accelsensor,
                 SensorManager.SENSOR_DELAY_NORMAL
             )
+
             sensorManager!!.registerListener(
                 sensorEventListener,
                 Lightsensor,

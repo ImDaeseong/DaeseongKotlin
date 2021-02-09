@@ -7,7 +7,7 @@ import android.widget.Toast
 
 class Check2Activity : AppCompatActivity() {
 
-    private val tag: String = Check2Activity::class.java.simpleName;
+    private val tag: String = Check2Activity::class.java.simpleName
 
     private var checkBox2: CheckBox? = null
     private var checkBox3: CheckBox? = null
@@ -21,14 +21,14 @@ class Check2Activity : AppCompatActivity() {
         checkBox2!!.setOnCheckedChangeListener { _, isChecked ->
 
             if (isChecked) {
-                Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show()
             }
         }
 
         checkBox3 = findViewById<CheckBox>(R.id.checkBox3)
         checkBox3!!.setOnCheckedChangeListener{compoundButton, isChecked ->
             if(isChecked){
-                Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -36,7 +36,7 @@ class Check2Activity : AppCompatActivity() {
         checkBox4!!.setOnCheckedChangeListener{ _, isChecked ->
 
             if(isChecked){
-                Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show()
             }
         }
 

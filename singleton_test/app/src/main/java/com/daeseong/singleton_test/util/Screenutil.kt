@@ -7,7 +7,7 @@ import android.view.WindowManager
 
 class Screenutil {
 
-    private val tag: String = Screenutil::class.java.simpleName;
+    private val tag: String = Screenutil::class.java.simpleName
 
     companion object {
         private var instance: Screenutil? = null

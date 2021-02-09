@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
             if( textToSpeechUtil!!.isLanguageAvailable() ) {
                 textToSpeechUtil!!.Speak("가나다라마바사아자차타파하")
             } else {
-                Toast.makeText(this, "한글을 사용할수 없습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "한글을 사용할수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         })
     }

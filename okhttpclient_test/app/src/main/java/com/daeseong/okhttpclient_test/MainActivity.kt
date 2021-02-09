@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getlogin(this, "https://nid.naver.com/nidlogin.login", "", "");
-        getBTC(this, "https://api.bithumb.com/public/ticker/BTC");
+        getlogin(this, "https://nid.naver.com/nidlogin.login", "", "")
+        getBTC(this, "https://api.bithumb.com/public/ticker/BTC")
     }
 
     private fun getBTC(context: Context, address: String) {

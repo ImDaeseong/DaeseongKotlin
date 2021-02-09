@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 class FirstActivity : AppCompatActivity() {
 
+    private val tag: String = FirstActivity::class.java.simpleName
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first)

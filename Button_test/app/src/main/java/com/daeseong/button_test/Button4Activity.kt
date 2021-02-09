@@ -8,9 +8,9 @@ import android.widget.Toast;
 
 class Button4Activity : AppCompatActivity() {
 
-    private val tag: String = Button4Activity::class.java.simpleName;
+    private val tag: String = Button4Activity::class.java.simpleName
 
-    private var button4 : Button? = null;
+    private var button4 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

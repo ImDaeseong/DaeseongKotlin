@@ -1,0 +1,2 @@
+rootProject.name='gameinfo_test'
+include ':app'

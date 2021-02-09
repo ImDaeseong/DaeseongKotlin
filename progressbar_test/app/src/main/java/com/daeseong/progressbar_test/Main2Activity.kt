@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Main2Activity : AppCompatActivity() {
 
-    private val tag: String = Main2Activity::class.java.simpleName;
+    private val tag: String = Main2Activity::class.java.simpleName
 
     private var pb1: ProgressBar? = null
     private var animator: ValueAnimator? = null

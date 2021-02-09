@@ -4,7 +4,7 @@ import android.content.Context
 
 class DbHandler {
 
-    private val tag: String = DbHandler::class.java.simpleName;
+    private val tag: String = DbHandler::class.java.simpleName
 
     private var dbHelperAlarm: DbHelperAlarm? = null
 

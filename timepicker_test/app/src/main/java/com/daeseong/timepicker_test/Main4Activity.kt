@@ -10,9 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Main4Activity : AppCompatActivity() {
 
-    private val tag: String = Main4Activity::class.java.simpleName;
+    private val tag: String = Main4Activity::class.java.simpleName
 
-    private var button1 : Button? = null;
+    private var button1 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

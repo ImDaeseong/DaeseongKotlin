@@ -8,7 +8,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 class Main3Activity : AppCompatActivity() {
 
-    private val tag: String = Main3Activity::class.java.simpleName;
+    private val tag: String = Main3Activity::class.java.simpleName
 
     private var zXingScannerView: ZXingScannerView? = null
 
@@ -22,7 +22,7 @@ class Main3Activity : AppCompatActivity() {
             val sBarcodeFormatText = result.barcodeFormat.toString()
 
             //한번 찍고 나서 멈추는걸 방지하기 위해
-            zXingScannerView!!.resumeCameraPreview(this);
+            zXingScannerView!!.resumeCameraPreview(this)
         }
     }
 

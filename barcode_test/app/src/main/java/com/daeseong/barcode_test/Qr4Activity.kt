@@ -16,7 +16,7 @@ import java.util.*
 
 class Qr4Activity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
-    private val tag: String = Qr4Activity::class.java.simpleName;
+    private val tag: String = Qr4Activity::class.java.simpleName
 
     private var zXingScannerView: ZXingScannerView? = null
 
@@ -38,7 +38,7 @@ class Qr4Activity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         imageView2 = findViewById<ImageView>(R.id.imageView2)
         imageView3 = findViewById<ImageView>(R.id.imageView3)
 
-        sBarcode = "ddsfasf123213441312349780"//"adQAd123DBV6";//"aAbcede";//"1234567890";
+        sBarcode = "ddsfasf123213441312349780"//"adQAd123DBV6"//"aAbcede"//"1234567890"
         displayCode1(sBarcode!!);
         displayCode2(sBarcode!!);
         displayCode3(sBarcode!!);

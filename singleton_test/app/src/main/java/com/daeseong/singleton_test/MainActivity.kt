@@ -12,7 +12,7 @@ import com.daeseong.singleton_test.util.SharedPreferencesutil
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag: String = MainActivity::class.java.simpleName;
+    private val tag: String = MainActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,13 +60,13 @@ class MainActivity : AppCompatActivity() {
             SharedPreferencesutil.getInstance().remove("FLAG");
         }
 
-        //SharedPreferencesutil.getInstance().clear();
+        //SharedPreferencesutil.getInstance().clear()
 
-        //AddAll();
-        //Add();
-        //delete();
-        //clearAlarm();
-        //findAlarm();
+        //AddAll()
+        //Add()
+        //delete()
+        //clearAlarm()
+        //findAlarm()
     }
 
     private fun AddAll() {
