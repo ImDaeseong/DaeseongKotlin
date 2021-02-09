@@ -1,0 +1,2 @@
+rootProject.name='toolbar_test'
+include ':app'
