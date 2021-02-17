@@ -9,7 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".Style4Activity_Dialog"
+            android:theme="@style/daeseong1DialogTheme" />
+        <activity
+            android:name=".Style3Activity_Dialog"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".Style2Activity_Dialog"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".Style1Activity_Dialog"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
