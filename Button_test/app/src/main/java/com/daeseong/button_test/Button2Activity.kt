@@ -23,7 +23,7 @@ class Button2Activity : AppCompatActivity() {
 
             //Log.e(tag, "button2_Click")
 
-            Toast.makeText(this@Button2Activity, "button2_Click", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "button2_Click", Toast.LENGTH_SHORT).show()
         })
     }
 }

@@ -35,11 +35,11 @@ class Button6Activity : AppCompatActivity(), View.OnClickListener {
             when (v.id) {
 
                 R.id.button10 -> {
-                    Toast.makeText(this@Button6Activity, "button10_Click", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "button10_Click", Toast.LENGTH_SHORT).show()
                 }
 
                 R.id.button11 -> {
-                    Toast.makeText(this@Button6Activity, "button11_Click", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "button11_Click", Toast.LENGTH_SHORT).show()
                 }
             }
         }

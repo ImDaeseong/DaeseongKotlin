@@ -25,7 +25,7 @@ class Button3Activity : AppCompatActivity() {
 
         //Log.e(tag, "button3_Click")
 
-        Toast.makeText(this@Button3Activity, "button3_Click", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "button3_Click", Toast.LENGTH_SHORT).show()
     }
 
 }

@@ -20,6 +20,6 @@ class Button1Activity : AppCompatActivity() {
 
         //Log.e(tag, "button1_Click")
 
-        Toast.makeText(this@Button1Activity, "button1_Click", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "button1_Click", Toast.LENGTH_SHORT).show()
     }
 }

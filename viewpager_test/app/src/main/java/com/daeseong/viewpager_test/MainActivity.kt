@@ -1,14 +1,12 @@
-package com.daeseong.button_test
+package com.daeseong.viewpager_test
 
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
 
-
-class MainActivity : AppCompatActivity() , View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener  {
 
     private val tag: String = MainActivity::class.java.simpleName
 
@@ -50,41 +48,40 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
 
                 R.id.button1 -> {
 
-                    val intent = Intent(this, Button1Activity::class.java)
+                    val intent = Intent(this, ViewPager1Activity::class.java)
                     startActivity(intent)
                 }
 
                 R.id.button2 -> {
 
-                    val intent = Intent(this, Button2Activity::class.java)
+                    val intent = Intent(this, ViewPager2Activity::class.java)
                     startActivity(intent)
                 }
 
                 R.id.button3 -> {
 
-                    val intent = Intent(this, Button3Activity::class.java)
+                    val intent = Intent(this, ViewPager3Activity::class.java)
                     startActivity(intent)
                 }
 
                 R.id.button4 -> {
 
-                    val intent = Intent(this, Button4Activity::class.java)
+                    val intent = Intent(this, ViewPager4Activity::class.java)
                     startActivity(intent)
                 }
 
                 R.id.button5 -> {
 
-                    val intent = Intent(this, Button5Activity::class.java)
+                    val intent = Intent(this, ViewPager5Activity::class.java)
                     startActivity(intent)
                 }
 
                 R.id.button6 -> {
 
-                    val intent = Intent(this, Button6Activity::class.java)
+                    val intent = Intent(this, ViewPager6Activity::class.java)
                     startActivity(intent)
                 }
             }
         }
-
     }
 }

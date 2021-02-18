@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">viewpager_test</string>
+
+    <string-array name="titles">
+        <item>number1</item>
+        <item>number2</item>
+        <item>number3</item>
+        <item>number4</item>
+    </string-array>
+
+    <string-array name="colors">
+        <item>#312f31</item>
+        <item>#f04a4c</item>
+        <item>#642b51</item>
+        <item>#06b4cf</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
