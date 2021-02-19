@@ -9,59 +9,78 @@ import android.view.View.OnTouchListener
 import kotlin.math.abs
 
 
-class SwipeListener(context: Context) : SimpleOnGestureListener(), OnTouchListener {
+open class SwipeListener(context: Context) :  OnTouchListener {
 
-    private val tag = SwipeListener::class.java.simpleName
-    private val SWIPE_THRESHOLD = 30
-    private val SWIPE_VELOCITY_THRESHOLD = 1
+    companion object {
+        private val tag = SwipeListener::class.java.simpleName
+        private const val SWIPE_THRESHOLD = 30
+        private const val SWIPE_VELOCITY_THRESHOLD = 1
+    }
 
-    var gestureDetector: GestureDetector = GestureDetector(context, this)
+    private val gestureDetector: GestureDetector
 
-    private fun swipeLeft(): Boolean {
+    init {
+        gestureDetector = GestureDetector(context, GestureListener())
+    }
+
+    open fun swipeLeft(): Boolean {
         return false
     }
 
-    private fun swipeRight(): Boolean {
+    open fun swipeRight(): Boolean {
         return false
     }
 
-    private fun swipeUp(): Boolean {
+    open fun swipeUp(): Boolean {
         return false
     }
 
-    private fun swipeDown(): Boolean {
+    open fun swipeDown(): Boolean {
         return false
-    }
-
-    override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean {
-        var result = false
-        val diffX = e2.x - e1.x
-        val diffY = e2.y - e1.y
-        if (abs(diffX) > abs(diffY)) {
-            if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                if (diffX > 0) {
-                    swipeRight()
-                } else {
-                    swipeLeft()
-                }
-                result = true
-            }
-        } else {
-            if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                if (diffY < 0) {
-                    swipeUp()
-                } else {
-                    swipeDown()
-                }
-                result = true
-            }
-        }
-        return result
-        //return super.onFling(e1, e2, velocityX, velocityY);
     }
 
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-        gestureDetector.onTouchEvent(motionEvent)
-        return false
+
+        if(motionEvent == null || gestureDetector == null)
+            return false
+
+        return gestureDetector.onTouchEvent(motionEvent)
+    }
+
+    private inner class GestureListener : SimpleOnGestureListener() {
+
+        override fun onDown(e: MotionEvent): Boolean {
+            return true
+        }
+
+        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+
+            var result = false
+            val diffX = e2.x - e1.x
+            val diffY = e2.y - e1.y
+
+            if (abs(diffX) > abs(diffY)) {
+
+                if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > 0) {
+                        swipeRight()
+                    } else {
+                        swipeLeft()
+                    }
+                    result = true
+                }
+            } else {
+
+                if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffY < 0) {
+                        swipeUp()
+                    } else {
+                        swipeDown()
+                    }
+                    result = true
+                }
+            }
+            return result
+        }
     }
 }

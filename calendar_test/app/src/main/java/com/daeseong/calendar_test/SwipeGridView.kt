@@ -30,7 +30,7 @@ class SwipeGridView : GridView {
         gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
 
             override fun onDown(motionEvent: MotionEvent): Boolean {
-                return false
+                return true
             }
 
             override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float,  velocityY: Float): Boolean {
@@ -65,7 +65,6 @@ class SwipeGridView : GridView {
                     }
                 }
                 return result
-                //return super.onFling(e1, e2, velocityX, velocityY);
             }
         })
     }
