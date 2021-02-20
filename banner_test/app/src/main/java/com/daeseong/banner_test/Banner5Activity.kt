@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -129,14 +128,28 @@ class Banner5Activity : AppCompatActivity() {
                     //오류로 인해 이미지를 받아오지 못할 경우 가지고 있는 리소스를 이용한다.
                     if (bitmap == null) {
                         when (sFileName) {
-                            "logo1.png" -> bitmap = BitmapFactory.decodeResource(MyApplication.getInstance().resources,  R.drawable.number1)
-                            "logo2.png" -> bitmap = BitmapFactory.decodeResource(MyApplication.getInstance().resources, R.drawable.number2)
-                            "logo3.png" -> bitmap = BitmapFactory.decodeResource(MyApplication.getInstance().resources, R.drawable.number3)
-                            "logo4.png" -> bitmap = BitmapFactory.decodeResource(MyApplication.getInstance().resources, R.drawable.number4)
+                            "logo1.png" -> bitmap = BitmapFactory.decodeResource(
+                                MyApplication.getInstance().resources,
+                                R.drawable.number1
+                            )
+                            "logo2.png" -> bitmap = BitmapFactory.decodeResource(
+                                MyApplication.getInstance().resources,
+                                R.drawable.number2
+                            )
+                            "logo3.png" -> bitmap = BitmapFactory.decodeResource(
+                                MyApplication.getInstance().resources,
+                                R.drawable.number3
+                            )
+                            "logo4.png" -> bitmap = BitmapFactory.decodeResource(
+                                MyApplication.getInstance().resources,
+                                R.drawable.number4
+                            )
                         }
                     }
 
-                    map1[sFileName] = bitmap!!
+                    if(bitmap != null){
+                        map1[sFileName] = bitmap!!
+                    }
                 }
 
                 //Log.e(tag, "Thread bitmap Download complete")
@@ -170,17 +183,17 @@ class Banner5Activity : AppCompatActivity() {
         }
     }
 
-    inner class Banner4Task : AsyncTask<String, Void, Boolean>() {
+    inner  class Banner4Task :  AsyncTask<String?, Void?, Boolean>() {
 
-        override fun doInBackground(vararg params: String): Boolean {
+        override fun doInBackground(vararg params: String?): Boolean? {
 
             var sFileName = ""
             var bitmap: Bitmap? = null
 
             for (url in params) {
 
-                sFileName = getImageName(url)
-                bitmap = DownLoadImage(url)
+                sFileName = getImageName(url!!)
+                bitmap = DownLoadImage(url!!)
 
                 //오류로 인해 이미지를 받아오지 못할 경우 가지고 있는 리소스를 이용한다.
                 if (bitmap == null) {
@@ -192,29 +205,31 @@ class Banner5Activity : AppCompatActivity() {
                     }
                 }
 
-                map[sFileName] = bitmap!!
+                if(bitmap != null){
+                    map[sFileName] = bitmap!!
+                }
             }
             return true
         }
 
         override fun onPostExecute(aBoolean: Boolean) {
             super.onPostExecute(aBoolean)
+
             if (aBoolean) {
 
                 for (key in map.keys) {
-
                     when (key) {
                         "logo1.png" -> {
-                            imageView1!!.setImageBitmap(map[key])
+                            imageView1!!.setImageBitmap(map.get(key))
                         }
                         "logo2.png" -> {
-                            imageView2!!.setImageBitmap(map[key])
+                            imageView2!!.setImageBitmap(map.get(key))
                         }
                         "logo3.png" -> {
-                            imageView3!!.setImageBitmap(map[key])
+                            imageView3!!.setImageBitmap(map.get(key))
                         }
                         "logo4.png" -> {
-                            imageView4!!.setImageBitmap(map[key])
+                            imageView4!!.setImageBitmap(map.get(key))
                         }
                     }
                 }
