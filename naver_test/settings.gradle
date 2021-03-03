@@ -1,0 +1,2 @@
+rootProject.name='naver_test'
+include ':app'
