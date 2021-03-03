@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getHashKey()
+        //getHashKey()
 
         button1 = findViewById<Button>(R.id.button1)
         button1!!.setOnClickListener {
