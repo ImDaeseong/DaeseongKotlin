@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#000000"
+    android:layout_height="49dp">
+
+    <ImageView
+        android:id="@+id/picabi"
+        android:layout_width="97dp"
+        android:layout_height="34dp"
+        android:layout_marginLeft="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/mainbiico" />
+
+    <ImageView
+        android:id="@+id/picareser"
+        android:layout_width="21dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.985"
+        app:layout_constraintLeft_toRightOf="@+id/picabi"
+        app:layout_constraintRight_toLeftOf="@+id/picamenu"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/mainreservationico" />
+
+    <ImageView
+        android:id="@+id/picamenu"
+        android:layout_width="21dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/mainmenuico" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
