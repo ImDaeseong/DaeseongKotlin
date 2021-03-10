@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:color="@color/holo_lighter_gray"
+        android:id="@+id/list"
+        android:icon="@drawable/vbook1"
+        app:showAsAction="always"
+        android:title="목록"/>
+
+    <item
+        android:color="@color/holo_lighter_gray"
+        android:id="@+id/sentence"
+        android:icon="@drawable/vbook1"
+        app:showAsAction="always"
+        android:title="문장"/>
+
+    <item
+        android:color="@color/holo_lighter_gray"
+        android:id="@+id/word"
+        android:icon="@drawable/vbook1"
+        app:showAsAction="always"
+        android:title="단어장"/>
+
+    <item
+        android:color="@color/holo_lighter_gray"
+        android:id="@+id/myword"
+        android:icon="@drawable/vbook1"
+        app:showAsAction="always"
+        android:title="나의단어장"/>
+
+    <item
+        android:color="@color/holo_lighter_gray"
+        android:id="@+id/setting"
+        android:icon="@drawable/vbook1"
+        app:showAsAction="always"
+        android:title="설정"/>
+
+</menu>
