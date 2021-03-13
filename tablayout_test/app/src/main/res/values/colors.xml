@@ -169,4 +169,7 @@
     <color name="WhiteSmoke">#F5F5F5</color>
     <color name="Wheat">#F5DEB3</color>
     <color name="tabline">#d9d9d9</color>
+
+    <color name="selected_tab">#ffffff</color>
+    <color name="unselected_tab">#FF7F50</color>
 </resources>

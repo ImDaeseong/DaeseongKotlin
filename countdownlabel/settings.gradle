@@ -1,0 +1,2 @@
+rootProject.name='countdownlabel'
+include ':app'
