@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path
+        name="AMR"
+        path="Android/data/com.daeseong.audiorecorder_test/files/AMR"/>
+    <files-path name="files" path="/" />
+</paths>
