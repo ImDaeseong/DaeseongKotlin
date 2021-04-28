@@ -9,6 +9,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -17,6 +19,9 @@ import androidx.core.content.ContextCompat
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
+
+    private var button1: Button? = null
+    private var button2: Button? = null
 
     private var broadcastReceiver: BroadcastReceiver? = null
 
@@ -28,6 +33,16 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
+        button1 = findViewById(R.id.button1)
+        button1!!.setOnClickListener(View.OnClickListener {
+            runService()
+        })
+
+        button2 = findViewById(R.id.button2)
+        button2!!.setOnClickListener(View.OnClickListener {
+            stopService()
+        })
+
         if (broadcastReceiver == null) {
             broadcastReceiver = object : BroadcastReceiver() {
 
@@ -38,7 +53,11 @@ class MainActivity : AppCompatActivity() {
                     Log.e(tag, "onReceive currentLatitude: $currentLatitude")
                     Log.e(tag, "onReceive currentLongitude: $currentLongitude")
 
-                    val sMsg = String.format("currentLatitude %f currentLongitude %f", currentLatitude, currentLongitude)
+                    val sMsg = String.format(
+                        "currentLatitude %f currentLongitude %f",
+                        currentLatitude,
+                        currentLongitude
+                    )
                     Toast.makeText(this@MainActivity, sMsg, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -53,11 +72,11 @@ class MainActivity : AppCompatActivity() {
 
         Log.e(tag, "onDestroy")
 
+        stopService()
+
         if (broadcastReceiver != null) {
             unregisterReceiver(broadcastReceiver)
         }
-
-        stopService(Intent(this, LocationService::class.java))
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
@@ -91,31 +110,47 @@ class MainActivity : AppCompatActivity() {
 
     private fun runService() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        try {
 
-            Log.e(tag, "startForegroundService")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            if (LocationService.serviceIntent == null) {
+                Log.e(tag, "startForegroundService")
 
-                val intent = Intent(this, LocationService::class.java)
-                startForegroundService(intent)
+                if (LocationService.serviceIntent == null) {
+
+                    val intent = Intent(this, LocationService::class.java)
+                    startForegroundService(intent)
+                } else {
+
+                    Log.e(tag, "startForegroundService 이미 실행중")
+                }
+
             } else {
 
-                Log.e(tag, "startForegroundService 이미 실행중")
+                Log.e(tag, "startService")
+
+                if (LocationService.serviceIntent == null) {
+
+                    val intent = Intent(this, LocationService::class.java)
+                    startService(intent)
+                } else {
+
+                    Log.e(tag, "startService 이미 실행중")
+                }
             }
+        }catch (ex: Exception) {
+            Log.e(tag, ex.message.toString())
+        }
+    }
 
-        } else {
+    private fun stopService() {
 
-            Log.e(tag, "startService")
+        try {
 
-            if (LocationService.serviceIntent == null) {
-
-                val intent = Intent(this, LocationService::class.java)
-                startService(intent)
-            } else {
-
-                Log.e(tag, "startService 이미 실행중")
-            }
+            val intent = Intent(this, LocationService::class.java)
+            stopService(intent)
+        } catch (ex: Exception) {
+            Log.e(tag, ex.message.toString())
         }
     }
 
@@ -129,11 +164,11 @@ class MainActivity : AppCompatActivity() {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 Log.e(tag, "사용자가 네트워크 권한 취소시 권한 재요청")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
             } else {
 
                 Log.e(tag, "최초로 네트워크 권한 요청 첫실행")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
             }
         } else {
 
@@ -150,11 +185,11 @@ class MainActivity : AppCompatActivity() {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 Log.e(tag, "사용자가 GPS 권한 취소시 권한 재요청")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
             } else {
 
                 Log.e(tag, "최초로 GPS 권한 요청 첫실행")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
             }
         } else {
 
