@@ -50,14 +50,10 @@ class MainActivity : AppCompatActivity() {
 
                     currentLatitude = intent.getDoubleExtra("LATITUDE", 0.0)
                     currentLongitude = intent.getDoubleExtra("LONGITUDE", 0.0)
-                    Log.e(tag, "onReceive currentLatitude: $currentLatitude")
-                    Log.e(tag, "onReceive currentLongitude: $currentLongitude")
+                    //Log.e(tag, "onReceive currentLatitude: $currentLatitude")
+                    //Log.e(tag, "onReceive currentLongitude: $currentLongitude")
 
-                    val sMsg = String.format(
-                        "currentLatitude %f currentLongitude %f",
-                        currentLatitude,
-                        currentLongitude
-                    )
+                    val sMsg = String.format("currentLatitude %f currentLongitude %f", currentLatitude, currentLongitude)
                     Toast.makeText(this@MainActivity, sMsg, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -70,7 +66,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        Log.e(tag, "onDestroy")
+        //Log.e(tag, "onDestroy")
 
         stopService()
 
@@ -82,27 +78,17 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        Log.e(tag, "onRequestPermissionsResult")
+        //Log.e(tag, "onRequestPermissionsResult")
 
         if (requestCode == 1) {
 
             // 네트워크 권한
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                Log.e(tag, "네트워크 권한 없음")
+                //Log.e(tag, "네트워크 권한 없음")
             } else {
 
-                Log.e(tag, "네트워크 권한 있음")
-                runService()
-            }
-
-            // GPS 권한
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                Log.e(tag, "GPS 권한 없음")
-            } else {
-
-                Log.e(tag, "GPS 권한 있음")
+                //Log.e(tag, "네트워크 권한 있음")
                 runService()
             }
         }
@@ -114,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-                Log.e(tag, "startForegroundService")
+                //Log.e(tag, "startForegroundService")
 
                 if (LocationService.serviceIntent == null) {
 
@@ -127,7 +113,7 @@ class MainActivity : AppCompatActivity() {
 
             } else {
 
-                Log.e(tag, "startService")
+                //Log.e(tag, "startService")
 
                 if (LocationService.serviceIntent == null) {
 
@@ -159,41 +145,20 @@ class MainActivity : AppCompatActivity() {
         // 네트워크 권한
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            Log.e(tag, "네트워크 권한 없음")
+            //Log.e(tag, "네트워크 권한 없음")
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-                Log.e(tag, "사용자가 네트워크 권한 취소시 권한 재요청")
+                //Log.e(tag, "사용자가 네트워크 권한 취소시 권한 재요청")
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
             } else {
 
-                Log.e(tag, "최초로 네트워크 권한 요청 첫실행")
+                //Log.e(tag, "최초로 네트워크 권한 요청 첫실행")
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
             }
         } else {
 
-            Log.e(tag, "네트워크 권한 있음")
-            runService()
-        }
-
-        // GPS 권한
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            Log.e(tag, "GPS 권한 없음")
-
-            // 최초 권한 요청인지, 혹은 사용자에 의한 재요청인지 확인
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                Log.e(tag, "사용자가 GPS 권한 취소시 권한 재요청")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
-            } else {
-
-                Log.e(tag, "최초로 GPS 권한 요청 첫실행")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
-            }
-        } else {
-
-            Log.e(tag, "GPS 권한 있음")
+            //Log.e(tag, "네트워크 권한 있음")
             runService()
         }
     }

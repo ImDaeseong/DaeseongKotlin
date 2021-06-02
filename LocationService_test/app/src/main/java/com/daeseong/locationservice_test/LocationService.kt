@@ -23,13 +23,13 @@ class LocationService : Service(), LocationListener {
     private var locationManager: LocationManager? = null
 
     override fun onBind(intent: Intent): IBinder? {
-        Log.e(tag, "onBind")
+        //Log.e(tag, "onBind")
         return null
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
-        Log.e(tag, "onStartCommand")
+        //Log.e(tag, "onStartCommand")
 
         serviceIntent = intent
 
@@ -57,13 +57,13 @@ class LocationService : Service(), LocationListener {
     override fun onCreate() {
         super.onCreate()
 
-        Log.e(tag, "onCreate")
+        //Log.e(tag, "onCreate")
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        Log.e(tag, "onDestroy")
+        //Log.e(tag, "onDestroy")
 
         serviceIntent = null
 
@@ -78,8 +78,8 @@ class LocationService : Service(), LocationListener {
 
     override fun onLocationChanged(location: Location) {
 
-        Log.e(tag, "onLocationChanged getLatitude: " + location.latitude)
-        Log.e(tag, "onLocationChanged getLongitude: " + location.longitude)
+        //Log.e(tag, "onLocationChanged getLatitude: " + location.latitude)
+        //Log.e(tag, "onLocationChanged getLongitude: " + location.longitude)
 
         val intent = Intent("LOCATION_UPDATE")
         intent.putExtra("LATITUDE", location.latitude)
@@ -104,11 +104,7 @@ class LocationService : Service(), LocationListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             //name 에 값이 없으면 않됨
-            val notificationChannel = NotificationChannel(
-                CHANNEL_ID,
-                "LocationService NotificationChannel",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
+            val notificationChannel = NotificationChannel(CHANNEL_ID,"LocationService NotificationChannel", NotificationManager.IMPORTANCE_DEFAULT)
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(notificationChannel)
         }
@@ -122,8 +118,8 @@ class LocationService : Service(), LocationListener {
             val bGPS = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER) //GPS 이용 위치,  android.permission.ACCESS_FINE_LOCATION
             val bNetwork = locationManager!!.isProviderEnabled(LocationManager.NETWORK_PROVIDER) //기지국, WIFI, android.permission.ACCESS_FINE_LOCATION||android.permission.ACCESS_COARSE_LOCATION
 
-            Log.e(tag, "bGPS:$bGPS")
-            Log.e(tag, "bNetwork:$bNetwork")
+            //Log.e(tag, "bGPS:$bGPS")
+            //Log.e(tag, "bNetwork:$bNetwork")
 
             if (!bGPS && !bNetwork) {
 
