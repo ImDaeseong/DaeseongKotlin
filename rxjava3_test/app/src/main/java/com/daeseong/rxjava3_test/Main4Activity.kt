@@ -81,7 +81,7 @@ class Main4Activity : AppCompatActivity() {
 
             try {
 
-                getBitmap1(sImgUrl)!!.subscribe(Consumer { result: Bitmap? ->
+                getBitmap1(sImgUrl)!!.onErrorComplete().subscribe(Consumer { result: Bitmap? ->
                     if (result != null)
                         imageView1!!.setImageBitmap(result)
                 })
@@ -95,7 +95,7 @@ class Main4Activity : AppCompatActivity() {
 
             try {
 
-                getBitmap2(sImgUrl)!!.subscribe(Consumer { result: Bitmap? ->
+                getBitmap2(sImgUrl)!!.onErrorComplete().subscribe(Consumer { result: Bitmap? ->
                     if (result != null)
                         imageView2!!.setImageBitmap(result)
                 })
