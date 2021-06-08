@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private var button3: Button? = null
     private var button4: Button? = null
     private var button5: Button? = null
+    private var button6: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +58,13 @@ class MainActivity : AppCompatActivity() {
         button5!!.setOnClickListener(View.OnClickListener {
 
             val intent = Intent(this, Main5Activity::class.java)
+            startActivity(intent)
+        })
+
+        button6 = findViewById(R.id.button6)
+        button6!!.setOnClickListener(View.OnClickListener {
+
+            val intent = Intent(this, Main6Activity::class.java)
             startActivity(intent)
         })
 

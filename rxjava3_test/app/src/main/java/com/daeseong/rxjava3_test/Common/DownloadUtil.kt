@@ -10,7 +10,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadJson {
+class DownloadUtil {
 
     fun getData(sUrl: String): Observable<String> {
         return Observable.fromCallable {

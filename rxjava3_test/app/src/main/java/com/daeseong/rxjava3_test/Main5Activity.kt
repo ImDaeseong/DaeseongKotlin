@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.daeseong.rxjava3_test.Common.DownloadJson
+import com.daeseong.rxjava3_test.Common.DownloadUtil
 import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -19,7 +19,7 @@ class Main5Activity : AppCompatActivity() {
     private val sUrl = "https://api.bithumb.com/public/ticker/BTC"
     private val sImgUrl = "https://.png"
 
-    private var downloadJson: DownloadJson? = null
+    private var downloadUtil: DownloadUtil? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +27,8 @@ class Main5Activity : AppCompatActivity() {
 
         textView1 = findViewById<View>(R.id.textView1) as TextView
 
-        downloadJson = DownloadJson()
-        downloadJson!!.getData(sUrl)
+        downloadUtil = DownloadUtil()
+        downloadUtil!!.getData(sUrl)
             .subscribeOn(Schedulers.io())
             .onErrorComplete()
             .subscribe(Consumer { sResult: String? ->
@@ -39,7 +39,7 @@ class Main5Activity : AppCompatActivity() {
                 }
             })
 
-        downloadJson!!.getBitmap(sUrl)
+        downloadUtil!!.getBitmap(sUrl)
             ?.subscribeOn(Schedulers.io())
             ?.onErrorComplete()
             ?.subscribe(Consumer { bBitmap: Bitmap? ->
