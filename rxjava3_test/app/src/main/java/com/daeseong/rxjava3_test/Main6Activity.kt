@@ -30,6 +30,8 @@ class Main6Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main6)
 
+        sendUtil = SendUtil()
+
         setLocalIP()
 
         textView1 = findViewById<View>(R.id.textView1) as TextView
@@ -40,7 +42,7 @@ class Main6Activity : AppCompatActivity() {
             val sMsg = textView1!!.text.toString()
             if (TextUtils.isEmpty(sMsg)) return@OnClickListener
 
-            sendUtil = SendUtil()
+            //sendUtil = SendUtil()
             sendUtil!!.SendMessage(sLocalIP, 10000, sMsg)
                 ?.subscribeOn(Schedulers.io())
                 ?.onErrorComplete()
