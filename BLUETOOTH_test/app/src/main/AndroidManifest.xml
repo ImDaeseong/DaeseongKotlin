@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.daeseong.bluetooth_test">
+    <!-- 블루투스간의 연결 요구, 연결 승인, 데이터 전송등의 블루투스 통신을 하기 위해 필요한 권한 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- 블루투스간의 디바이스 검색 시작하거나, 블루투스 설정을 하기 위해 필요한 권한 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 블루투스 기기를 검색 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> <!-- 다른 블루투스 기기에서 검색 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" /> <!-- 페어링된 블루투스 기기와 통신 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" /> <!-- 저전력 블루투스 통신 -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BLUETOOTH_test">
+        <activity android:name=".MainActivity6"></activity>
+        <activity android:name=".MainActivity5" />
+        <activity android:name=".MainActivity4" />
+        <activity android:name=".MainActivity3" />
+        <activity android:name=".MainActivity2" />
+        <activity android:name=".MainActivity1" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
