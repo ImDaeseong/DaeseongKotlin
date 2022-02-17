@@ -111,8 +111,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun func_Main() {
+
         val activity = Intent(this, MainActivity::class.java)
         activity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(activity)
+
+        /*
+        //현재 상태 유지
+        val activity = Intent(this, MainActivity::class.java)
+        activity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        startActivity(activity);
+        */
     }
 }
