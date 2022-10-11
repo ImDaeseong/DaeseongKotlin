@@ -54,7 +54,7 @@ class Main1Activity : AppCompatActivity() {
 
             if (handlerThread != null) {
                 handler.post(myRunnable)
-                handler.postDelayed(myRunnable, 1000);
+                //handler.postDelayed(myRunnable, 1000)
             }
         }
     }
