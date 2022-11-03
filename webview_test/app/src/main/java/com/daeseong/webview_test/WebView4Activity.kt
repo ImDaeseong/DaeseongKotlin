@@ -1,6 +1,5 @@
 package com.daeseong.webview_test
 
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
@@ -19,6 +18,7 @@ import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import java.lang.reflect.Method
 
 class WebView4Activity : AppCompatActivity() {
 
@@ -62,8 +62,8 @@ class WebView4Activity : AppCompatActivity() {
 
         try {
 
-            //val pause = javaClass.getMethod("onPause")
-            //pause.invoke(webView)
+            val pause = WebView::class.java.getMethod("onPause")
+            pause.invoke(webView)
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -77,8 +77,8 @@ class WebView4Activity : AppCompatActivity() {
 
         try {
 
-            //val resume = javaClass.getMethod("onResume")
-            //resume.invoke(webView)
+            val resume = WebView::class.java.getMethod("onResume")
+            resume.invoke(webView)
 
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
@@ -138,6 +138,13 @@ class WebView4Activity : AppCompatActivity() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
+
+                progressBar!!.visibility = View.GONE;
+
+                if (view != null) {
+                    sTitle = view.title
+                    Log.d("onPageFinished", sTitle)
+                }
 
                 webJavaScriptInterface!!.Javascript_htmlTojavaScript()
                 Log.e(tag, "html에 있는 javascript 호출")
@@ -342,7 +349,7 @@ class webJavaScriptInterface(var mContext: Context, var webView : WebView) {
     fun Javascript_webToNative(message: String?) {
 
         val sMsg = String.format("%s", message)
-        //Log.e(tag, sMsg)
+        Log.e("Javascript_webToNative", sMsg)
     }
 
     @JavascriptInterface
