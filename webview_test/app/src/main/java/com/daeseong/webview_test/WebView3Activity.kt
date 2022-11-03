@@ -2,12 +2,12 @@ package com.daeseong.webview_test
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Process
 import android.webkit.*
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
@@ -16,12 +16,15 @@ class WebView3Activity : AppCompatActivity() {
 
     private val tag: String = WebView3Activity::class.java.simpleName
 
-    private var sTitle: String? = null
     private var context: Context? = null
     private var webView: WebView? = null
-    private var progressBar: ProgressBar? = null
 
     private var backPressCloseHandler: BackPressCloseHandler? = null
+
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.isDefaultNetworkActive
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +35,7 @@ class WebView3Activity : AppCompatActivity() {
 
         context = applicationContext
 
-        progressBar = findViewById<ProgressBar>(R.id.progressBar2)
-
-        webView = findViewById<WebView>(R.id.webview3)
-
+        webView = findViewById<WebView>(R.id.webview1)
         webView!!.settings.defaultTextEncodingName = "UTF-8"
         webView!!.settings.javaScriptEnabled = true
         webView!!.settings.setAppCacheEnabled(true)
@@ -43,7 +43,7 @@ class WebView3Activity : AppCompatActivity() {
 
 
         //네트워크 연결 여부
-        if(IsConnect()){
+        if(isNetworkAvailable(this)){
             webView!!.loadUrl("https://m.naver.com")
         }else {
             webView!!.loadUrl("about:blank")
@@ -52,7 +52,6 @@ class WebView3Activity : AppCompatActivity() {
         // 쿠키 즉시 싱크를 위한 싱크매니저 등록
         //CookieSyncManager.createInstance(applicationContext)
         //CookieManager.getInstance().setAcceptCookie(true)
-
     }
 
     override fun onResume() {
@@ -75,19 +74,22 @@ class WebView3Activity : AppCompatActivity() {
         //super.onBackPressed();
     }
 
-    private fun IsConnect(): Boolean {
-        var bConnected = false
-        try {
-            val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkInfo = connectivityManager.activeNetworkInfo
-            if (networkInfo != null && networkInfo.isConnected) bConnected = true
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return bConnected
-    }
-
     inner class CustomWebViewClient : WebViewClient() {
+
+        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+            super.onReceivedError(view, request, error)
+
+        }
+
+        override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
+            super.onReceivedError(view, errorCode, description, failingUrl)
+
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            intent.putExtra("Url", failingUrl)
+            intent.putExtra("ErrCode", errorCode)
+            intent.putExtra("Desdescription", description)
+            startActivity(intent)
+        }
 
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
 
@@ -103,10 +105,6 @@ class WebView3Activity : AppCompatActivity() {
                 }
             }
             return super.shouldOverrideUrlLoading(view, url)
-        }
-
-        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-            super.onReceivedError(view, request, error)
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {

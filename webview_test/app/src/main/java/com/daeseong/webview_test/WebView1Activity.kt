@@ -1,11 +1,13 @@
 package com.daeseong.webview_test
 
+import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -20,6 +22,16 @@ class WebView1Activity : AppCompatActivity() {
     private var sTitle: String? = null
     private var context: Context? = null
     private var webView: WebView? = null
+
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.isDefaultNetworkActive
+    }
+
+    private fun isWifiAvailable(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return !cm.isActiveNetworkMetered
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,10 +95,16 @@ class WebView1Activity : AppCompatActivity() {
                 return true
                 //return super.onJsConfirm(view, url, message, result)
             }
+
+            override fun onReceivedTitle(view: WebView?, title: String) {
+                super.onReceivedTitle(view, title)
+
+                Log.e(tag, "title:$title")
+            }
         }
 
         //네트워크 연결 여부
-        if(IsConnect()){
+        if(isNetworkAvailable(this)){
             webView!!.loadUrl("file:///android_asset/test1.html")
         }else {
             webView!!.loadUrl("about:blank");
@@ -103,29 +121,19 @@ class WebView1Activity : AppCompatActivity() {
         return super.onKeyDown(keyCode, event)
     }
 
-    private fun IsConnect(): Boolean {
-        var bConnected = false
-        try {
-            val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkInfo = connectivityManager.activeNetworkInfo
-            if (networkInfo != null && networkInfo.isConnected) bConnected = true
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return bConnected
-    }
-
     inner class CustomWebViewClient : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             try {
 
-                Log.d(tag, "shouldOverrideUrlLoading:$url")
+                Log.d("test1.html 에서 링크 클릭시:", url)
 
                 if (url.startsWith("app://")) {
+
                     val intent = Intent(context!!.applicationContext, MainActivity::class.java)
                     startActivity(intent)
                 } else {
+
                     view.loadUrl(url)
                 }
             } catch (e: java.lang.Exception) {
@@ -135,23 +143,49 @@ class WebView1Activity : AppCompatActivity() {
             //return super.shouldOverrideUrlLoading(view, url);
         }
 
-        override fun onPageFinished(view: WebView, url: String) {
-            super.onPageFinished(view, url)
+        @TargetApi(Build.VERSION_CODES.N)
+        override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
 
-            sTitle = view.title
-            Log.d(tag, "onPageFinished:$sTitle")
+            Log.d("test1.html 에서 링크 클릭시:", request.url.toString())
+
+            try {
+
+                val url = request.url.toString()
+                if (url.startsWith("app://")) {
+
+                    val intent = Intent(context!!.applicationContext, MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+
+                    view.loadUrl(url)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return true
+            //return super.shouldOverrideUrlLoading(view, request);
+        }
+
+        override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
+            super.onReceivedError(view, errorCode, description, failingUrl)
+
+        }
+
+        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+            super.onReceivedError(view, request, error)
+
         }
 
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
+
         }
 
-        override fun onReceivedError(
-            view: WebView,
-            request: WebResourceRequest,
-            error: WebResourceError
-        ) {
-            super.onReceivedError(view, request, error)
+        override fun onPageFinished(view: WebView, url: String?) {
+            super.onPageFinished(view, url)
+
+            sTitle = view.title
+            Log.d("onPageFinished", sTitle)
         }
     }
 

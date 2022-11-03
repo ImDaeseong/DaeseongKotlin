@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title>WebView 에서 Activity 호출하기 </title>
+</head>
+<body>
+    <a href="test3.html 에서 링크 클릭시 webView 데이터 전달">click</a>
+    <br><br>
+    <input type="button" value="Javascript_webToNative 테스트" onClick="Send_Message('html에서 webview 로 메시지 전달')" />
+    <br><br>
+    <input type="button" value="Get_String 테스트" onClick="Get_String()" />
+    <br><br>
+    <input type="button" value="Get_Int 테스트" onClick="Get_Int()" />
+    <br><br>
+    <input type="button" value="Get_Boolean 테스트" onClick="Get_Boolean()" />
+    <br><br>
+    <input type="button" value="confirm 테스트" onClick="Call_confirm()" />
+    <br><br>
+     <input type="button" value="prompt 테스트" onClick="Call_prompt()" />
+    <br><br>
+    <input type="button" value="Close_Activity 테스트" onClick="Close_Activity()" />
+</body>
+<script type="text/javascript">
+
+    function EndLoad_Message() {
+        Android.Javascript_webToNative("웹페이지 로드 완료");
+    }
+
+    function Send_Message(message) {
+        Android.Javascript_webToNative(message);
+    }
+
+    function Get_String() {
+        var obj = Android.Javascript_getString();
+        alert(obj);
+    }
+
+    function Get_Int() {
+        var obj = Android.Javascript_getInt();
+        alert(obj);
+    }
+
+    function Get_Boolean() {
+        var obj = Android.Javascript_getBoolean();
+        alert(obj);
+    }
+
+    function Call_confirm() {
+        var obj = confirm('업로드를 시작하시겠습니까?');
+        alert(obj);
+    }
+    
+    function Call_prompt() {
+        var obj = prompt('업로드를 시작하시겠습니까?', '');
+        alert(obj);
+    }
+
+    function Close_Activity() {
+        Android.Javascript_finish();
+    }
+    
+</script>
+</html>
