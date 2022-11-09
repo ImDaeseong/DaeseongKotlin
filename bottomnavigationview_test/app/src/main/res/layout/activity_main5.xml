@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main2Activity">
+    tools:context=".Main5Activity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
@@ -15,17 +15,29 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView" />
 
+    <View
+        android:id="@+id/line1"
+        style="@style/Divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="0dp"
+        android:background="@color/DodgerBlue"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/holo_orange_dark"
-        app:itemIconTint="@color/DodgerBlue"
-        app:itemTextColor="@color/DimGray"
-        app:layout_constraintTop_toBottomOf="@+id/viewPager"
+        android:background="@drawable/bg_view"
+        app:itemIconTint="@drawable/select_item"
+        app:itemTextColor="@drawable/select_item"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom5_menu"
+        app:layout_constraintTop_toBottomOf="@+id/line1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom2_menu"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

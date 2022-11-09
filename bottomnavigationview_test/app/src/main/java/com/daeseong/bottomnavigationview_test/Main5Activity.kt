@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+class Main5Activity : AppCompatActivity() {
 
-class Main4Activity : AppCompatActivity() {
-
-    private val tag = Main4Activity::class.java.simpleName
+    private val tag = Main5Activity::class.java.simpleName
 
     private var bottomNavigationView: BottomNavigationView? = null
     private var viewPager: ViewPager? = null
@@ -18,7 +16,7 @@ class Main4Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main4)
+        setContentView(R.layout.activity_main5)
 
         viewPager = findViewById(R.id.viewPager)
 
@@ -35,7 +33,7 @@ class Main4Activity : AppCompatActivity() {
             false
         }
 
-        viewPager!!.addOnPageChangeListener(object : OnPageChangeListener {
+        viewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
