@@ -55,4 +55,5 @@ class Fragment1 : Fragment() {
 
         //Log.e(tag, "Fragment 보일때")
     }
+
 }

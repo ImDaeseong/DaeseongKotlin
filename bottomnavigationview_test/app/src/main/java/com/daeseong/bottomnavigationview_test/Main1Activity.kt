@@ -61,22 +61,27 @@ class Main1Activity : AppCompatActivity() {
 
         when (nIndex) {
             0 -> {
+                fragmentTransaction!!.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top)
                 fragmentTransaction!!.replace(R.id.frameLayout, fragment1!!)
                 fragmentTransaction!!.commit()
             }
             1 -> {
+                fragmentTransaction!!.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top)
                 fragmentTransaction!!.replace(R.id.frameLayout, fragment2!!)
                 fragmentTransaction!!.commit()
             }
             2 -> {
+                fragmentTransaction!!.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top)
                 fragmentTransaction!!.replace(R.id.frameLayout, fragment3!!)
                 fragmentTransaction!!.commit()
             }
             3 -> {
+                fragmentTransaction!!.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top)
                 fragmentTransaction!!.replace(R.id.frameLayout, fragment4!!)
                 fragmentTransaction!!.commit()
             }
             4 -> {
+                fragmentTransaction!!.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top)
                 fragmentTransaction!!.replace(R.id.frameLayout, fragment5!!)
                 fragmentTransaction!!.commit()
             }
