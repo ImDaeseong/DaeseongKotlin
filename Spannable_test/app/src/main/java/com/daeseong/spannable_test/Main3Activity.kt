@@ -2,6 +2,7 @@ package com.daeseong.spannable_test
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
@@ -21,6 +22,8 @@ class Main3Activity : AppCompatActivity() {
     private var tv3: TextView? = null
     private var tv4: TextView? = null
     private var tv5: TextView? = null
+    private var tv6: TextView? = null
+    private var tv7: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +44,19 @@ class Main3Activity : AppCompatActivity() {
         tv5 = findViewById<View>(R.id.tv5) as TextView
         tv5!!.text = "텍스트 색상 변경"
 
+        tv6 = findViewById<View>(R.id.tv6) as TextView
+        tv6!!.text = "텍스트 이미지 추가"
+
+        tv7 = findViewById<View>(R.id.tv7) as TextView
+        tv7!!.text = "텍스트 색상 볼드 처리"
+
         settv1()
         settv2()
         settv3()
         settv4()
         settv5()
+        settv6()
+        settv7()
     }
 
     private fun settv1() {
@@ -94,5 +105,30 @@ class Main3Activity : AppCompatActivity() {
 
         //클릭 가능하게 설정
         tv5!!.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun settv6() {
+
+        val drawable = resources.getDrawable(R.drawable.number1, null)
+        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+
+        val spannableString = SpannableString(tv6!!.text)
+        spannableString.setSpan(ImageSpan(drawable), 0, 3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+
+        tv6!!.text = spannableString
+    }
+
+    private fun settv7() {
+
+        //문장에서 찾을 문자열
+        val sFind = "볼드"
+        val nStart = tv7!!.text.toString().indexOf(sFind)
+        val nEnd = nStart + sFind.length
+        val spannableString = SpannableString(tv7!!.text)
+
+        spannableString.setSpan(ForegroundColorSpan(Color.WHITE), nStart, nEnd, 0)
+        spannableString.setSpan(BackgroundColorSpan(Color.RED), nStart, nEnd, 0)
+        spannableString.setSpan(StyleSpan(Typeface.BOLD), nStart, nEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        tv7!!.text = spannableString
     }
 }
