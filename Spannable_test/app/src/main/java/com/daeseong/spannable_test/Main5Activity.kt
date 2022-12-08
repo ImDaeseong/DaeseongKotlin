@@ -1,15 +1,9 @@
 package com.daeseong.spannable_test
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.TextPaint
 import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -41,20 +35,5 @@ class Main5Activity : AppCompatActivity() {
         spannableString.setSpan(ClickableSpanEx(this, sUrl2),17,22, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         tv1!!.text = spannableString
         tv1!!.movementMethod = LinkMovementMethod.getInstance()
-    }
-
-    private class ClickableSpanEx(private val context: Context, private val sUrl: String) : ClickableSpan() {
-
-        override fun updateDrawState(ds: TextPaint) {
-            super.updateDrawState(ds)
-
-            ds.color = Color.RED
-            ds.isUnderlineText = false
-        }
-
-        override fun onClick(widget: View) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sUrl))
-            context.startActivity(intent)
-        }
     }
 }
