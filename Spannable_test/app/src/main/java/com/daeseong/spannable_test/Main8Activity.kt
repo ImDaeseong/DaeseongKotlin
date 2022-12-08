@@ -106,8 +106,10 @@ class Main8Activity : AppCompatActivity() {
 
                     //링크 보여주는 부분
                     slink2_Sub = getNameURL(slink2)
-                    val s2 = SpannableString(getNameURL(slink2_Sub!!))
-                    s2.setSpan(ClickableSpanEx(this, slink2),0, slink2_Sub.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                    val s2 = SpannableString("$slink2_Sub ")//여기에 공백을 하나 넎어야만 전체 라인 클릭이 않된다.
+                    if (slink2_Sub != null) {
+                        s2.setSpan(ClickableSpanEx(this, slink2),0, slink2_Sub.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
 
                     stringArray.add((TextUtils.concat(s1, s2, "\n") as SpannedString))
                 } else {
