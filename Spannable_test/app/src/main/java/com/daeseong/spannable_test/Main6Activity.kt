@@ -21,60 +21,59 @@ class Main6Activity : AppCompatActivity() {
     private var tv1: TextView? = null
     private var button1: Button? = null
     private var button2: Button? = null
+    private var button3: Button? = null
 
     private var sEdit: String? = null
 
-    private val sData = """서울
+    private val sData = """서울          서울         서울
 구름많음
 온도 1.6°
 미세 좋음
 초미세 좋음
-[https://weather.naver.com/today/01110580?cpName=KMA]
+[https://weather.naver.com/today/01110580?cpName=KMA] 링크 처리 1 
 
- 춘천
+ 춘천         춘천 
 <!--구름많음-->
-[https://weather.naver.com/today/01150101?cpName=KMA]
+   링크 처리 2 [https://weather.naver.com/today/01150101?cpName=KMA]
 
-강릉
+강릉__강릉
 <!--흐림-->
-  온도 5.6° [https://weather.naver.com/today/16113114?cpName=KMA]
+  온도 5.6° [https://weather.naver.com/today/16113114?cpName=KMA]   링크 처리 3
 
-청주
-초미세 좋음 [https://weather.naver.com/today/07170630?cpName=KMA] <!--흐림-->
+!청주       청주!
+초미세 좋음 [https://weather.naver.com/today/07170630?cpName=KMA] 링크 처리 4  <!--흐림-->
 
-대전
+@대전                            대전#
 미세 보통
 초미세 보통
-[https://weather.naver.com/today/06110517?cpName=KMA]
+링크 처리 5 [https://weather.naver.com/today/06110517?cpName=KMA]   링크 처리 5
 
 """
 
-/*
-    private val sData = """서울
+    private val sData1 = """서울          서울         서울
 구름많음
 온도 1.6°
 미세 좋음
 초미세 좋음
-"https://weather.naver.com/today/01110580?cpName=KMA"
+https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1 
 
- 춘천
+ 춘천         춘천 
 <!--구름많음-->
-"https://weather.naver.com/today/01150101?cpName=KMA"
+   링크 처리 2 https://weather.naver.com/today/01150101?cpName=KMA
 
-강릉
+강릉__강릉
 <!--흐림-->
-  온도 5.6° "https://weather.naver.com/today/16113114?cpName=KMA"
+  온도 5.6° https://weather.naver.com/today/16113114?cpName=KMA   링크 처리 3
 
-청주
-초미세 좋음 "https://weather.naver.com/today/07170630?cpName=KMA" <!--흐림-->
+!청주       청주!
+초미세 좋음 https://weather.naver.com/today/07170630?cpName=KMA 링크 처리 4  <!--흐림-->
 
-대전
+@대전                            대전#
 미세 보통
 초미세 보통
-"https://weather.naver.com/today/06110517?cpName=KMA"
+링크 처리 5 https://weather.naver.com/today/06110517?cpName=KMA   링크 처리 5
 
 """
-*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +91,7 @@ class Main6Activity : AppCompatActivity() {
         button1!!.setOnClickListener(View.OnClickListener {
 
             sEdit = CheckReturn(et1!!.text.toString())
+
             tv1!!.text = sEdit
         })
 
@@ -100,6 +100,14 @@ class Main6Activity : AppCompatActivity() {
 
             CheckLink(et1!!.text.toString())
         })
+
+        button3 = findViewById<View>(R.id.button3) as Button
+        button3!!.setOnClickListener {
+
+            et1!!.setText(sData1)
+
+            CheckHttp(et1!!.text.toString())
+        }
     }
 
     private fun CheckLink(sInput: String) {
@@ -115,10 +123,28 @@ class Main6Activity : AppCompatActivity() {
             sFind = matcher.group()
             nLength = sFind.length
             sUrl = sFind.substring(1, nLength - 1)
-
-            //Log.e(tag, sUrl)
             spannableString.setSpan(ClickableSpanEx(this, sUrl), matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
+        tv1!!.text = spannableString
+        tv1!!.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun CheckHttp(sInput: String) {
+
+        val sRegex = "(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?"
+
+        val spannableString = SpannableString(sInput)
+        val matcher = Pattern.compile(sRegex).matcher(sInput)
+        var sFind: String
+        var sUrl: String
+        var nLength: Int
+        while (matcher.find()) {
+            sFind = matcher.group()
+            nLength = sFind.length
+            sUrl = sFind.substring(0, nLength)
+            spannableString.setSpan(ClickableSpanEx(this, sUrl), matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         tv1!!.text = spannableString
         tv1!!.movementMethod = LinkMovementMethod.getInstance()
     }
@@ -134,9 +160,6 @@ class Main6Activity : AppCompatActivity() {
             val end = matcher.end()
             spannableString.setSpan(AbsoluteSizeSpan(15, true), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-
-        //Log.e(tag, spannableString.toString())
-
         return spannableString.toString()
     }
 }

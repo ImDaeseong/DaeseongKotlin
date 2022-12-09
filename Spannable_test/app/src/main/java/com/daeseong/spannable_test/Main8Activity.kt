@@ -25,28 +25,28 @@ class Main8Activity : AppCompatActivity() {
 
     private val stringArray = ArrayList<SpannedString>()
 
-    private val sData = """서울
+    private val sData = """서울          서울         서울
 구름많음
 온도 1.6°
 미세 좋음
 초미세 좋음
-[https://weather.naver.com/today/01110580?cpName=KMA]
+[https://weather.naver.com/today/01110580?cpName=KMA] 링크 처리 1 
 
- 춘천
+ 춘천         춘천 
 <!--구름많음-->
-[https://weather.naver.com/today/01150101?cpName=KMA]
+   링크 처리 2 [https://weather.naver.com/today/01150101?cpName=KMA]
 
-강릉
+강릉__강릉
 <!--흐림-->
-  온도 5.6° [https://weather.naver.com/today/16113114?cpName=KMA]
+  온도 5.6° [https://weather.naver.com/today/16113114?cpName=KMA]   링크 처리 3
 
-청주
-초미세 좋음 [https://weather.naver.com/today/07170630?cpName=KMA] <!--흐림-->
+!청주       청주!
+초미세 좋음 [https://weather.naver.com/today/07170630?cpName=KMA] 링크 처리 4  <!--흐림-->
 
-대전
+@대전                            대전#
 미세 보통
 초미세 보통
-[https://weather.naver.com/today/06110517?cpName=KMA]
+링크 처리 5 [https://weather.naver.com/today/06110517?cpName=KMA]   링크 처리 5
 
 """
 
@@ -86,6 +86,7 @@ class Main8Activity : AppCompatActivity() {
         var slink2: String
         var slink2_Sub: String?
         var slink3: String?
+        var slink4: String
 
         val sRead: Array<String?> = sInput.split("\n".toRegex()).toTypedArray()
         for (i in sRead.indices) {
@@ -101,6 +102,10 @@ class Main8Activity : AppCompatActivity() {
 
                     //링크 부분
                     slink2 = sCheck.substring(sCheck.indexOf("[") + 1, sCheck.indexOf("]"))
+
+                    //링크 끝나는 부분
+                    slink3 = sCheck.substring(sCheck.indexOf("]") + 1)
+
                     val s1 = SpannableString(slink1)
                     stringArray.add((TextUtils.concat("", s1) as SpannedString))
 
@@ -111,13 +116,16 @@ class Main8Activity : AppCompatActivity() {
                         s2.setSpan(ClickableSpanEx(this, slink2),0, slink2_Sub.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
 
-                    stringArray.add((TextUtils.concat(s1, s2, "\n") as SpannedString))
+                    val s3 = SpannableString(slink3)
+                    stringArray.add((TextUtils.concat("", s3) as SpannedString))
+
+                    stringArray.add((TextUtils.concat(s1, s2, s3, "\n") as SpannedString))
                 } else {
 
                     //링크 없는 라인
-                    slink3 = sCheck
-                    val s3 = SpannableString(slink3)
-                    stringArray.add((TextUtils.concat("", s3, "\n") as SpannedString))
+                    slink4 = sCheck
+                    val s4 = SpannableString(slink4)
+                    stringArray.add((TextUtils.concat("", s4, "\n") as SpannedString))
                 }
             }
         }
