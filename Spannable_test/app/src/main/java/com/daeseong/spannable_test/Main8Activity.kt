@@ -50,6 +50,33 @@ class Main8Activity : AppCompatActivity() {
 
 """
 
+    private val sData1 = """서울          서울         서울
+구름많음
+온도 1.6°
+미세 좋음
+초미세 좋음
+https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1 
+
+ 춘천         춘천 
+<!--구름많음-->
+   링크 처리 2 https://weather.naver.com/today/01150101?cpName=KMA 
+
+강릉__강릉
+<!--흐림-->
+  온도 5.6° https://weather.naver.com/today/16113114?cpName=KMA   링크 처리 3
+
+!청주       청주!
+초미세 좋음 https://weather.naver.com/today/07170630?cpName=KMA 링크 처리 4  <!--흐림-->
+
+@대전                            대전#
+미세 보통
+초미세 보통
+링크 처리 5 https://weather.naver.com/today/06110517?cpName=KMA   링크 처리 5
+
+"""
+
+    private val bHttp = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main8)
@@ -60,7 +87,14 @@ class Main8Activity : AppCompatActivity() {
         //textview scroll 추가
         tv1!!.movementMethod = ScrollingMovementMethod()
 
-        et1!!.setText(sData)
+        //데이터 검색 타입
+
+        //데이터 검색 타입
+        if (bHttp) {
+            et1!!.setText(sData1)
+        } else {
+            et1!!.setText(sData)
+        }
 
         button1 = findViewById<View>(R.id.button1) as Button
         button1!!.setOnClickListener {
@@ -69,7 +103,13 @@ class Main8Activity : AppCompatActivity() {
             tv1!!.text = ""
 
             sEdit = et1!!.text.toString()
-            checkLink(sEdit!!)
+
+            //데이터 검색 타입
+            if (bHttp) {
+                checkLinkhttps(sEdit!!)
+            } else {
+                checkLink(sEdit!!)
+            }
 
             var finalString = SpannedString("")
             for (item in stringArray) {
@@ -77,6 +117,68 @@ class Main8Activity : AppCompatActivity() {
             }
             tv1!!.text = finalString
             tv1!!.movementMethod = LinkMovementMethod.getInstance()
+        }
+    }
+
+    private fun checkLinkhttps(sInput: String) {
+
+        var slink1: String
+        var slink2: String
+        var slink2_Sub: String?
+        var slink3: String
+        var slink4: String?
+        var slast: String
+        var nEnd: Int
+
+        val sRead: Array<String?> = sInput.split("\n".toRegex()).toTypedArray()
+        for (i in sRead.indices) {
+
+            if (sRead[i] != null) {
+
+                val sCheck = sRead[i]
+
+                if (sCheck!!.indexOf("https") >= 0) {
+
+                    //링크 아닌부분
+                    slink1 = sCheck.substring(0, sCheck.indexOf("https"))
+
+                    slast = sCheck.substring(sCheck.indexOf("https"))
+
+                    //링크 부분
+                    nEnd = slast.indexOf(" ")
+                    slink2 = if (nEnd != -1) {
+                        slast.substring(0, nEnd)
+                    } else {
+                        ""
+                    }
+
+                    //링크 끝나는 부분
+                    slink3 = slast.substring(nEnd + 1)
+
+                    val s1 = SpannableString(slink1)
+
+                    //링크 보여주는 부분
+                    slink2_Sub = getNameURL(slink2)
+                    val s2 = SpannableString("$slink2_Sub ") //여기에 공백을 하나 넎어야만 전체 라인 클릭이 않된다.
+                    s2.setSpan(
+                        ClickableSpanEx(this, slink2),
+                        0,
+                        slink2_Sub!!.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+
+                    val s3 = SpannableString(slink3)
+
+                    stringArray.add((TextUtils.concat(s1, s2, s3, "\n") as SpannedString))
+                } else {
+
+                    //링크 없는 라인
+                    slink4 = sCheck
+                    val s4 = SpannableString(slink4)
+
+                    stringArray.add((TextUtils.concat("", s4, "\n") as SpannedString))
+                }
+            }
         }
     }
 
