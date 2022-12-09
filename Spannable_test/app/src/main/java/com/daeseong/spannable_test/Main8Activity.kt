@@ -107,7 +107,6 @@ class Main8Activity : AppCompatActivity() {
                     slink3 = sCheck.substring(sCheck.indexOf("]") + 1)
 
                     val s1 = SpannableString(slink1)
-                    stringArray.add((TextUtils.concat("", s1) as SpannedString))
 
                     //링크 보여주는 부분
                     slink2_Sub = getNameURL(slink2)
@@ -117,7 +116,6 @@ class Main8Activity : AppCompatActivity() {
                     }
 
                     val s3 = SpannableString(slink3)
-                    stringArray.add((TextUtils.concat("", s3) as SpannedString))
 
                     stringArray.add((TextUtils.concat(s1, s2, s3, "\n") as SpannedString))
                 } else {
@@ -125,6 +123,7 @@ class Main8Activity : AppCompatActivity() {
                     //링크 없는 라인
                     slink4 = sCheck
                     val s4 = SpannableString(slink4)
+
                     stringArray.add((TextUtils.concat("", s4, "\n") as SpannedString))
                 }
             }
