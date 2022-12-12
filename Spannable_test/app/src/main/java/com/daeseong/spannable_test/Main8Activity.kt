@@ -59,7 +59,7 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
 
  춘천         춘천 
 <!--구름많음-->
-   링크 처리 2 https://weather.naver.com/today/01150101?cpName=KMA 
+   링크 처리 2 https://weather.naver.com/today/01150101?cpName=KMA
 
 강릉__강릉
 <!--흐림-->
@@ -86,8 +86,6 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
 
         //textview scroll 추가
         tv1!!.movementMethod = ScrollingMovementMethod()
-
-        //데이터 검색 타입
 
         //데이터 검색 타입
         if (bHttp) {
@@ -123,12 +121,12 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
     private fun checkLinkhttps(sInput: String) {
 
         var slink1: String
-        var slink2: String
+        var slink2 : String = ""
         var slink2_Sub: String?
         var slink3: String
         var slink4: String?
         var slast: String
-        var nEnd: Int
+        var nEnd : Int = 0
 
         val sRead: Array<String?> = sInput.split("\n".toRegex()).toTypedArray()
         for (i in sRead.indices) {
@@ -142,18 +140,22 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
                     //링크 아닌부분
                     slink1 = sCheck.substring(0, sCheck.indexOf("https"))
 
+                    //링크 부분
                     slast = sCheck.substring(sCheck.indexOf("https"))
 
-                    //링크 부분
                     nEnd = slast.indexOf(" ")
                     slink2 = if (nEnd != -1) {
                         slast.substring(0, nEnd)
                     } else {
-                        ""
+                        slast
                     }
 
                     //링크 끝나는 부분
-                    slink3 = slast.substring(nEnd + 1)
+                    slink3 = if (nEnd == -1) {
+                        ""
+                    } else {
+                        slast.substring(nEnd + 1)
+                    }
 
                     val s1 = SpannableString(slink1)
 
