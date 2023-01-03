@@ -1,10 +1,8 @@
 package com.daeseong.newbanner_test
 
-
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.daeseong.newbanner_test.Banner4_style.BannerView
-
 
 class Banner4styleActivity : AppCompatActivity() {
 

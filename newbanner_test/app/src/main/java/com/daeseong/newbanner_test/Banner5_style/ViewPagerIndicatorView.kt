@@ -3,12 +3,9 @@ package com.daeseong.newbanner_test.Banner5_style
 import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
-
 import android.view.ViewGroup
 import android.widget.ImageView
-
 import android.widget.LinearLayout
-
 
 class ViewPagerIndicatorView : LinearLayout {
 

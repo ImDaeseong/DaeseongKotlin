@@ -7,7 +7,6 @@ import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 
-
 class BannerAdapter(context: Context, imgRes: IntArray) : PagerAdapter(),  OnPageChangeListener {
 
     private val tag = javaClass.simpleName

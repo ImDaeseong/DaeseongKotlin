@@ -14,11 +14,10 @@
         android:padding="2dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.124"></LinearLayout>
+        app:layout_constraintVertical_bias="0"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -29,11 +28,10 @@
         android:orientation="horizontal"
         android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout1"
-        app:layout_constraintVertical_bias="0.405"></LinearLayout>
+        app:layout_constraintVertical_bias="0.5"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -43,7 +41,6 @@
         android:orientation="horizontal"
         android:gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

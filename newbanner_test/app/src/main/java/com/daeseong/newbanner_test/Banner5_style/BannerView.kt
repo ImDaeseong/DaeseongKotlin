@@ -1,6 +1,5 @@
 package com.daeseong.newbanner_test.Banner5_style
 
-
 import android.content.Context
 import android.os.Handler
 import android.os.Message
@@ -12,7 +11,6 @@ import android.widget.RelativeLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.daeseong.newbanner_test.R
-
 
 class BannerView : RelativeLayout {
 

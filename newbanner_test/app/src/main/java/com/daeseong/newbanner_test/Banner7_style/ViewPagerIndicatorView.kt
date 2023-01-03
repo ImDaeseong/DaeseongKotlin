@@ -1,4 +1,4 @@
-package com.daeseong.newbanner_test.Banner3_style
+package com.daeseong.newbanner_test.Banner7_style
 
 import android.content.Context
 import android.util.AttributeSet
@@ -46,6 +46,10 @@ class ViewPagerIndicatorView : LinearLayout {
             params.gravity = Gravity.CENTER
             dotImages[i]!!.layoutParams = params
             dotImages[i]!!.setImageResource(defaultDot)
+
+            //화면에 맞게 full 로 채운다.
+            dotImages[i]!!.adjustViewBounds = true
+            dotImages[i]!!.scaleType = ImageView.ScaleType.FIT_XY
             dotImages[i]!!.setTag(dotImages[i]!!.id, false)
             this.addView(dotImages[i])
         }

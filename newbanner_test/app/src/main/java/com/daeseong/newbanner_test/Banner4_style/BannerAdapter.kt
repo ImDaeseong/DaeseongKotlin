@@ -4,9 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-
 import androidx.viewpager.widget.PagerAdapter
-
 
 class BannerAdapter(private val mContext: Context, private var mBannerResIds: IntArray) : PagerAdapter() {
 

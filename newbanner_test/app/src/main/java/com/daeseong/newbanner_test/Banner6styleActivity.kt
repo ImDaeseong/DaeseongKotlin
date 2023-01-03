@@ -1,6 +1,5 @@
 package com.daeseong.newbanner_test
 
-
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -9,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.daeseong.newbanner_test.Banner6_style.BannerAdapter
-
 
 class Banner6styleActivity : AppCompatActivity() {
 

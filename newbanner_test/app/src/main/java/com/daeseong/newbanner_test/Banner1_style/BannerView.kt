@@ -1,6 +1,5 @@
 package com.daeseong.newbanner_test.Banner1_style
 
-
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,7 +12,6 @@ import android.widget.RelativeLayout
 import com.daeseong.newbanner_test.Banner1styleActivity
 import com.daeseong.newbanner_test.MainActivity
 import com.daeseong.newbanner_test.R
-
 
 class BannerView : RelativeLayout, View.OnTouchListener {
 

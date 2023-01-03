@@ -1,11 +1,9 @@
 package com.daeseong.newbanner_test
 
-
 import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.daeseong.newbanner_test.Banner1_style.BannerView
-
 
 class Banner1styleActivity : AppCompatActivity() {
 

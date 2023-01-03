@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.daeseong.newbanner_test.Banner5_style.BannerView
 
-
 class Banner5styleActivity : AppCompatActivity() {
 
     private val tag = Banner5styleActivity::class.java.simpleName

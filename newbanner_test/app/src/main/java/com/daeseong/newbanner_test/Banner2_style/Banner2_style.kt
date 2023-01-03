@@ -16,7 +16,6 @@ import android.webkit.*
 import android.widget.RelativeLayout
 import com.daeseong.newbanner_test.MainActivity
 
-
 class BannerView @JvmOverloads constructor(private val activity: Activity, private val url: String, WIDTH: Int, HEIGHT: Int,  attrs: AttributeSet? = null, defStyle: Int = 0) : RelativeLayout(activity, attrs, defStyle), OnTouchListener {
 
     private val tag = BannerView::class.java.simpleName

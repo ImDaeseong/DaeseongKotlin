@@ -9,7 +9,6 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-
 class BannerdisplayImage : AsyncTask<String, Void, Bitmap?>() {
 
     override fun doInBackground(vararg params: String): Bitmap? {

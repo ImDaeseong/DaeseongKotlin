@@ -1,12 +1,10 @@
 package com.daeseong.newbanner_test
 
-
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.daeseong.newbanner_test.Banner2_style.BannerView
-
 
 class Banner2styleActivity : AppCompatActivity() {
 
