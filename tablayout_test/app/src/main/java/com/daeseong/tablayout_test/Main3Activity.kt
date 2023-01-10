@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
-
 class Main3Activity : AppCompatActivity() {
 
     private val tag = Main3Activity::class.java.simpleName

@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
-
 class Main7Activity : AppCompatActivity() {
 
     private val tag = Main7Activity::class.java.simpleName

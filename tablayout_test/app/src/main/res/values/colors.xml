@@ -172,4 +172,8 @@
 
     <color name="selected_tab">#ffffff</color>
     <color name="unselected_tab">#FF7F50</color>
+
+    <color name="selected_tab1">#000000</color>
+    <color name="unselected_tab1">#FF7F50</color>
+
 </resources>
