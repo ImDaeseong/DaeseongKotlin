@@ -62,4 +62,5 @@ class Main2Activity : AppCompatActivity() {
         dialog.window!!.setGravity(Gravity.BOTTOM)
         dialog.show()
     }
+
 }
