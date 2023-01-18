@@ -19,6 +19,7 @@ class Main2Activity : AppCompatActivity() {
     private lateinit var dialog : Dialog
 
     private var button1: Button? = null
+    private var button2: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,12 @@ class Main2Activity : AppCompatActivity() {
         button1!!.setOnClickListener(View.OnClickListener {
 
             showDefaultDialog()
+        })
+
+        button2 = findViewById<View>(R.id.button2) as Button
+        button2!!.setOnClickListener(View.OnClickListener {
+
+            showCustomDialog()
         })
     }
 
@@ -61,6 +68,17 @@ class Main2Activity : AppCompatActivity() {
         dialog.window!!.attributes.windowAnimations = R.style.DialogTheme
         dialog.window!!.setGravity(Gravity.BOTTOM)
         dialog.show()
+    }
+
+
+    private fun showCustomDialog() {
+
+        val customDialog = CustomDialog(this)
+        customDialog.show()
+        customDialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        customDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        customDialog.window!!.attributes.windowAnimations = R.style.DialogTheme
+        customDialog.window!!.setGravity(Gravity.BOTTOM)
     }
 
 }

@@ -22,6 +22,5 @@ class MainActivity : AppCompatActivity() {
         Custom1_Dialog(this) {
             finish()
         }.show()
-
     }
 }
