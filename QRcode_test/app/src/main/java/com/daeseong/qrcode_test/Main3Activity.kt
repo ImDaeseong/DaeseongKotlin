@@ -1,10 +1,10 @@
 package com.daeseong.qrcode_test
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-
 
 class Main3Activity : AppCompatActivity() {
 
@@ -20,6 +20,7 @@ class Main3Activity : AppCompatActivity() {
 
             val txt = result.text
             val sBarcodeFormatText = result.barcodeFormat.toString()
+            Log.e(tag,"handleResult - sText : $txt sBarcodeFormatText: $sBarcodeFormatText")
 
             //한번 찍고 나서 멈추는걸 방지하기 위해
             zXingScannerView!!.resumeCameraPreview(this)

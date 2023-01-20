@@ -7,14 +7,15 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import me.dm7.barcodescanner.core.IViewFinder
 import me.dm7.barcodescanner.core.ViewFinderView
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-
 
 class Main4Activity : AppCompatActivity() {
 
@@ -30,13 +31,16 @@ class Main4Activity : AppCompatActivity() {
 
             val txt = result.text
             val sBarcodeFormatText = result.barcodeFormat.toString()
+            Log.e(tag,"handleResult - sText : $txt sBarcodeFormatText: $sBarcodeFormatText")
 
-            Handler().postDelayed({
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
 
                 //한번 찍고 나서 멈추는걸 방지하기 위해
-                zXingScannerView!!.resumeCameraPreview(this)
+                zXingScannerView!!.resumeCameraPreview(this )
 
-            }, 1000)
+            }, 2000)
+
         }
     }
 

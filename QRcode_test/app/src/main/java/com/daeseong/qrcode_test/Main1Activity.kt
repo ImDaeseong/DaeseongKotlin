@@ -11,7 +11,6 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 
-
 class Main1Activity : AppCompatActivity() {
 
     private val tag: String = Main1Activity::class.java.simpleName

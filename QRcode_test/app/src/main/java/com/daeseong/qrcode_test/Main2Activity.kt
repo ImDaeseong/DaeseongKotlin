@@ -1,10 +1,10 @@
 package com.daeseong.qrcode_test
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-
 
 class Main2Activity : AppCompatActivity() {
 
@@ -18,6 +18,7 @@ class Main2Activity : AppCompatActivity() {
 
         val txt = result.text
         val sBarcodeFormatText = result.barcodeFormat.toString()
+        Log.e(tag, "handleResult - sText : $txt sBarcodeFormatText: $sBarcodeFormatText")
 
         stopScanner()
     }
