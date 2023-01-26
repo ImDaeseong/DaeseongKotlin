@@ -1,12 +1,10 @@
 package com.daeseong.banner_test
 
-
 import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
 
 class Banner3Activity : AppCompatActivity() {
 

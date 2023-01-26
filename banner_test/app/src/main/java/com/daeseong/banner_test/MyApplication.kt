@@ -2,7 +2,6 @@ package com.daeseong.banner_test
 
 import android.app.Application
 
-
 class MyApplication : Application() {
 
     private val tag: String = MyApplication::class.java.simpleName

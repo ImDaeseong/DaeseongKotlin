@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
-
 class Banner4Activity : AppCompatActivity() {
 
     private val tag = Banner4Activity::class.java.simpleName

@@ -1,13 +1,16 @@
 package com.daeseong.banner_test
 
+import android.util.Log
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-
+import kotlin.math.floor
 
 object String_util {
+
+    private val tag: String = String_util::class.java.simpleName
 
     //파일 확장자
     fun getExt(url: String): String {
@@ -275,5 +278,87 @@ object String_util {
             df.format(lLength * 1.0 / div) + unit[index]
         }
     }
+
+    fun getLastVisitDay(sInput: String?): String? {
+
+        var sResult = ""
+
+        try {
+
+            val startDate = getDate(sInput, "yyyy-MM-dd")
+            val lTime = getDifferentDays(startDate!!, Date())
+
+            //Math.floor 로 소수점 무시하고 앞에 데이터만 처리
+            val nYears = floor((lTime.toFloat() / 365).toDouble()).toInt()
+            val nTempYears = lTime - nYears * 365
+            val nMonths = floor((nTempYears.toFloat() / 30).toDouble()).toInt()
+            val nTempMonths = nTempYears - nMonths * 30
+            val nWeeks = floor((nTempMonths.toFloat() / 7).toDouble()).toInt()
+            val nDays = floor((nTempMonths.toFloat() - nWeeks * 7).toDouble()).toInt()
+
+            //val sValue = String.format("[%d]  %d년 %d개월 %d주 %d일 전", lTime, nYears, nMonths, nWeeks, nDays)
+            //Log.e(tag, sValue)
+
+
+            if (lTime == 0L) {
+
+                sResult = String.format("오늘")
+            }
+
+            if (lTime in 1..6) {
+
+                sResult = String.format("%d일 전", lTime)
+            }
+
+            if (lTime in 7..29) {
+                sResult = if (nDays == 0) {
+                    String.format("%d주 %d일 전", nWeeks, nDays)
+                } else {
+                    String.format("%d주 전", nWeeks)
+                }
+            }
+
+            if (lTime in 30..364) {
+
+                sResult = if (nWeeks == 0) {
+                    String.format("%d개월", nMonths)
+                } else {
+                    String.format("%d개월 %d주", nMonths, nWeeks)
+                }
+
+                sResult += if (nDays == 0) {
+                    String.format(" 전")
+                } else {
+                    String.format(" %d일 전", nDays)
+                }
+            }
+
+            if (lTime > 365) {
+
+                sResult = if (nMonths == 0) {
+                    String.format("%d년", nYears)
+                } else {
+                    String.format("%d년 %d개월", nYears, nMonths)
+                }
+
+                sResult += if (nWeeks == 0) {
+                    String.format("")
+                } else {
+                    String.format(" %d주", nWeeks)
+                }
+
+                sResult += if (nDays == 0) {
+                    String.format(" 전")
+                } else {
+                    String.format(" %d일 전", nDays)
+                }
+            }
+
+        } catch (e: java.lang.Exception) {
+        }
+
+        return sResult
+    }
+
 }
 

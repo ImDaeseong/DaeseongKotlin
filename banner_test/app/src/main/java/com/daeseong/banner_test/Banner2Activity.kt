@@ -19,7 +19,6 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-
 class Banner2Activity : AppCompatActivity() {
 
     private val tag = Banner2Activity::class.java.simpleName

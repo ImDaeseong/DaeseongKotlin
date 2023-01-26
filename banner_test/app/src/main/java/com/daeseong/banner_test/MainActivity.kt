@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 
-class MainActivity : AppCompatActivity()  , View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val tag: String = MainActivity::class.java.simpleName
 
@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity()  , View.OnClickListener {
     private var button3 : Button? = null
     private var button4 : Button? = null
     private var button5 : Button? = null
+    private var button6 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +35,9 @@ class MainActivity : AppCompatActivity()  , View.OnClickListener {
 
         button5 = findViewById<Button>(R.id.button5)
         button5!!.setOnClickListener(this)
+
+        button6 = findViewById<Button>(R.id.button6)
+        button6!!.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -72,8 +76,14 @@ class MainActivity : AppCompatActivity()  , View.OnClickListener {
                     startActivity(intent)
                 }
 
-            }
-        }
+                R.id.button6 -> {
 
+                    val intent = Intent(this, StringutilActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+        }
     }
+
 }

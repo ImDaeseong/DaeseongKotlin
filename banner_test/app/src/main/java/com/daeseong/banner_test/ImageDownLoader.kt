@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.ImageView
 import java.net.URL
 
-
 class ImageDownLoader(private val imageView: ImageView) : AsyncTask<String, Void, Bitmap>() {
 
     companion object {
