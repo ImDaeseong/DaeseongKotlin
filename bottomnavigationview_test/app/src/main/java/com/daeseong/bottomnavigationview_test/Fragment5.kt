@@ -8,7 +8,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 
-
 class Fragment5 : Fragment() {
 
     companion object {

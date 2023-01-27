@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-
 class Main1Activity : AppCompatActivity() {
 
     private val tag = Main1Activity::class.java.simpleName

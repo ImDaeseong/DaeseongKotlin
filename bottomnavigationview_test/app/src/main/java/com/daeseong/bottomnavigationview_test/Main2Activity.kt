@@ -6,7 +6,6 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-
 class Main2Activity : AppCompatActivity() {
 
     private val tag = Main2Activity::class.java.simpleName

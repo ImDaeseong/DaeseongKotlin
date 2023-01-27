@@ -1,15 +1,14 @@
 package com.daeseong.bottomnavigationview_test
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class Main3Activity : AppCompatActivity() {
+class Main7Activity : AppCompatActivity() {
 
-    private val tag = Main3Activity::class.java.simpleName
+    private val tag = Main7Activity::class.java.simpleName
 
     private var bottomNavigationView: BottomNavigationView? = null
     private var viewPager: ViewPager? = null
@@ -17,7 +16,7 @@ class Main3Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main3)
+        setContentView(R.layout.activity_main7)
 
         viewPager = findViewById(R.id.viewPager)
 
@@ -28,18 +27,18 @@ class Main3Activity : AppCompatActivity() {
                 R.id.list -> viewPager!!.currentItem = 0
                 R.id.sentence -> viewPager!!.currentItem = 1
                 R.id.word -> viewPager!!.currentItem = 2
+                R.id.myword -> viewPager!!.currentItem = 3
+                R.id.setting -> viewPager!!.currentItem = 4
             }
-
             false
         }
 
-        viewPager!!.addOnPageChangeListener(object : OnPageChangeListener {
+        viewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-
                 if (menuItem != null) {
                     menuItem!!.isChecked = false
                 } else {
@@ -55,9 +54,11 @@ class Main3Activity : AppCompatActivity() {
 
     private fun setupViewPager(v: ViewPager?) {
         val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
-        viewPagerAdapter.addFragment(Fragment1())
-        viewPagerAdapter.addFragment(Fragment2())
-        viewPagerAdapter.addFragment(Fragment3())
+        Fragment1().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment1())
+        Fragment2().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment2())
+        Fragment3().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment3())
+        Fragment4().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment4())
+        Fragment5().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment5())
         v!!.adapter = viewPagerAdapter
     }
 }
