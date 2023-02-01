@@ -2,6 +2,7 @@ package com.daeseong.newbanner_test
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -27,8 +28,8 @@ class Banner6styleActivity : AppCompatActivity() {
         R.drawable.number4
     )
 
-    private val handler: Handler = object : Handler() {
-        override fun handleMessage(msg: Message?) {
+    private val handler: Handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
 
             //viewPager!!.setCurrentItem(nCurrent%TotalCount, true)
             //nCurrent++;

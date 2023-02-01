@@ -3,10 +3,10 @@ package com.daeseong.newbanner_test.Banner7_style
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.daeseong.newbanner_test.OnSingleClickListener
 import com.daeseong.newbanner_test.R
 
@@ -55,8 +55,27 @@ class ImagePagerAdapter(private val context: Context, private val size: Int) : R
         try {
 
             val nPos = getPosition(position)
-            Log.e(tag, nPos.toString())
-            holder.imageView!!.setImageResource(imgs[nPos])
+            //holder.imageView!!.setImageResource(imgs[nPos])
+
+            var sUrl = ""
+            when (nPos) {
+                0 -> {
+                    sUrl = "https://.png"
+                }
+                1 -> {
+                    sUrl = "https://.png"
+                }
+                2 -> {
+                    sUrl = "https://.jpg"
+                }
+                3 -> {
+                    sUrl = "https://.png"
+                }
+            }
+
+            Glide.with(context)
+                .load(sUrl)
+                .into(holder.imageView!!)
 
         } catch (ex: Exception) {
             holder.imageView!!.setImageBitmap(BitmapFactory.decodeResource(view.resources, R.drawable.number1))

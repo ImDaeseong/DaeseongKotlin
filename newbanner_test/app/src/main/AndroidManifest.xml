@@ -12,20 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".Banner7styleActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+        <activity android:name=".Banner7styleActivity" />
         <activity android:name=".Banner6styleActivity" />
         <activity android:name=".Banner5styleActivity" />
         <activity android:name=".Banner4styleActivity" />
         <activity android:name=".Banner3styleActivity" />
         <activity android:name=".Banner2styleActivity" />
         <activity android:name=".Banner1styleActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:exported="true"
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

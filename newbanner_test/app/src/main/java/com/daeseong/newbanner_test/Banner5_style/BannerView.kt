@@ -2,6 +2,7 @@ package com.daeseong.newbanner_test.Banner5_style
 
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
 import android.util.Log
@@ -22,7 +23,7 @@ class BannerView : RelativeLayout {
     private var BannerDotView: ViewPagerIndicatorView? = null
     private var nSize = 0
 
-    private val handler  = object : Handler() {
+    private val handler  = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             var item = mViewPager!!.currentItem
             item = if (nSize != 0) {
