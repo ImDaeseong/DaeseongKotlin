@@ -120,4 +120,5 @@
         app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2"
         app:srcCompat="@drawable/banner1" />
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>

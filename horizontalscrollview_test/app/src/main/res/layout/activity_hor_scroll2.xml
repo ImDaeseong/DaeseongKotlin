@@ -53,6 +53,7 @@
                     app:srcCompat="@drawable/banner2" />
 
             </LinearLayout>
+
         </ScrollView>
 
     </HorizontalScrollView>
@@ -123,6 +124,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cL1" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
