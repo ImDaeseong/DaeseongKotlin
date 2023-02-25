@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
     private var button1: Button? = null
     private var button2: Button? = null
     private var button3: Button? = null
+    private var button4: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +37,13 @@ class MainActivity : AppCompatActivity() {
         button3!!.setOnClickListener {
 
             val intent = Intent(this, HorScroll3Activity::class.java)
+            startActivity(intent)
+        }
+
+        button4 = findViewById<View>(R.id.button4) as Button
+        button4!!.setOnClickListener {
+
+            val intent = Intent(this, HorScroll4Activity::class.java)
             startActivity(intent)
         }
     }
