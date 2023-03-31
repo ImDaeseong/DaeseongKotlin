@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var button3: Button? = null
     private var button4: Button? = null
     private var button5: Button? = null
+    private var button6: Button? = null
+    private var button7: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         button5 = findViewById<Button>(R.id.button5)
         button5!!.setOnClickListener(this)
+
+        button6 = findViewById<Button>(R.id.button6)
+        button6!!.setOnClickListener(this)
+
+        button7 = findViewById<Button>(R.id.button7)
+        button7!!.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -64,6 +72,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 R.id.button5 -> {
                     val intent = Intent(this, Main5Activity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.button6 -> {
+                    val intent = Intent(this, Main6Activity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.button7 -> {
+                    val intent = Intent(this, Main7Activity::class.java)
                     startActivity(intent)
                 }
             }
