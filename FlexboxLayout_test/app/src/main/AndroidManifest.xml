@@ -13,6 +13,13 @@
         android:theme="@style/Theme.FlexboxLayout_test"
         tools:targetApi="31">
         <activity
+            android:name=".FlexboxLayout5Activity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".FlexboxLayout4Activity"
             android:exported="false">
             <meta-data
