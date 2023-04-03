@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener   {
     private var button1: Button? = null
     private var button2: Button? = null
     private var button3: Button? = null
+    private var button4: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,10 +22,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener   {
         button1 = findViewById<Button>(R.id.button1)
         button2 = findViewById<Button>(R.id.button2)
         button3 = findViewById<Button>(R.id.button3)
+        button4 = findViewById<Button>(R.id.button4)
 
         button1!!.setOnClickListener(this)
         button2!!.setOnClickListener(this)
         button3!!.setOnClickListener(this)
+        button4!!.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener   {
             R.id.button1 -> startActivity(Intent(this, FlexboxLayout1Activity::class.java))
             R.id.button2 -> startActivity(Intent(this, FlexboxLayout2Activity::class.java))
             R.id.button3 -> startActivity(Intent(this, FlexboxLayout3Activity::class.java))
+            R.id.button4 -> startActivity(Intent(this, FlexboxLayout4Activity::class.java))
         }
     }
 }
