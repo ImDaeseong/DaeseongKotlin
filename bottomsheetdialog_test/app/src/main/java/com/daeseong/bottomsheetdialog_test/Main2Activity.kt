@@ -79,6 +79,8 @@ class Main2Activity : AppCompatActivity() {
         customDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         customDialog.window!!.attributes.windowAnimations = R.style.DialogTheme
         customDialog.window!!.setGravity(Gravity.BOTTOM)
+
+        //customDialog.window!!.decorView.setPadding(0, 0, 0, 100)
     }
 
 }

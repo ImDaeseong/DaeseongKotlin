@@ -127,6 +127,8 @@ class Main8Activity : AppCompatActivity() {
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window.attributes.windowAnimations = R.style.DialogTheme
         window.setGravity(Gravity.BOTTOM)
+
+        //window.decorView.setPadding(0, 0, 0, 100)
     }
 
     private fun changeView() {

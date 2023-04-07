@@ -33,5 +33,7 @@ class Main7Activity : AppCompatActivity() {
         customDialog3.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         customDialog3.window!!.attributes.windowAnimations = R.style.DialogTheme
         customDialog3.window!!.setGravity(Gravity.BOTTOM)
+
+        //customDialog3.window!!.decorView.setPadding(0, 0, 0, 100)
     }
 }
