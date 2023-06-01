@@ -1,6 +1,6 @@
 package com.daeseong.contextmenu_test
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupWindow
+import androidx.appcompat.app.AppCompatActivity
 
 class Popupmenu3Activity : AppCompatActivity() {
 
@@ -62,6 +63,12 @@ class Popupmenu3Activity : AppCompatActivity() {
             popupWindow!!.dismiss()
         }
 
-        popupWindow!!.showAsDropDown(button1)
+        val nTop: Int = dip2px(this, 4f)
+        popupWindow!!.showAsDropDown(button1, 0, nTop)
+    }
+
+    private fun dip2px(context: Context, dpValue: Float): Int {
+        val scale = context.resources.displayMetrics.density
+        return (dpValue * scale + 0.5f).toInt()
     }
 }
