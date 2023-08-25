@@ -1,9 +1,14 @@
 package com.daeseong.permission33sdk_test
 
+import android.Manifest
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,10 +18,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button2: Button
     private lateinit var button3: Button
     private lateinit var button4: Button
+    private lateinit var button5: Button
+
+    private val PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
+    private val PERMISSIONS33 = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.POST_NOTIFICATIONS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        init()
 
         button1 = findViewById(R.id.button1)
         button1.setOnClickListener {
@@ -41,5 +52,37 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, Permission4Activity::class.java)
             startActivity(intent)
         }
+
+        button5 = findViewById(R.id.button5)
+        button5.setOnClickListener {
+            val intent = Intent(this@MainActivity, Permission5Activity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun init() {
+
+        //sdk 33 이상
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            for (permission in PERMISSIONS33) {
+                if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+                    Log.e(TAG, "$permission 미허용 상태")
+                } else {
+                    Log.e(TAG, "$permission 허용 상태")
+                }
+            }
+
+        } else {
+
+            for (permission in PERMISSIONS) {
+                if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+                    Log.e(TAG, "$permission 미허용 상태")
+                } else {
+                    Log.e(TAG, "$permission 허용 상태")
+                }
+            }
+        }
+
     }
 }

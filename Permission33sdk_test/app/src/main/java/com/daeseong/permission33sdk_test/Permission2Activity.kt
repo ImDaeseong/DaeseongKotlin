@@ -3,12 +3,12 @@ package com.daeseong.permission33sdk_test
 import android.Manifest.permission.*
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 
 class Permission2Activity : AppCompatActivity() {
 
@@ -34,6 +34,9 @@ class Permission2Activity : AppCompatActivity() {
 
                 for (permission in PERMISSIONS33) {
                     bPermissResult = checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+                    if (!bPermissResult) {
+                        break
+                    }
                 }
 
                 if (!bPermissResult) {
@@ -46,6 +49,9 @@ class Permission2Activity : AppCompatActivity() {
 
                 for (permission in PERMISSIONS) {
                     bPermissResult = checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+                    if (!bPermissResult) {
+                        break
+                    }
                 }
 
                 if (!bPermissResult) {
