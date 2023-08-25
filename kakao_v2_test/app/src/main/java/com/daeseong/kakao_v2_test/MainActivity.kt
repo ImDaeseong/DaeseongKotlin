@@ -8,11 +8,14 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.share.ShareClient
+import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.AccessTokenInfo
 import com.kakao.sdk.user.model.User
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import kotlin.Unit
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +25,9 @@ class MainActivity : AppCompatActivity() {
     private var button2 : Button? = null
     private var button3 : Button? = null
     private var button4 : Button? = null
+    private var button5 : Button? = null
+
+    private val callback = kakaoCallback()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +59,11 @@ class MainActivity : AppCompatActivity() {
             kakaounReg()
         }
 
+        button5 = findViewById<Button>(R.id.button5)
+        button5!!.setOnClickListener {
+
+            kakaolink()
+        }
     }
 
     private fun getHashKey() {
@@ -60,7 +71,6 @@ class MainActivity : AppCompatActivity() {
         var packageInfo: PackageInfo? = null
 
         try {
-
             packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
         } catch (ex: PackageManager.NameNotFoundException) {
             Log.e(tag, ex.message.toString())
@@ -69,7 +79,6 @@ class MainActivity : AppCompatActivity() {
         for (signature in packageInfo!!.signatures) {
 
             try {
-
                 val messageDigest: MessageDigest = MessageDigest.getInstance("SHA")
                 messageDigest.update(signature.toByteArray())
                 Log.e(tag, "haskey:" + Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))
@@ -77,24 +86,16 @@ class MainActivity : AppCompatActivity() {
                 Log.e(tag, ex.message.toString())
             }
         }
-
     }
 
     //카카오 로그인
     private fun kakaologin() {
 
-        val callback: (OAuthToken?, Throwable?) -> Unit = { accessToken, throwable ->
-            requestLogin()
-            if (accessToken != null) {
-                Log.e(tag, "getAccessToken:${accessToken.accessToken}")
-            } else if (throwable != null) {
-                Log.e(tag, "Error: ${throwable.message}")
-            }
-        }
-
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
+            Log.e(tag, "kakao 설치")
             UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
         } else {
+            Log.e(tag, "kakao 미설치")
             UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
         }
     }
@@ -157,4 +158,38 @@ class MainActivity : AppCompatActivity() {
             null
         }
     }
+
+    private fun kakaolink() {
+
+        if (!ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
+            return
+        }
+
+        TalkApiClient.instance.friends { friendFriends, error ->
+            if (error != null) {
+                Log.e(tag, "카카오톡 친구 목록 가져오기 실패:$error")
+            } else {
+                if (friendFriends!!.elements!!.isEmpty()) {
+                    Log.e(tag, "메시지를 보낼 수 있는 친구가 없습니다.")
+                } else {
+                    Log.e(tag, friendFriends.toString())
+                }
+            }
+            null
+        }
+    }
+
+    private inner class kakaoCallback : (OAuthToken?, Throwable?) -> Unit {
+        override fun invoke(token: OAuthToken?, error: Throwable?) {
+            token?.let {
+                if (it.idToken != null) {
+                    Log.e(tag, "getIdToken:" + it.idToken)
+                } else if (it.accessToken != null) {
+                    Log.e(tag, "getAccessToken:" + it.accessToken)
+                }
+                requestLogin()
+            }
+        }
+    }
+
 }
