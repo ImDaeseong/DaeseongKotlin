@@ -17,6 +17,14 @@
         android:theme="@style/Theme.Kakao_v2_test"
         tools:targetApi="31">
 
+        <activity
+            android:name=".Main1Activity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_id" />
@@ -34,10 +42,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
-            android:exported="true"
-            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -50,7 +57,6 @@
                     android:scheme="@string/kakao_id" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun requestLogin() {
+    private fun LoginInfo() {
         UserApiClient.instance.me { user: User?, throwable: Throwable? ->
             if (user != null) {
                 try {
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity() {
                 } else if (it.accessToken != null) {
                     Log.e(tag, "getAccessToken:" + it.accessToken)
                 }
-                requestLogin()
+                LoginInfo()
             }
         }
     }
