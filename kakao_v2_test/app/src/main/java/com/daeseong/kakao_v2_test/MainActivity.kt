@@ -9,13 +9,12 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.share.ShareClient
-import com.kakao.sdk.talk.TalkApiClient
+import com.kakao.sdk.template.model.*
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.AccessTokenInfo
 import com.kakao.sdk.user.model.User
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import kotlin.Unit
 
 class MainActivity : AppCompatActivity() {
 
@@ -161,6 +160,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun kakaolink() {
 
+        if (!ShareClient.instance.isKakaoTalkSharingAvailable(this))
+            return
+
+        val title = "제목"
+        val imgUrl = ""
+        val desc = ""
+
+        val content = Content(title, imgUrl, Link(imgUrl, imgUrl), desc)
+        val itemContent = ItemContent()
+        val social = Social()
+
+        val button = com.kakao.sdk.template.model.Button("자세히 보기", Link(imgUrl, imgUrl))
+        val buttons = arrayOf(button)
+
+        val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList(), "")
+
+        ShareClient.instance.shareDefault(this, feedTemplate) { sharingResult, error ->
+            if (error != null) {
+                Log.e(tag, "카카오톡 친구 목록 가져오기 실패: $error")
+            } else {
+                Log.e(tag, sharingResult!!.warningMsg.size.toString())
+            }
+            null
+        }
+
+        /*
         if (!ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
             return
         }
@@ -177,6 +202,7 @@ class MainActivity : AppCompatActivity() {
             }
             null
         }
+        */
     }
 
     private inner class kakaoCallback : (OAuthToken?, Throwable?) -> Unit {
