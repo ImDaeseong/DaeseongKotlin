@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.link.LinkClient
 import com.kakao.sdk.share.ShareClient
 import com.kakao.sdk.template.model.*
 import com.kakao.sdk.user.UserApiClient
@@ -160,6 +161,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun kakaolink() {
 
+        //v1 에서  v2 변경된 내용
+        //KakaoLinkService  -> ShareClient
+        //KakaoTalkService  -> TalkApiClient
+
         if (!ShareClient.instance.isKakaoTalkSharingAvailable(this))
             return
 
@@ -176,20 +181,36 @@ class MainActivity : AppCompatActivity() {
 
         val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList(), "")
 
+
         ShareClient.instance.shareDefault(this, feedTemplate) { sharingResult, error ->
+
             if (error != null) {
-                Log.e(tag, "카카오톡 친구 목록 가져오기 실패: $error")
-            } else {
-                Log.e(tag, sharingResult!!.warningMsg.size.toString())
+                Log.e(tag, "카카오톡 공유 실패: $error")
+            } else if (sharingResult != null) {
+                startActivity(sharingResult.intent)
+                Log.e(tag, "${sharingResult.warningMsg}")
+                Log.e(tag, "${sharingResult.argumentMsg}")
+                Log.e(tag, "${sharingResult.warningMsg.size}")
             }
             null
         }
 
         /*
-        if (!ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
-            return
-        }
+        LinkClient.instance.defaultTemplate(this, feedTemplate) { linkResult, error ->
 
+            if (error != null) {
+                Log.e(tag, "카카오링크 공유 실패: $error")
+            } else if (linkResult != null) {
+                startActivity(linkResult.intent)
+                Log.e(tag, "${linkResult.warningMsg}")
+                Log.e(tag, "${linkResult.argumentMsg}")
+                Log.e(tag, "${linkResult.warningMsg.size}")
+            }
+            null
+        }
+        */
+
+        /*
         TalkApiClient.instance.friends { friendFriends, error ->
             if (error != null) {
                 Log.e(tag, "카카오톡 친구 목록 가져오기 실패:$error")
