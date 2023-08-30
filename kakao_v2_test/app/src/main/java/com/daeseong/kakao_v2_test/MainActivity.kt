@@ -8,7 +8,6 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.link.LinkClient
 import com.kakao.sdk.share.ShareClient
 import com.kakao.sdk.template.model.*
 import com.kakao.sdk.user.UserApiClient
@@ -169,17 +168,18 @@ class MainActivity : AppCompatActivity() {
             return
 
         val title = "제목"
-        val imgUrl = ""
-        val desc = ""
+        val imgUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
+        val desc = "설명"
+        val linkUrl = "https://www.google.com"
 
-        val content = Content(title, imgUrl, Link(imgUrl, imgUrl), desc)
+        val content = Content(title, imgUrl, Link(linkUrl, linkUrl), desc)
         val itemContent = ItemContent()
         val social = Social()
 
-        val button = com.kakao.sdk.template.model.Button("자세히 보기", Link(imgUrl, imgUrl))
+        val button = com.kakao.sdk.template.model.Button("자세히 보기", Link(linkUrl, linkUrl))
         val buttons = arrayOf(button)
 
-        val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList(), "")
+        val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList(), "버튼제목")
 
 
         ShareClient.instance.shareDefault(this, feedTemplate) { sharingResult, error ->
