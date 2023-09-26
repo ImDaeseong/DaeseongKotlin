@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
-
 class Qr2Activity : AppCompatActivity() {
 
     private val tag: String = Qr2Activity::class.java.simpleName
@@ -13,7 +12,6 @@ class Qr2Activity : AppCompatActivity() {
     private var zXingScannerView: ZXingScannerView? = null
 
     private val handle = ZXingScannerView.ResultHandler { result ->
-
         val txt = result.text
         val sBarcodeFormat = result.barcodeFormat.toString()
 
@@ -21,8 +19,7 @@ class Qr2Activity : AppCompatActivity() {
         Toast.makeText(this@Qr2Activity, sBarcodeFormat, Toast.LENGTH_LONG).show()
 
         setContentView(R.layout.activity_qr2)
-
-        zXingScannerView!!.stopCamera()
+        zXingScannerView?.stopCamera()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,19 +36,19 @@ class Qr2Activity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        zXingScannerView!!.stopCamera()
+        zXingScannerView?.stopCamera()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        zXingScannerView!!.stopCamera()
+        zXingScannerView?.stopCamera()
     }
 
     private fun startScan() {
         zXingScannerView = ZXingScannerView(this)
-        zXingScannerView!!.setResultHandler(handle)
+        zXingScannerView?.setResultHandler(handle)
         setContentView(zXingScannerView)
-        zXingScannerView!!.startCamera()
+        zXingScannerView?.startCamera()
     }
 }

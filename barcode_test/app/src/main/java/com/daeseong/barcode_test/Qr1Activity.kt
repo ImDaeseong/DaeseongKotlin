@@ -10,7 +10,6 @@ import androidx.core.app.ActivityCompat
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
-
 class Qr1Activity : AppCompatActivity() , ZXingScannerView.ResultHandler {
 
     private val tag: String = Qr1Activity::class.java.simpleName
@@ -24,7 +23,6 @@ class Qr1Activity : AppCompatActivity() , ZXingScannerView.ResultHandler {
         zXingScannerView = ZXingScannerView(this)
         setContentView(zXingScannerView)
 
-
         checkPermission()
     }
 
@@ -34,11 +32,10 @@ class Qr1Activity : AppCompatActivity() , ZXingScannerView.ResultHandler {
         Toast.makeText(this, result.barcodeFormat.toString(),Toast.LENGTH_LONG).show()
 
         //한번 찍고 나서 멈추는걸 방지하기 위해
-        zXingScannerView!!.resumeCameraPreview(this)
+        zXingScannerView?.resumeCameraPreview(this)
 
         finish()
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -58,13 +55,13 @@ class Qr1Activity : AppCompatActivity() , ZXingScannerView.ResultHandler {
     override fun onPause() {
         super.onPause()
 
-        zXingScannerView!!.stopCamera()
+        zXingScannerView?.stopCamera()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        zXingScannerView!!.stopCamera()
+        zXingScannerView?.stopCamera()
     }
 
     private fun checkPermission(): Boolean {
