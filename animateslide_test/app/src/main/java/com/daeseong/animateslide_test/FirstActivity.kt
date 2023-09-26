@@ -3,7 +3,6 @@ package com.daeseong.animateslide_test
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-
 class FirstActivity : AppCompatActivity() {
 
     private val tag: String = FirstActivity::class.java.simpleName

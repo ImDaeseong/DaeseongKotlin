@@ -10,20 +10,16 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
-
 class Animate7Activity : AppCompatActivity() {
 
     private val tag: String = Animate7Activity::class.java.simpleName
 
-    private var button1 : Button? = null
-
+    private var button1: Button? = null
     private var image1: ImageView? = null
-
     private var llayout: LinearLayout? = null
-
-    private var nWidth:Int = 0
-    private var nHeight:Int = 0
-    private var nImgHeight:Int = 0
+    private var nWidth: Int = 0
+    private var nHeight: Int = 0
+    private var nImgHeight: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,38 +31,37 @@ class Animate7Activity : AppCompatActivity() {
         nWidth = displayMetrics.widthPixels
         nHeight = displayMetrics.heightPixels
 
-        llayout = findViewById<LinearLayout>(R.id.llayout)
+        llayout = findViewById(R.id.llayout)
+        image1 = findViewById(R.id.image1)
+        button1 = findViewById(R.id.button1)
 
-        image1 = findViewById<ImageView>(R.id.image1)
-
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
-
+        button1?.setOnClickListener {
             runAnimation1(image1!!)
         }
     }
 
     private fun runAnimation1(imageView: ImageView) {
         try {
-
-            //ImageView - > Bitmap
+            // ImageView -> Bitmap
             val drawable = imageView.drawable
             val bitmap = (drawable as BitmapDrawable).bitmap
             val rows = 3
             val columns = 5
-            var xPosition = 0
-            var yPosition = 0
+            var xPosition: Int
+            var yPosition: Int
             val nWidth = bitmap.width / columns
             val nHeight = bitmap.height / rows
-            for (i in 0..13) {
+
+            for (i in 0 until 14) {
                 xPosition = i % columns * nWidth
                 yPosition = i / columns * nHeight
 
-                //이미지 자르기
+                // 이미지 자르기
                 val croppedBmp = Bitmap.createBitmap(bitmap, xPosition, yPosition, nWidth, nHeight)
                 setImageView(i, croppedBmp)
             }
         } catch (ex: Exception) {
+            ex.printStackTrace()
         }
     }
 
@@ -77,14 +72,10 @@ class Animate7Activity : AppCompatActivity() {
         imageView.scaleType = ImageView.ScaleType.FIT_XY
         imageView.layoutParams = params
 
-        //마진 설정
-        if (nIndex == 0) {
-            params.setMargins(0, 0, 0, 0)
-        } else {
-            params.setMargins(10, 0, 0, 0)
-        }
+        // 마진 설정
+        params.setMargins(if (nIndex == 0) 0 else 10, 0, 0, 0)
         imageView.setImageBitmap(bitmap)
-        llayout!!.addView(imageView)
+        llayout?.addView(imageView)
     }
 
     private fun dip2px(context: Context, dpValue: Float): Int {

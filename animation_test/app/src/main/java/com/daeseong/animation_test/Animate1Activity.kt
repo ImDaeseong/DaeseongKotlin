@@ -1,46 +1,40 @@
 package com.daeseong.animation_test
 
 import android.animation.Animator
-import android.animation.Animator.AnimatorListener
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
-
 class Animate1Activity : AppCompatActivity() {
 
     private val tag: String = Animate1Activity::class.java.simpleName
 
-    private var button1 : Button? = null
-    private var button2 : Button? = null
-    private var button3 : Button? = null
-
-    private var image1: ImageView? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var image1: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_animate1)
 
-        image1 = findViewById<ImageView>(R.id.image1)
+        image1 = findViewById(R.id.image1)
+        button1 = findViewById(R.id.button1)
+        button2 = findViewById(R.id.button2)
+        button3 = findViewById(R.id.button3)
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
-
-            runAnimation1(image1!!)
+        button1.setOnClickListener {
+            runAnimation1(image1)
         }
 
-        button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
-
-            runAnimation2(image1!!)
+        button2.setOnClickListener {
+            runAnimation2(image1)
         }
 
-        button3 = findViewById<Button>(R.id.button3)
-        button3!!.setOnClickListener {
-
-            runAnimation3(image1!!)
+        button3.setOnClickListener {
+            runAnimation3(image1)
         }
     }
 
@@ -67,14 +61,15 @@ class Animate1Activity : AppCompatActivity() {
     }
 
     private fun runAnimation3(imageView: ImageView) {
+
         val objectAnimator = ObjectAnimator.ofFloat(imageView, "rotationY", 0f, 720f)
         objectAnimator.duration = 2000 //2초동안 실행
-        objectAnimator.addListener(object : AnimatorListener {
+        objectAnimator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animator: Animator) {}
             override fun onAnimationEnd(animator: Animator) {
 
                 //완료시 이미지 교체
-                image1!!.setImageResource(R.drawable.img2)
+                imageView.setImageResource(R.drawable.img2)
             }
 
             override fun onAnimationCancel(animator: Animator) {}

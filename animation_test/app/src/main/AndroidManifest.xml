@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Animate8Activity"></activity>
+
+        <activity android:name=".Animate8Activity" />
         <activity android:name=".Animate7Activity" />
         <activity android:name=".Animate6Activity" />
         <activity android:name=".Animate5Activity" />
@@ -17,13 +18,15 @@
         <activity android:name=".Animate3Activity" />
         <activity android:name=".Animate2Activity" />
         <activity android:name=".Animate1Activity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
