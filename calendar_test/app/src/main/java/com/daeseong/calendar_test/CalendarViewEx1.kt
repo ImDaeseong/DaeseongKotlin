@@ -1,12 +1,10 @@
 package com.daeseong.calendar_test
 
-
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +12,6 @@ import com.daeseong.calendar_test.SwipeGridView.OnSwipeFrameListener
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 class CalendarViewEx1 : ConstraintLayout {
 
@@ -42,22 +39,21 @@ class CalendarViewEx1 : ConstraintLayout {
     private fun init(context: Context) {
 
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view: View = inflater.inflate(R.layout.calendar_view2, this)
+        val view = inflater.inflate(R.layout.calendar_view2, this)
         tv_title = view.findViewById(R.id.tv_title)
         clleft_arrow = view.findViewById(R.id.clleft_arrow)
         clright_arrow = view.findViewById(R.id.clright_arrow)
         gridview1 = view.findViewById(R.id.gridview1)
 
-
-        clleft_arrow!!.setOnClickListener(OnClickListener {
+        clleft_arrow!!.setOnClickListener {
             calendar.add(Calendar.MONTH, -1)
             showCalendarView()
-        })
+        }
 
-        clright_arrow!!.setOnClickListener(OnClickListener {
+        clright_arrow!!.setOnClickListener {
             calendar.add(Calendar.MONTH, 1)
             showCalendarView()
-        })
+        }
 
         showCalendarView()
     }
@@ -74,7 +70,7 @@ class CalendarViewEx1 : ConstraintLayout {
         //Calendar.DAY_OF_WEEK 값은 1 ~ 7 일 ~ 토
         val tempcalendar = calendar.clone() as Calendar
         tempcalendar[Calendar.DAY_OF_MONTH] = 1
-        val nNonth = tempcalendar[Calendar.MONTH]
+        val nMonth = tempcalendar[Calendar.MONTH]
         val nDay = tempcalendar[Calendar.DAY_OF_WEEK] - 1
         tempcalendar.add(Calendar.DAY_OF_MONTH, -nDay)
 
@@ -88,8 +84,7 @@ class CalendarViewEx1 : ConstraintLayout {
 
 
         gridview1!!.adapter = Calendar1Adapter(context, arrayList)
-        gridview1!!.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-
+        gridview1!!.onItemClickListener = OnItemClickListener { _, _, position, _ ->
             val date = arrayList[position]
             val nDay = date.date
             val sDay = String.format("%02d", nDay)
@@ -98,7 +93,6 @@ class CalendarViewEx1 : ConstraintLayout {
 
 
         gridview1!!.setOnSwipeListener(object : OnSwipeFrameListener {
-
             override fun swipeLeft() {
                 calendar.add(Calendar.MONTH, -1)
                 showCalendarView()
@@ -112,5 +106,6 @@ class CalendarViewEx1 : ConstraintLayout {
             override fun swipeUp() {}
             override fun swipeDown() {}
         })
+
     }
 }

@@ -3,11 +3,9 @@ package com.daeseong.calendar_test
 import android.content.Context
 import android.util.AttributeSet
 import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.widget.GridView
 import kotlin.math.abs
-
 
 class SwipeGridView : GridView {
 
@@ -27,39 +25,31 @@ class SwipeGridView : GridView {
 
     private fun init() {
 
-        gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
+        gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
 
             override fun onDown(motionEvent: MotionEvent): Boolean {
                 return true
             }
 
-            override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float,  velocityY: Float): Boolean {
+            override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
                 var result = false
                 val diffX = e2.x - e1.x
                 val diffY = e2.y - e1.y
                 if (abs(diffX) > abs(diffY)) {
                     if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffX > 0) {
-                            if (swipeFrameListener != null) {
-                                swipeFrameListener!!.swipeRight()
-                            }
+                            swipeFrameListener?.swipeRight()
                         } else {
-                            if (swipeFrameListener != null) {
-                                swipeFrameListener!!.swipeLeft()
-                            }
+                            swipeFrameListener?.swipeLeft()
                         }
                         result = true
                     }
                 } else {
                     if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffY < 0) {
-                            if (swipeFrameListener != null) {
-                                swipeFrameListener!!.swipeUp()
-                            }
+                            swipeFrameListener?.swipeUp()
                         } else {
-                            if (swipeFrameListener != null) {
-                                swipeFrameListener!!.swipeDown()
-                            }
+                            swipeFrameListener?.swipeDown()
                         }
                         result = true
                     }
@@ -74,7 +64,7 @@ class SwipeGridView : GridView {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        gestureDetector!!.onTouchEvent(event)
+        gestureDetector?.onTouchEvent(event)
         return true
     }
 

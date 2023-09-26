@@ -16,7 +16,8 @@
         <activity android:name=".Button3Activity" />
         <activity android:name=".Button2Activity" />
         <activity android:name=".Button1Activity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

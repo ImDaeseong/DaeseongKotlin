@@ -17,7 +17,6 @@ class DayViewDecoratorEx3(calendarDays: Collection<CalendarDay>) :  DayViewDecor
     }
 
     override fun decorate(view: DayViewFacade) {
-
-        view.addSpan(DotSpan(Color.rgb(255, 0, 0).toFloat(), 5))
+        view.addSpan(DotSpan(5F, Color.rgb(255, 0, 0)))
     }
 }

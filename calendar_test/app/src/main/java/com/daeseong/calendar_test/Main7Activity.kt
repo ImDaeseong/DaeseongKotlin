@@ -7,13 +7,12 @@ class Main7Activity : AppCompatActivity() {
 
     private val tag: String = Main7Activity::class.java.simpleName
 
-    private var calendarviewex1: CalendarViewEx1? = null
+    private var calendarViewEx1: CalendarViewEx1? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main7)
 
-        calendarviewex1 = findViewById<CalendarViewEx1>(R.id.calendarviewex1)
-
+        calendarViewEx1 = findViewById(R.id.calendarviewex1)
     }
 }

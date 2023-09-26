@@ -6,7 +6,6 @@ import android.widget.CalendarView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 
-
 class Main1Activity : AppCompatActivity() {
 
     private val tag: String = Main1Activity::class.java.simpleName
@@ -17,9 +16,8 @@ class Main1Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main1)
 
-        calendarview1 = findViewById<CalendarView>(R.id.calendarview1)
-
-        calendarview1!!.firstDayOfWeek = Calendar.MONDAY;//.SUNDAY);//달력의 시작일 설정(default 일요일)
+        calendarview1  = findViewById(R.id.calendarview1)
+        calendarview1!!.firstDayOfWeek = Calendar.MONDAY//.SUNDAY);//달력의 시작일 설정(default 일요일)
 
         //달력 유효기간 설정
         setCalendarDay1()

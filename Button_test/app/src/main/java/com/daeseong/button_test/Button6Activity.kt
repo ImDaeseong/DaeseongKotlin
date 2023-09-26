@@ -2,47 +2,33 @@ package com.daeseong.button_test
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 
-class Button6Activity : AppCompatActivity(), View.OnClickListener {
+class Button6Activity : AppCompatActivity() {
 
     private val tag: String = Button6Activity::class.java.simpleName
 
-    private var button10 : Button? = null
-    private var button11 : Button? = null
+    private lateinit var button10: Button
+    private lateinit var button11: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_button6)
 
-        button10 = findViewById<Button>(R.id.button10)
-        button10!!.setOnClickListener(this)
+        button10 = findViewById(R.id.button10)
+        button11 = findViewById(R.id.button11)
 
-        button11 = findViewById<Button>(R.id.button11)
-        button11!!.setOnClickListener(this)
-    }
-
-    override fun onClick(v: View?) {
-
-        if (v != null) {
-
-            //var btn = v as Button
-            //Log.e(tag, btn.text as String)
-
-            when (v.id) {
-
-                R.id.button10 -> {
-                    Toast.makeText(this, "button10_Click", Toast.LENGTH_SHORT).show()
-                }
-
-                R.id.button11 -> {
-                    Toast.makeText(this, "button11_Click", Toast.LENGTH_SHORT).show()
-                }
-            }
+        button10.setOnClickListener {
+            showToast("button10_Click")
         }
 
+        button11.setOnClickListener {
+            showToast("button11_Click")
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

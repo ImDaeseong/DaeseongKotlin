@@ -11,32 +11,30 @@ class Main3Activity : AppCompatActivity() {
 
     private val tag: String = Main3Activity::class.java.simpleName
 
-    private var materialCalendarView1: MaterialCalendarView? = null
+    private var materialCalendarView: MaterialCalendarView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
 
-        materialCalendarView1 = findViewById<MaterialCalendarView>(R.id.materialCalendarView1)
+        materialCalendarView = findViewById(R.id.materialCalendarView1)
 
-        materialCalendarView1!!.setOnDateChangedListener { widget, date, selected ->
-
+        materialCalendarView?.setOnDateChangedListener { widget, date, selected ->
             val sDay = String.format("%02d/%02d/%04d", date.month + 1, date.day, date.year)
             Log.e(tag, "sDay:$sDay")
         }
 
-        materialCalendarView1!!.setOnMonthChangedListener { widget, date ->
-
-            Log.e(tag, "month:" + date.month + 1)
+        materialCalendarView?.setOnMonthChangedListener { widget, date ->
+            Log.e(tag, "month:" + (date.month + 1))
         }
 
         //선택된 요일 색상
-        materialCalendarView1!!.selectionColor = Color.GRAY
+        materialCalendarView?.selectionColor = Color.GRAY
 
         //달력 시작일 설정
-        materialCalendarView1!!.state().edit().setMinimumDate(CalendarDay.from(2020, 8, 1)).commit()
+        materialCalendarView?.state()?.edit()?.setMinimumDate(CalendarDay.from(2020, 8, 1))?.commit()
 
         //일요일 색상만 red
-        materialCalendarView1!!.addDecorators(DayViewDecoratorEx())
+        materialCalendarView?.addDecorators(DayViewDecoratorEx())
     }
 }

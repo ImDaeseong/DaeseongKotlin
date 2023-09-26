@@ -2,17 +2,14 @@ package com.daeseong.calendar_test
 
 import android.content.Context
 import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import kotlin.math.abs
 
-
-open class SwipeListener(context: Context) :  OnTouchListener {
+open class SwipeListener(context: Context) : View.OnTouchListener {
 
     companion object {
-        private val tag = SwipeListener::class.java.simpleName
+        private val TAG = SwipeListener::class.java.simpleName
         private const val SWIPE_THRESHOLD = 30
         private const val SWIPE_VELOCITY_THRESHOLD = 1
     }
@@ -41,13 +38,13 @@ open class SwipeListener(context: Context) :  OnTouchListener {
 
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
 
-        if(motionEvent == null || gestureDetector == null)
+        if (motionEvent == null || gestureDetector == null)
             return false
 
         return gestureDetector.onTouchEvent(motionEvent)
     }
 
-    private inner class GestureListener : SimpleOnGestureListener() {
+    private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
 
         override fun onDown(e: MotionEvent): Boolean {
             return true
@@ -83,4 +80,5 @@ open class SwipeListener(context: Context) :  OnTouchListener {
             return result
         }
     }
+
 }

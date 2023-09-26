@@ -1,20 +1,17 @@
 package com.daeseong.calendar_test
 
-
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
-import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView
 import android.widget.GridView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 class CalendarViewEx : ConstraintLayout {
 
@@ -48,25 +45,23 @@ class CalendarViewEx : ConstraintLayout {
         clright_arrow = view.findViewById(R.id.clright_arrow)
         gridview1 = view.findViewById(R.id.gridview1)
 
-
-        clleft_arrow!!.setOnClickListener(OnClickListener {
+        clleft_arrow!!.setOnClickListener {
             calendar.add(Calendar.MONTH, -1)
             showCalendarView()
-        })
+        }
 
-        clright_arrow!!.setOnClickListener(OnClickListener {
+        clright_arrow!!.setOnClickListener {
             calendar.add(Calendar.MONTH, 1)
             showCalendarView()
-        })
+        }
 
         showCalendarView()
     }
 
     private fun showCalendarView() {
 
-        val simpleDateFormat = SimpleDateFormat("yyyy년MM월")
-
         //제목
+        val simpleDateFormat = SimpleDateFormat("yyyy년MM월")
         tv_title!!.text = simpleDateFormat.format(calendar.time)
 
 
@@ -88,7 +83,7 @@ class CalendarViewEx : ConstraintLayout {
 
 
         gridview1!!.adapter = Calendar1Adapter(context, arrayList)
-        gridview1!!.onItemClickListener = OnItemClickListener { _, _, position, _ ->
+        gridview1!!.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 
             val date = arrayList[position]
             val nDay = date.date

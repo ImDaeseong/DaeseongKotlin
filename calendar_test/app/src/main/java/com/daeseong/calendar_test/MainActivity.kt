@@ -5,70 +5,42 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
-
 class MainActivity : AppCompatActivity() {
 
     private val tag: String = MainActivity::class.java.simpleName
-
-    private var button1 : Button? = null
-    private var button2 : Button? = null
-    private var button3 : Button? = null
-    private var button4 : Button? = null
-    private var button5 : Button? = null
-    private var button6 : Button? = null
-    private var button7 : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
+        val buttonIds = arrayOf(
+            R.id.button1,
+            R.id.button2,
+            R.id.button3,
+            R.id.button4,
+            R.id.button5,
+            R.id.button6,
+            R.id.button7
+        )
 
-            val intent = Intent(this, Main1Activity::class.java)
-            startActivity(intent)
+        for (buttonId in buttonIds) {
+            findViewById<Button>(buttonId).setOnClickListener {
+                val intent = Intent(this, CallActivity(buttonId))
+                startActivity(intent)
+            }
         }
+    }
 
-        button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
-
-            val intent = Intent(this, Main2Activity::class.java)
-            startActivity(intent)
-        }
-
-        button3 = findViewById<Button>(R.id.button3)
-        button3!!.setOnClickListener {
-
-            val intent = Intent(this, Main3Activity::class.java)
-            startActivity(intent)
-        }
-
-        button4 = findViewById<Button>(R.id.button4)
-        button4!!.setOnClickListener {
-
-            val intent = Intent(this, Main4Activity::class.java)
-            startActivity(intent)
-        }
-
-        button5 = findViewById<Button>(R.id.button5)
-        button5!!.setOnClickListener {
-
-            val intent = Intent(this, Main5Activity::class.java)
-            startActivity(intent)
-        }
-
-        button6 = findViewById<Button>(R.id.button6)
-        button6!!.setOnClickListener {
-
-            val intent = Intent(this, Main6Activity::class.java)
-            startActivity(intent)
-        }
-
-        button7 = findViewById<Button>(R.id.button7)
-        button7!!.setOnClickListener {
-
-            val intent = Intent(this, Main7Activity::class.java)
-            startActivity(intent)
+    private fun CallActivity(buttonId: Int): Class<*> {
+        return when (buttonId) {
+            R.id.button1 -> Main1Activity::class.java
+            R.id.button2 -> Main2Activity::class.java
+            R.id.button3 -> Main3Activity::class.java
+            R.id.button4 -> Main4Activity::class.java
+            R.id.button5 -> Main5Activity::class.java
+            R.id.button6 -> Main6Activity::class.java
+            R.id.button7 -> Main7Activity::class.java
+            else -> throw IllegalArgumentException("Unknown button clicked")
         }
     }
 }

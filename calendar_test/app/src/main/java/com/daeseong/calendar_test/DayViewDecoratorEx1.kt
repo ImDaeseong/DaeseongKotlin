@@ -7,28 +7,32 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
-import java.util.*
-
+import java.util.Calendar
 
 class DayViewDecoratorEx1 : DayViewDecorator {
 
     private val tag = DayViewDecoratorEx1::class.java.simpleName
 
-    private val calendar: Calendar = Calendar.getInstance()
+    private val calendar = Calendar.getInstance()
+
+    constructor() : super()
 
     override fun shouldDecorate(day: CalendarDay): Boolean {
+
         day.copyTo(calendar)
         val nIndex = calendar[Calendar.DAY_OF_WEEK]
 
-        when (nIndex) {
-            1 -> Log.e(tag, "일요일")
-            2 -> Log.e(tag, "월요일")
-            3 -> Log.e(tag, "화요일")
-            4 -> Log.e(tag, "수요일")
-            5 -> Log.e(tag, "목요일")
-            6 -> Log.e(tag, "금요일")
-            7 -> Log.e(tag, "토요일")
+        val dayOfWeek = when (nIndex) {
+            Calendar.SUNDAY -> "일요일"
+            Calendar.MONDAY -> "월요일"
+            Calendar.TUESDAY -> "화요일"
+            Calendar.WEDNESDAY -> "수요일"
+            Calendar.THURSDAY -> "목요일"
+            Calendar.FRIDAY -> "금요일"
+            Calendar.SATURDAY -> "토요일"
+            else -> "알 수 없음"
         }
+        Log.e(tag, dayOfWeek)
 
         return nIndex == Calendar.SATURDAY
     }
