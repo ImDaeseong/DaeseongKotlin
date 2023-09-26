@@ -29,9 +29,9 @@ class Banner4Activity : AppCompatActivity() {
         button1 = findViewById<View>(R.id.button1) as Button
         button1!!.setOnClickListener {
 
-            Log.e(tag, "getCompleteBannerItem1:" + Banner_util.getInstance().getCompleteBannerItem1())
+            Log.e(tag, "getCompleteBannerItem1:" + BannerUtil.getInstance().getCompleteBannerItem1())
 
-            val rowItems = Banner_util.getInstance().getDownloadBanner()
+            val rowItems = BannerUtil.getInstance().getDownloadBanner()
             for (i in rowItems.indices) {
                 val bitmap = rowItems[i].bitmap
 

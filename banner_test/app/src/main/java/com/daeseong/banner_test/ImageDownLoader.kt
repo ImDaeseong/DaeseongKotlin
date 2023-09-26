@@ -1,5 +1,3 @@
-package com.daeseong.banner_test
-
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
@@ -7,28 +5,25 @@ import android.util.Log
 import android.widget.ImageView
 import java.net.URL
 
-class ImageDownLoader(private val imageView: ImageView) : AsyncTask<String, Void, Bitmap>() {
+class ImageDownloader(private val imageView: ImageView) : AsyncTask<String, Void, Bitmap>() {
 
     companion object {
-        private val tag = ImageDownLoader::class.java.name
+        private val TAG = ImageDownloader::class.java.name
     }
 
-    override fun doInBackground(vararg params: String): Bitmap {
-
-        var bitmap: Bitmap? = null
-        try {
-            bitmap = BitmapFactory.decodeStream(URL(params[0]).openStream())
+    override fun doInBackground(vararg params: String): Bitmap? {
+        return try {
+            BitmapFactory.decodeStream(URL(params[0]).openStream())
         } catch (e: Exception) {
             e.printStackTrace()
-            cancel(true)
+            null
         }
-        return bitmap!!
     }
 
-    override fun onPostExecute(bitmap: Bitmap) {
+    override fun onPostExecute(bitmap: Bitmap?) {
         try {
-            if (bitmap != null) {
-                imageView.setImageBitmap(bitmap)
+            bitmap?.let {
+                imageView.setImageBitmap(it)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -36,7 +31,6 @@ class ImageDownLoader(private val imageView: ImageView) : AsyncTask<String, Void
     }
 
     override fun onCancelled() {
-        Log.e(tag, "onCancelled")
+        Log.e(TAG, "onCancelled")
     }
-
 }

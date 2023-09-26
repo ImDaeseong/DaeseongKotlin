@@ -1,5 +1,6 @@
 package com.daeseong.banner_test
 
+import ImageDownloader
 import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.ImageView
@@ -10,7 +11,7 @@ class Banner3Activity : AppCompatActivity() {
 
     private val tag = Banner3Activity::class.java.simpleName
 
-    private var imageDownLoader: ImageDownLoader? = null
+    private var imageDownloader: ImageDownloader? = null
 
     private var imageView1: ImageView? = null
     private var imageView2:ImageView? = null
@@ -32,24 +33,25 @@ class Banner3Activity : AppCompatActivity() {
         val url2 = "https://.png"
         val url3 = "https://.png"
         val url4 = "https://.png"
-        imageDownLoader = ImageDownLoader(imageView1!!)
-        imageDownLoader!!.execute(url1)
 
-        imageDownLoader = ImageDownLoader(imageView2!!)
-        imageDownLoader!!.execute(url2)
+        imageDownloader = ImageDownloader(imageView1!!)
+        imageDownloader!!.execute(url1)
 
-        imageDownLoader = ImageDownLoader(imageView3!!)
-        imageDownLoader!!.execute(url3)
+        imageDownloader = ImageDownloader(imageView2!!)
+        imageDownloader!!.execute(url2)
 
-        imageDownLoader = ImageDownLoader(imageView4!!)
-        imageDownLoader!!.execute(url4)
+        imageDownloader = ImageDownloader(imageView3!!)
+        imageDownloader!!.execute(url3)
+
+        imageDownloader = ImageDownloader(imageView4!!)
+        imageDownloader!!.execute(url4)
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        if (imageDownLoader!!.status != AsyncTask.Status.FINISHED) {
-            imageDownLoader!!.cancel(true)
+        if (imageDownloader != null && imageDownloader!!.status != AsyncTask.Status.FINISHED) {
+            imageDownloader!!.cancel(true)
         }
     }
 }

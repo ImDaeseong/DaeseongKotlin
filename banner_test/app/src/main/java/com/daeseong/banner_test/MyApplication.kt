@@ -19,7 +19,7 @@ class MyApplication : Application() {
         super.onCreate()
 
         mInstance = this
-        Banner_util.getInstance().setDownloadBanner()
+        BannerUtil.getInstance().setDownloadBanner()
     }
 
 }

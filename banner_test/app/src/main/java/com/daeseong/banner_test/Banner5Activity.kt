@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import com.daeseong.banner_test.String_util.getImageName
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -56,7 +55,6 @@ class Banner5Activity : AppCompatActivity() {
                 thread.start()
             }
         }
-
     }
 
     private fun DownLoadImage(sUrl: String): Bitmap? {
@@ -120,7 +118,7 @@ class Banner5Activity : AppCompatActivity() {
                 var bitmap: Bitmap? = null
 
                 for (url in params) {
-                    sFileName = getImageName(url)
+                    sFileName = StringUtil.getImageName(url)
                     bitmap = DownLoadImage(url)
 
                     //오류로 인해 이미지를 받아오지 못할 경우 가지고 있는 리소스를 이용한다.
@@ -190,7 +188,7 @@ class Banner5Activity : AppCompatActivity() {
 
             for (url in params) {
 
-                sFileName = getImageName(url!!)
+                sFileName = StringUtil.getImageName(url!!)
                 bitmap = DownLoadImage(url!!)
 
                 //오류로 인해 이미지를 받아오지 못할 경우 가지고 있는 리소스를 이용한다.
