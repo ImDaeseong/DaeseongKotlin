@@ -1,26 +1,19 @@
 package com.daeseong.toast_test
 
 import android.content.Context
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.TextView
 import android.widget.Toast
 
-
-class Toast_layout2(context: Context, sMsg: String) : Toast(context) {
-
-    private val tag: String = Toast_layout2::class.java.simpleName
-
-    private var tv1: TextView
-    private var vlayout : View = View.inflate(context, R.layout.toast_layout1, null)
+class ToastLayout2(context: Context, sMsg: String) : Toast(context) {
 
     init {
-
-        tv1 = vlayout.findViewById<TextView>(R.id.tvtoast)
-        tv1!!.text = sMsg
+        val vlayout = LayoutInflater.from(context).inflate(R.layout.toast_layout1, null)
+        val tv1 = vlayout.findViewById<TextView>(R.id.tvtoast)
+        tv1.text = sMsg
 
         view = vlayout
         duration = LENGTH_LONG
         show()
     }
 }
-

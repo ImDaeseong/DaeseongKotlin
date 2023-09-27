@@ -1,11 +1,9 @@
 package com.daeseong.toast_test
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -19,83 +17,90 @@ class MainActivity : AppCompatActivity() {
 
     private val tag: String = MainActivity::class.java.simpleName
 
-    private var button1: Button? = null
-    private var button2:Button? = null
-    private var button3: Button? = null
-    private var button4:Button? = null
-    private var button5:Button? = null
-    private var ivbitmap: ImageView? = null
-
-    private var toast : Toast? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
+    private lateinit var button5: Button
+    private lateinit var ivbitmap: ImageView
+    private lateinit var toast: Toast
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        ivbitmap = findViewById<ImageView>(R.id.ivbitmap)
+        ivbitmap = findViewById(R.id.ivbitmap)
 
         button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener(View.OnClickListener {
-
-            showToast(this, "Toast test")
-        })
+        button1.setOnClickListener {
+            showToast("Toast test")
+        }
 
         button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener(View.OnClickListener { view ->
-
+        button2.setOnClickListener { view ->
             Snackbar.make(view, "Snackbar test", Snackbar.LENGTH_LONG).show()
-        })
+        }
 
         button3 = findViewById<Button>(R.id.button3)
-        button3!!.setOnClickListener(View.OnClickListener {
-
+        button3.setOnClickListener {
             val bitmap = getBitmapFromView(window.decorView)
-            if (bitmap != null) {
-                ivbitmap!!.setImageBitmap(bitmap)
-            }
-        })
+            ivbitmap.setImageBitmap(bitmap)
+        }
 
         button4 = findViewById<Button>(R.id.button4)
-        button4!!.setOnClickListener(View.OnClickListener {
-
-           Toast_layout1(this, "ClickToast ClickToast").show()
-        })
+        button4.setOnClickListener {
+            showCustomToast("ClickToast ClickToast", Gravity.CENTER, Toast.LENGTH_SHORT)
+        }
 
         button5 = findViewById<Button>(R.id.button5)
-        button5!!.setOnClickListener(View.OnClickListener {
-
-            Toast_layout2(this, "Toast test")
-        })
+        button5.setOnClickListener {
+            showToast("Toast test")
+        }
     }
 
     private fun getBitmapFromView(view: View): Bitmap? {
-        try {
+        return try {
             val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(returnedBitmap)
             val bgDrawable = view.background
             if (bgDrawable != null) bgDrawable.draw(canvas) else canvas.drawColor(Color.WHITE)
             view.draw(canvas)
-            return returnedBitmap
+            returnedBitmap
         } catch (e: Exception) {
+            null
         }
-        return null
     }
 
-    private fun showToast(context: Context, sMsg: String) {
+    private fun showToast(message: String) {
+        val toastLayout = layoutInflater.inflate(R.layout.toast_layout, null)
+        val toastTextView = toastLayout.findViewById<TextView>(R.id.tvtoast)
+        toastTextView.text = message
 
-        val vlayout = View.inflate(context, R.layout.toast_layout, null)
-        val tv1  = vlayout.findViewById<TextView>(R.id.tvtoast)
-        tv1.text = sMsg;
-
-        if(toast != null){
-            toast!!.cancel()
+        if (::toast.isInitialized) {
+            toast.cancel()
         }
 
-        toast = Toast(context)
-        toast!!.view = vlayout
-        toast!!.setGravity(Gravity.BOTTOM, 0, 0)
-        toast!!.duration = Toast.LENGTH_LONG
-        toast!!.show()
+        toast = Toast(applicationContext)
+        toast.view = toastLayout
+        toast.setGravity(Gravity.BOTTOM, 0, 0)
+        toast.duration = Toast.LENGTH_LONG
+        toast.show()
+    }
+
+    private fun showCustomToast(message: String, gravity: Int, duration: Int) {
+        val toastLayout = layoutInflater.inflate(R.layout.toast_layout, null)
+        val toastTextView = toastLayout.findViewById<TextView>(R.id.tvtoast)
+        toastTextView.text = message
+
+        if (::toast.isInitialized) {
+            toast.cancel()
+        }
+
+        toast = Toast(applicationContext)
+        toast.view = toastLayout
+        toast.setGravity(gravity, 0, 0)
+        toast.duration = duration
+        toast.show()
     }
 
 }
