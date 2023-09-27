@@ -6,7 +6,6 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import java.util.*
 
-
 class GetRequestData {
 
     companion object {

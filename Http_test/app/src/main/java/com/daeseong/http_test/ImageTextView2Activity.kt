@@ -1,75 +1,62 @@
 package com.daeseong.http_test
 
-import android.content.Context
+import DownloadImage2
+import DownloadJson1
 import android.graphics.Bitmap
-import android.net.ConnectivityManager
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.daeseong.http_test.HttpUtil.DownloadImage2
-import com.daeseong.http_test.HttpUtil.DownloadJson1
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ImageTextView2Activity : AppCompatActivity() {
 
     private val tag: String = ImageTextView2Activity::class.java.simpleName
 
-    private var button1: Button? = null
-    private var button2:Button? = null
-    private var imageView1: ImageView? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var textView1: TextView
+    private lateinit var imageView1: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_text_view2)
 
-        button1 = findViewById<Button>(R.id.button1)
-        button2 = findViewById<Button>(R.id.button2)
-        imageView1 = findViewById<ImageView>(R.id.imageView1)
+        button1 = findViewById(R.id.button1)
+        button2 = findViewById(R.id.button2)
+        textView1 = findViewById(R.id.textView1)
+        imageView1 = findViewById(R.id.imageView1)
 
-        button1!!.setOnClickListener {
+        button1.setOnClickListener {
+            DownloadImage2(this).execute()
+        }
 
-            if (IsConnection()) {
-                DownloadImage2(this).execute()
-            } else {
-                Toast.makeText(applicationContext, "Not Connect", Toast.LENGTH_SHORT).show()
+        button2.setOnClickListener {
+            DownloadJson1(this).execute()
+        }
+    }
+
+    fun setImageViewBitmap(bitmap: Bitmap?) {
+
+        GlobalScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
+                val defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.r)
+                imageView1.setImageBitmap(bitmap ?: defaultBitmap)
             }
         }
+    }
 
-        button2!!.setOnClickListener {
+    fun loadJsonData(data: String?) {
 
-            if (IsConnection()) {
-                DownloadJson1(this).execute()
-            } else {
-                Toast.makeText(applicationContext, "Not Connect", Toast.LENGTH_SHORT).show()
+        GlobalScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
+                textView1.text = data
             }
         }
-    }
-
-    fun ImageViewBitmap(bitmap: Bitmap?) {
-
-        if (bitmap != null) {
-            val imageView1 = findViewById<ImageView>(R.id.imageView1)
-            imageView1.setImageBitmap(bitmap)
-        } else {
-            val imageView1 = findViewById<ImageView>(R.id.imageView1)
-            imageView1.setImageResource(R.drawable.r)
-        }
-    }
-
-    fun LoadjsonData(sData: String?) {
-
-        Log.e(tag, "LoadjsonData:$sData")
-    }
-
-    fun IsConnection(): Boolean {
-        val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-        if (!networkInfo.isConnected) {
-            return false
-        }
-        return networkInfo.isAvailable
     }
 }
