@@ -5,37 +5,31 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-object rxUtil {
+object RxUtil {
 
     //convert AsyncTask<String, Void, String>
-    open fun GetDataString(sUrl: String?): Observable<String?>? {
-
+    fun getDataString(sUrl: String?): Observable<String?> {
         return Observable.fromCallable {
-
-            var sResult = ""
             try {
-                sResult = HttpUtil.GetDataString(sUrl)
-            } catch (e: java.lang.Exception) {
+                HttpUtil.getDataString(sUrl)
+            } catch (e: Exception) {
                 e.printStackTrace()
+                null
             }
-            sResult
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
     //convert AsyncTask<String, Void, Bitmap>
-    open fun GetDataBitmap(sUrl: String?): Observable<Bitmap?>? {
-
+    fun getDataBitmap(sUrl: String?): Observable<Bitmap?> {
         return Observable.fromCallable {
-
-            var bm: Bitmap? = null
             try {
-                bm = HttpUtil.GetDataBitmap(sUrl!!)
+                HttpUtil.getDataBitmap(sUrl!!)
             } catch (e: Exception) {
                 e.printStackTrace()
+                null
             }
-            bm!!
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

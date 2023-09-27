@@ -1,6 +1,5 @@
 package com.daeseong.cardview_test
 
-
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -12,34 +11,33 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
+class RecyclerAdapter(private val context: Context, private val items: ArrayList<DataItem>) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-class RecyclerAdapter(var context: Context, var items: ArrayList<DataItem>) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
-
-        val v: View = LayoutInflater.from(parent.context).inflate(R.layout.item1_cardview, null)
-        return ViewHolder(v)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val itemView = inflater.inflate(R.layout.item1_cardview, parent, false)
+        return ViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val item = items[position]
-        val drawable = ContextCompat.getDrawable(context, item.getImage())
+        val drawable = ContextCompat.getDrawable(context, item.image!! )
 
-        holder.image.background = drawable
-        holder.title.text = item.getTitle()
-        holder.cardView.setOnClickListener {
-            Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show()
+        with(holder) {
+            image.background = drawable
+            title.text = item.title
+            cardView.setOnClickListener {
+                Toast.makeText(context, item.title, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
-    inner class ViewHolder(v : View) : RecyclerView.ViewHolder(v) {
-        var image: ImageView = v.findViewById<View>(R.id.image) as ImageView
-        var title: TextView = v.findViewById<View>(R.id.title) as TextView
-        var cardView: CardView = v.findViewById<View>(R.id.cardview) as CardView
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val image: ImageView = itemView.findViewById(R.id.image)
+        val title: TextView = itemView.findViewById(R.id.title)
+        val cardView: CardView = itemView.findViewById(R.id.cardview)
     }
 }

@@ -1,19 +1,18 @@
 package com.daeseong.changedeprecated.Common
 
+import ThreadTask
 import android.graphics.Bitmap
-import com.daeseong.changedeprecated.Common.HttpUtil.GetDataBitmap
+import com.daeseong.changedeprecated.Common.HttpUtil.getDataBitmap
 
 class GetBitmapTask : ThreadTask<String?, Bitmap?>() {
 
-    private var bm: Bitmap? = null
-
-    override fun doInBackground(sUrl: String?): Bitmap {
-
+    override fun doInBackground(param: String?): Bitmap? {
+        var bm: Bitmap? = null
         try {
-            bm = GetDataBitmap(sUrl!!)
+            bm = getDataBitmap(param!!)
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return bm!!
+        return bm
     }
 }

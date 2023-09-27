@@ -6,17 +6,17 @@ import com.kakao.sdk.common.KakaoSdk.init
 class GlobalApplication : Application() {
 
     companion object {
-        private lateinit var mInstance: GlobalApplication
+        private lateinit var instance: GlobalApplication
 
         fun getInstance(): GlobalApplication {
-            return mInstance
+            return instance
         }
     }
 
     override fun onCreate() {
         super.onCreate()
 
-        mInstance = this
+        instance = this
 
         // Kakao Sdk 초기화
         init(this, resources.getString(R.string.kakao_id))

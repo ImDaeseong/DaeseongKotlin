@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-
 class RecyclerViewAdapter(var itemList: ArrayList<DataItem>) : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -18,8 +17,8 @@ class RecyclerViewAdapter(var itemList: ArrayList<DataItem>) : RecyclerView.Adap
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        holder.title.text = itemList[position].getTitle()
-        holder.image.setBackgroundResource(itemList[position].getImage())
+        holder.title.text = itemList[position].title
+        holder.image.setBackgroundResource(itemList[position].image!!)
     }
 
     override fun getItemCount(): Int {

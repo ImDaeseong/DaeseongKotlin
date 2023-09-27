@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -12,118 +11,66 @@ import javax.net.ssl.HttpsURLConnection
 
 object HttpUtil {
 
-    fun GetDataString(sUrl: String?): String {
+    fun getDataString(sUrl: String?): String {
+        return try {
+            val url = URL(sUrl)
+            val httpURLConnection = url.openConnection() as HttpURLConnection
 
-        var httpURLConnection: HttpURLConnection? = null
-        var inputStream: InputStream? = null
-        var bufferedReader: BufferedReader? = null
-        val stringBuilder = StringBuilder()
-
-        try {
-
-            //SSL https 처리
+            // SSL https 처리
             HttpsURLConnection.setDefaultHostnameVerifier { hostname, session ->
                 hostname == session.peerHost
             }
 
-            val url = URL(sUrl)
-            httpURLConnection = url.openConnection() as HttpURLConnection
-            httpURLConnection!!.allowUserInteraction = false
+            httpURLConnection.allowUserInteraction = false
             httpURLConnection.instanceFollowRedirects = true
             httpURLConnection.requestMethod = "GET"
-            //httpURLConnection.connectTimeout = 60//타임아웃 시간 설정(default:무한대기)
-            //httpURLConnection.setRequestProperty("Content-Type", "application/json")
             httpURLConnection.connect()
 
             val resCode = httpURLConnection.responseCode
             if (resCode == HttpURLConnection.HTTP_OK) {
-
-                inputStream = httpURLConnection.inputStream
-                bufferedReader = BufferedReader(InputStreamReader(inputStream))
-                var line: String? = null
+                val inputStream = httpURLConnection.inputStream
+                val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+                val stringBuilder = StringBuilder()
+                var line: String?
                 while (bufferedReader.readLine().also { line = it } != null) {
                     stringBuilder.append(line)
                 }
+                inputStream.close()
+                stringBuilder.toString()
+            } else {
+                ""
             }
-            httpURLConnection.disconnect()
-
         } catch (e: IOException) {
             e.printStackTrace()
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close()
-                } catch (e: IOException) {
-                }
-            }
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close()
-                } catch (e: IOException) {
-                }
-            }
-            if (httpURLConnection != null) {
-                try {
-                    httpURLConnection.disconnect()
-                } catch (e: Exception) {
-                }
-            }
+            ""
         }
-        return stringBuilder.toString()
     }
 
-    fun GetDataBitmap(sUrl: String): Bitmap? {
+    fun getDataBitmap(sUrl: String): Bitmap? {
+        return try {
+            val url = URL(sUrl)
+            val httpURLConnection = url.openConnection() as HttpURLConnection
 
-        var httpURLConnection: HttpURLConnection? = null
-        var inputStream: InputStream? = null
-        val bufferedReader: BufferedReader? = null
-        var bitmap: Bitmap? = null
-
-        try {
-
-            //SSL https 처리
+            // SSL https 처리
             HttpsURLConnection.setDefaultHostnameVerifier { hostname, session ->
                 hostname == session.peerHost
             }
 
-            val url = URL(sUrl)
-            httpURLConnection = url.openConnection() as HttpURLConnection
-            httpURLConnection!!.allowUserInteraction = false
+            httpURLConnection.allowUserInteraction = false
             httpURLConnection.instanceFollowRedirects = true
             httpURLConnection.requestMethod = "GET"
-            //httpURLConnection.connectTimeout = 60//타임아웃 시간 설정(default:무한대기)
             httpURLConnection.connect()
 
             val resCode = httpURLConnection.responseCode
             if (resCode == HttpURLConnection.HTTP_OK) {
-                inputStream = httpURLConnection.inputStream
-                bitmap = BitmapFactory.decodeStream(inputStream)
+                val inputStream = httpURLConnection.inputStream
+                BitmapFactory.decodeStream(inputStream)
+            } else {
+                null
             }
-            httpURLConnection.disconnect()
-
         } catch (e: IOException) {
             e.printStackTrace()
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close()
-                } catch (e: IOException) {
-                }
-            }
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close()
-                } catch (e: IOException) {
-                }
-            }
-            if (httpURLConnection != null) {
-                try {
-                    httpURLConnection.disconnect()
-                } catch (e: Exception) {
-                }
-            }
+            null
         }
-        return bitmap
     }
 }
-

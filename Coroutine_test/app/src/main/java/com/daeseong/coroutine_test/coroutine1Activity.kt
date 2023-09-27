@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.BufferedReader
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -18,88 +18,58 @@ class coroutine1Activity : AppCompatActivity() {
 
     private val tag: String = coroutine1Activity::class.java.simpleName
 
-    private var imageView1: ImageView? = null
-
-    private val sUrl = "https://.png"
+    private lateinit var imageView1: ImageView
+    private val sUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_coroutine1)
 
-        imageView1 = findViewById<ImageView>(R.id.imageView1)
-
-        GlobalScopeImageView()
-    }
-
-    private fun GlobalScopeImageView(){
+        imageView1 = findViewById(R.id.imageView1)
 
         GlobalScope.launch(Dispatchers.IO) {
 
-            //백그라운드 처리
-
-            var bitmap: Bitmap? = null
             try {
-
-                bitmap = getBitmapUrl(sUrl)
-
-                GlobalScope.launch(Dispatchers.Main) {
-
-                    //UI 처리
-                    imageView1!!.setImageBitmap(bitmap);
-                }
-            } catch (e: java.lang.Exception) {
+                val bitmap = getBitmapFromUrl(sUrl)
+                updateImageView(bitmap)
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+
     }
 
-    private fun getBitmapUrl(urlImage: String): Bitmap? {
+    private suspend fun getBitmapFromUrl(urlImage: String): Bitmap? {
 
         var httpURLConnection: HttpURLConnection? = null
         var inputStream: InputStream? = null
-        val bufferedReader: BufferedReader? = null
-        var bitmap: Bitmap? = null
 
-        try {
+        return try {
             val url = URL(urlImage)
             httpURLConnection = url.openConnection() as HttpURLConnection
             httpURLConnection.allowUserInteraction = false
-            httpURLConnection!!.instanceFollowRedirects = true
+            httpURLConnection.instanceFollowRedirects = true
             httpURLConnection.requestMethod = "GET"
-            httpURLConnection.connectTimeout = 60//타임아웃 시간 설정(default:무한대기)
+            httpURLConnection.connectTimeout = 60000 // 타임아웃 시간 설정 (60초)
             httpURLConnection.connect()
-            val resCode = httpURLConnection.responseCode
-            if (resCode != HttpURLConnection.HTTP_OK) {
-                return null
+
+            if (httpURLConnection.responseCode != HttpURLConnection.HTTP_OK) {
+                null
+            } else {
+                inputStream = httpURLConnection.inputStream
+                BitmapFactory.decodeStream(inputStream)
             }
-            inputStream = httpURLConnection.inputStream
-            bitmap = BitmapFactory.decodeStream(inputStream)
-            httpURLConnection.disconnect()
         } catch (e: IOException) {
-            e.printStackTrace()
+            null
         } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            if (httpURLConnection != null) {
-                try {
-                    httpURLConnection.disconnect()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
+            inputStream?.close()
+            httpURLConnection?.disconnect()
         }
-        return bitmap
+    }
+
+    private suspend fun updateImageView(bitmap: Bitmap?) {
+        withContext(Dispatchers.Main) {
+            imageView1.setImageBitmap(bitmap)
+        }
     }
 }

@@ -14,36 +14,44 @@ class coroutine4Activity : AppCompatActivity() {
     private lateinit var textView1: TextView
     private lateinit var button1: Button
 
-    private lateinit var job: Job
-    private var nCount : Int = 0
+    private var nCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_coroutine4)
 
-        textView1 = findViewById<TextView>(R.id.textView1)
-        button1 = findViewById<Button>(R.id.button1)
+        textView1 = findViewById(R.id.textView1)
+        button1 = findViewById(R.id.button1)
 
         button1.setOnClickListener {
 
+            // UI 업데이트를 위한 메인 스레드에서의 CoroutineScope 생성
             CoroutineScope(Dispatchers.Main).launch {
 
-                job = CoroutineScope(Dispatchers.Main).launch {
+                // Job을 생성하여 취소할 수 있는 작업 수행
+                val job = launch(Dispatchers.Default) {
 
                     repeat(5) {
 
-                        nCount ++
+                        nCount++
                         Log.e(tag, nCount.toString())
+
+                        // UI 업데이트
+                        withContext(Dispatchers.Main) {
+                            textView1.text = nCount.toString()
+                        }
+
                         delay(1000)
                     }
                 }
 
-                //2초후 job 종료
+                // 2초 후 job을 취소하고 종료를 대기
                 delay(2000)
                 job.cancelAndJoin()
 
                 Log.e(tag, "job.cancelAndJoin()")
             }
         }
+
     }
 }

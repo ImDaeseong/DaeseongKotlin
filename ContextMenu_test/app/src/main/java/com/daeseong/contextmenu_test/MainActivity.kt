@@ -6,17 +6,12 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
-
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    companion object {
-        private val tag = MainActivity::class.java.simpleName
-    }
-
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var button3: Button? = null
-    private var button4: Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,10 +21,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button2 = findViewById(R.id.button2)
         button3 = findViewById(R.id.button3)
         button4 = findViewById(R.id.button4)
-        button1!!.setOnClickListener(this)
-        button2!!.setOnClickListener(this)
-        button3!!.setOnClickListener(this)
-        button4!!.setOnClickListener(this)
+
+        button1.setOnClickListener(this)
+        button2.setOnClickListener(this)
+        button3.setOnClickListener(this)
+        button4.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {

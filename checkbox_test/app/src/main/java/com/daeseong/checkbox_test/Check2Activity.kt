@@ -9,37 +9,32 @@ class Check2Activity : AppCompatActivity() {
 
     private val tag: String = Check2Activity::class.java.simpleName
 
-    private var checkBox2: CheckBox? = null
-    private var checkBox3: CheckBox? = null
-    private var checkBox4: CheckBox? = null
+    private lateinit var checkBox2: CheckBox
+    private lateinit var checkBox3: CheckBox
+    private lateinit var checkBox4: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check2)
 
-        checkBox2 = findViewById<CheckBox>(R.id.checkBox2)
-        checkBox2!!.setOnCheckedChangeListener { _, isChecked ->
+        checkBox2 = findViewById(R.id.checkBox2)
+        checkBox3 = findViewById(R.id.checkBox3)
+        checkBox4 = findViewById(R.id.checkBox4)
 
-            if (isChecked) {
-                Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        checkBox3 = findViewById<CheckBox>(R.id.checkBox3)
-        checkBox3!!.setOnCheckedChangeListener{compoundButton, isChecked ->
-            if(isChecked){
-                Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        checkBox4 = findViewById<CheckBox>(R.id.checkBox4)
-        checkBox4!!.setOnCheckedChangeListener{ _, isChecked ->
-
-            if(isChecked){
-                Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show()
-            }
-        }
-
+        setCheckBoxListener(checkBox2)
+        setCheckBoxListener(checkBox3)
+        setCheckBoxListener(checkBox4)
     }
 
+    private fun setCheckBoxListener(checkBox: CheckBox) {
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                showToast("checked")
+            }
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }

@@ -17,148 +17,96 @@ class coroutine3Activity : AppCompatActivity() {
     private lateinit var button3: Button
     private lateinit var button4: Button
 
-    private var sText : String? = ""
-    private var nCount : Int = 0
-
+    private var sText: String = ""
+    private var nCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_coroutine3)
 
-        textView1 = findViewById<TextView>(R.id.textView1)
-        button1 = findViewById<Button>(R.id.button1)
-        button2 = findViewById<Button>(R.id.button2)
-        button3 = findViewById<Button>(R.id.button3)
-        button4 = findViewById<Button>(R.id.button4)
+        textView1 = findViewById(R.id.textView1)
+        button1 = findViewById(R.id.button1)
+        button2 = findViewById(R.id.button2)
+        button3 = findViewById(R.id.button3)
+        button4 = findViewById(R.id.button4)
 
         button1.setOnClickListener {
-
             textView1.text = ""
-            normalFun()
+            CoroutineScope(Dispatchers.IO).launch {
+                normalFun()
+            }
         }
 
         button2.setOnClickListener {
-
             textView1.text = ""
-            asyncFun()
+            CoroutineScope(Dispatchers.IO).launch {
+                asyncFun()
+            }
         }
 
         button3.setOnClickListener {
-
             textView1.text = ""
-            repeatFun()
+            CoroutineScope(Dispatchers.IO).launch {
+                repeatFun()
+            }
         }
 
         button4.setOnClickListener {
-
             textView1.text = ""
-            withTimeoutFun()
+            CoroutineScope(Dispatchers.IO).launch {
+                withTimeoutFun()
+            }
         }
     }
 
-    private fun normalFun(){
+    private suspend fun normalFun() {
+        val result1 = getDelay1()
+        val result2 = getDelay2()
+        sText += "$result1\r\n$result2"
+        updateTextView()
+    }
 
-        CoroutineScope(Dispatchers.IO).launch {
+    private suspend fun asyncFun() {
 
+        val result1 = getDelay1()
+        val result2 = getDelay2()
+        val combinedResult = "$result1\r\n$result2"
+
+        // 결과를 UI 스레드에서 표시
+        withContext(Dispatchers.Main) {
+            sText += combinedResult
+            updateTextView()
+        }
+    }
+
+    private suspend fun repeatFun() {
+        repeat(5) {
+            nCount++
             val result1 = getDelay1()
             val result2 = getDelay2()
-
-            sText += result1 + "\r\n"
-            sText += result2
-
-            CoroutineScope(Dispatchers.Main).launch {
-                textView1.text = sText
-            }
+            sText += "$result1\r\n"
+            sText += if (nCount > 4) result2 else "$result2\r\n"
+            updateTextView()
+            delay(1000)
         }
     }
 
-    private fun asyncFun(){
-
-        CoroutineScope(Dispatchers.IO).launch {
-
-            //async 비동기
-            val result1 = async {
-                getDelay1()
-            }
-
-            val result2 = async {
-                getDelay2()
-            }
-
-            sText += result1.await() + "\r\n"
-            sText += result2.await()
-
-            CoroutineScope(Dispatchers.Main).launch {
-                textView1.text = sText
-            }
-        }
-    }
-
-    private fun repeatFun() {
-
-        CoroutineScope(Dispatchers.IO).launch {
-
-            //repeat 회수만큼 반복
-            repeat(5) {
-
-                nCount ++
-                //Log.e(tag, nCount.toString())
-
-                val result1 = getDelay1()
-                val result2 = getDelay2()
-
-                sText += result1 + "\r\n"
-
-                sText += if(nCount > 4)
-                    result2
-                else
-                    result2 + "\r\n"
-
-                CoroutineScope(Dispatchers.Main).launch {
-                    textView1.text = sText
+    private suspend fun withTimeoutFun() {
+        try {
+            withTimeout(5000) {
+                repeat(5000) {
+                    nCount++
+                    val result1 = getDelay1()
+                    sText += "$result1\r\n"
+                    sText += if (nCount > 4) result1 else "$result1\r\n"
+                    updateTextView()
+                    delay(100)
                 }
-
-                delay(1000)
             }
+        } catch (e: TimeoutCancellationException) {
+            Log.e(tag, e.message.toString())
         }
     }
-
-    private fun withTimeoutFun() {
-
-        CoroutineScope(Dispatchers.IO).launch {
-
-            try {
-
-                withTimeout(5000) {
-
-                    repeat(5000){
-
-                        nCount ++
-                        //Log.e(tag, nCount.toString())
-
-                        val result1 = getDelay1()
-
-                        sText += result1 + "\r\n"
-
-                        sText += if(nCount > 4)
-                            result1
-                        else
-                            result1 + "\r\n"
-
-                        CoroutineScope(Dispatchers.Main).launch {
-                            textView1.text = sText
-                        }
-
-                        delay(100)
-                    }
-                }
-
-            }catch (e : TimeoutCancellationException){
-                Log.e(tag, e.message.toString())
-            }
-        }
-    }
-
 
     private suspend fun getDelay1(): String {
         delay(1000)
@@ -168,5 +116,11 @@ class coroutine3Activity : AppCompatActivity() {
     private suspend fun getDelay2(): String {
         delay(3000)
         return "getDelay2"
+    }
+
+    private suspend fun updateTextView() {
+        withContext(Dispatchers.Main) {
+            textView1.text = sText
+        }
     }
 }

@@ -8,7 +8,9 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.link.LinkClient
 import com.kakao.sdk.share.ShareClient
+import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.template.model.*
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.AccessTokenInfo
@@ -20,53 +22,47 @@ class MainActivity : AppCompatActivity() {
 
     private val tag: String = MainActivity::class.java.simpleName
 
-    private var button1 : Button? = null
-    private var button2 : Button? = null
-    private var button3 : Button? = null
-    private var button4 : Button? = null
-    private var button5 : Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
+    private lateinit var button5: Button
 
-    private val callback = kakaoCallback()
+    private val callback = KakaoCallback()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //getHashKey()
+        getHashKey()
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
-
-            kakaologin()
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
+            kakaoLogin()
         }
 
-        button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
-
-            kakaologout()
+        button2 = findViewById(R.id.button2)
+        button2.setOnClickListener {
+            kakaoLogout()
         }
 
-        button3 = findViewById<Button>(R.id.button3)
-        button3!!.setOnClickListener {
-
+        button3 = findViewById(R.id.button3)
+        button3.setOnClickListener {
             kakaoTokenInfo()
         }
 
-        button4 = findViewById<Button>(R.id.button4)
-        button4!!.setOnClickListener {
-
-            kakaounReg()
+        button4 = findViewById(R.id.button4)
+        button4.setOnClickListener {
+            kakaoUnregister()
         }
 
-        button5 = findViewById<Button>(R.id.button5)
-        button5!!.setOnClickListener {
-
-            kakaolink()
+        button5 = findViewById(R.id.button5)
+        button5.setOnClickListener {
+            kakaoLink()
         }
     }
 
     private fun getHashKey() {
-
         var packageInfo: PackageInfo? = null
 
         try {
@@ -76,11 +72,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         for (signature in packageInfo!!.signatures) {
-
             try {
                 val messageDigest: MessageDigest = MessageDigest.getInstance("SHA")
                 messageDigest.update(signature.toByteArray())
-                Log.e(tag, "haskey:" + Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))
+                Log.e(tag, "hashkey: " + Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))
             } catch (ex: NoSuchAlgorithmException) {
                 Log.e(tag, ex.message.toString())
             }
@@ -88,45 +83,44 @@ class MainActivity : AppCompatActivity() {
     }
 
     //카카오 로그인
-    private fun kakaologin() {
-
+    private fun kakaoLogin() {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-            Log.e(tag, "kakao 설치")
+            Log.e(tag, "Kakao 설치")
             UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
         } else {
-            Log.e(tag, "kakao 미설치")
+            Log.e(tag, "Kakao 미설치")
             UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
         }
     }
 
-    private fun LoginInfo() {
+    private fun loginInfo() {
         UserApiClient.instance.me { user: User?, throwable: Throwable? ->
             if (user != null) {
                 try {
-                    Log.e(tag, "getId : " + user.id)
-                    Log.e(tag, "getNickname : " + user?.kakaoAccount?.profile?.nickname);
-                    Log.e(tag, "getEmail : " + user.kakaoAccount?.email)
-                    Log.e(tag, "getGender : " + user.kakaoAccount?.gender)
-                    Log.e(tag, "getAgeRange : " + user.kakaoAccount?.ageRange)
-                    Log.e(tag, "getProfileImageUrl : " + user?.kakaoAccount?.profile?.profileImageUrl)
+                    Log.e(tag, "getId: ${user.id}")
+                    Log.e(tag, "getNickname: ${user?.kakaoAccount?.profile?.nickname}")
+                    Log.e(tag, "getEmail: ${user.kakaoAccount?.email}")
+                    Log.e(tag, "getGender: ${user.kakaoAccount?.gender}")
+                    Log.e(tag, "getAgeRange: ${user.kakaoAccount?.ageRange}")
+                    Log.e(tag, "getProfileImageUrl: ${user?.kakaoAccount?.profile?.profileImageUrl}")
                     Log.e(tag, "카카오 로그인 성공")
                 } catch (ex: Exception) {
                     Log.e(tag, ex.message.toString())
                 }
             } else {
-                Log.e(tag, "카카오 로그인 실패: ", throwable)
+                Log.e(tag, "카카오 로그인 실패: $throwable")
             }
             null
         }
     }
 
     //카카오 로그아웃
-    private fun kakaologout() {
+    private fun kakaoLogout() {
         UserApiClient.instance.logout { throwable: Throwable? ->
             if (throwable != null) {
-                Log.e(tag, "kakao 로그아웃 실패")
+                Log.e(tag, "Kakao 로그아웃 실패")
             } else {
-                Log.e(tag, "kakao 로그아웃 성공")
+                Log.e(tag, "Kakao 로그아웃 성공")
             }
             null
         }
@@ -134,31 +128,30 @@ class MainActivity : AppCompatActivity() {
 
     //카카오 토큰 정보
     private fun kakaoTokenInfo() {
-        UserApiClient.instance
-            .accessTokenInfo { accessTokenInfo: AccessTokenInfo?, throwable: Throwable? ->
-                if (throwable != null) {
-                    Log.e(tag, "kakao 토큰 정보 호출 실패")
-                } else if (accessTokenInfo != null) {
-                    Log.e(tag, "getId:" + accessTokenInfo.id)
-                    Log.e(tag, "만료시간:" + accessTokenInfo.expiresIn)
-                }
-                null
-            }
-    }
-
-    //카카오 탈퇴
-    private fun kakaounReg() {
-        UserApiClient.instance.unlink { throwable: Throwable? ->
+        UserApiClient.instance.accessTokenInfo { accessTokenInfo: AccessTokenInfo?, throwable: Throwable? ->
             if (throwable != null) {
-                Log.e(tag, "kakao 토큰 회원탈퇴 실패")
-            } else {
-                Log.e(tag, "kakao 토큰 회원탈퇴 성공")
+                Log.e(tag, "Kakao 토큰 정보 호출 실패")
+            } else if (accessTokenInfo != null) {
+                Log.e(tag, "getId: ${accessTokenInfo.id}")
+                Log.e(tag, "만료시간: ${accessTokenInfo.expiresIn}")
             }
             null
         }
     }
 
-    private fun kakaolink() {
+    //카카오 탈퇴
+    private fun kakaoUnregister() {
+        UserApiClient.instance.unlink { throwable: Throwable? ->
+            if (throwable != null) {
+                Log.e(tag, "Kakao 토큰 회원탈퇴 실패")
+            } else {
+                Log.e(tag, "Kakao 토큰 회원탈퇴 성공")
+            }
+            null
+        }
+    }
+
+    private fun kakaoLink() {
 
         //v1 에서  v2 변경된 내용
         //KakaoLinkService  -> ShareClient
@@ -181,11 +174,9 @@ class MainActivity : AppCompatActivity() {
 
         val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList(), "버튼제목")
 
-
         ShareClient.instance.shareDefault(this, feedTemplate) { sharingResult, error ->
-
             if (error != null) {
-                Log.e(tag, "카카오톡 공유 실패: $error")
+                Log.e(tag, "KakaoTalk 공유 실패: $error")
             } else if (sharingResult != null) {
                 startActivity(sharingResult.intent)
                 Log.e(tag, "${sharingResult.warningMsg}")
@@ -226,15 +217,15 @@ class MainActivity : AppCompatActivity() {
         */
     }
 
-    private inner class kakaoCallback : (OAuthToken?, Throwable?) -> Unit {
+    private inner class KakaoCallback : (OAuthToken?, Throwable?) -> Unit {
         override fun invoke(token: OAuthToken?, error: Throwable?) {
             token?.let {
                 if (it.idToken != null) {
-                    Log.e(tag, "getIdToken:" + it.idToken)
+                    Log.e(tag, "getIdToken: ${it.idToken}")
                 } else if (it.accessToken != null) {
-                    Log.e(tag, "getAccessToken:" + it.accessToken)
+                    Log.e(tag, "getAccessToken: ${it.accessToken}")
                 }
-                LoginInfo()
+                loginInfo()
             }
         }
     }

@@ -3,53 +3,38 @@ package com.daeseong.checkbox_test
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.CheckBox
-import android.widget.CompoundButton
 import android.widget.Toast
 
 class Check3Activity : AppCompatActivity() {
 
     private val tag: String = Check3Activity::class.java.simpleName
 
-    private var checkBox5: CheckBox? = null
-    private var checkBox6: CheckBox? = null
-    private var checkBox7: CheckBox? = null
+    private lateinit var checkBox5: CheckBox
+    private lateinit var checkBox6: CheckBox
+    private lateinit var checkBox7: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check3)
 
-        checkBox5 = findViewById<CheckBox>(R.id.checkBox5)
-        checkBox5!!.setOnCheckedChangeListener( object : CompoundButton.OnCheckedChangeListener{
+        checkBox5 = findViewById(R.id.checkBox5)
+        checkBox6 = findViewById(R.id.checkBox6)
+        checkBox7 = findViewById(R.id.checkBox7)
 
-            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+        setCheckBoxListener(checkBox5)
+        setCheckBoxListener(checkBox6)
+        setCheckBoxListener(checkBox7)
+    }
 
-                if (isChecked) {
-                    Toast.makeText(this@Check3Activity, "checked", Toast.LENGTH_SHORT).show()
-                }
+    private fun setCheckBoxListener(checkBox: CheckBox) {
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                showToast("checked")
             }
-        } )
+        }
+    }
 
-        checkBox6 = findViewById<CheckBox>(R.id.checkBox6)
-        checkBox6!!.setOnCheckedChangeListener( object : CompoundButton.OnCheckedChangeListener{
-
-            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-
-                if (isChecked) {
-                    Toast.makeText(this@Check3Activity, "checked", Toast.LENGTH_SHORT).show()
-                }
-            }
-        } )
-
-        checkBox7 = findViewById<CheckBox>(R.id.checkBox7)
-        checkBox7!!.setOnCheckedChangeListener( object : CompoundButton.OnCheckedChangeListener{
-
-            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-
-                if (isChecked) {
-                    Toast.makeText(this@Check3Activity, "checked", Toast.LENGTH_SHORT).show()
-                }
-            }
-        } )
-
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

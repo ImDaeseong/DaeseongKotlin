@@ -9,33 +9,32 @@ class MainActivity : AppCompatActivity() {
 
     private val tag: String = MainActivity::class.java.simpleName
 
-    private var button1 : Button? = null
-    private var button2 : Button? = null
-    private var button3 : Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
+        button1 = findViewById(R.id.button1)
+        button2 = findViewById(R.id.button2)
+        button3 = findViewById(R.id.button3)
 
-            val intent = Intent(this, Check1Activity::class.java)
-            startActivity(intent)
+        button1.setOnClickListener {
+            callActivity<Check1Activity>()
         }
 
-        button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
-
-            val intent = Intent(this, Check2Activity::class.java)
-            startActivity(intent)
+        button2.setOnClickListener {
+            callActivity<Check2Activity>()
         }
 
-        button3 = findViewById<Button>(R.id.button3)
-        button3!!.setOnClickListener {
-
-            val intent = Intent(this, Check3Activity::class.java)
-            startActivity(intent)
+        button3.setOnClickListener {
+            callActivity<Check3Activity>()
         }
+    }
+
+    inline fun <reified T : AppCompatActivity> AppCompatActivity.callActivity() {
+        startActivity(Intent(this, T::class.java))
     }
 }

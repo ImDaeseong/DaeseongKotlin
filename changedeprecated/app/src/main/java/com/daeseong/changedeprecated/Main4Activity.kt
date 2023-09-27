@@ -2,22 +2,22 @@ package com.daeseong.changedeprecated
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.daeseong.changedeprecated.Common.GetBitmapTask
 import com.daeseong.changedeprecated.Common.GetStringTask
+import java.util.concurrent.Future
 
 class Main4Activity : AppCompatActivity() {
 
     private val tag = Main4Activity::class.java.simpleName
 
-    private var imageView1: ImageView? = null
-    private var textView1: TextView? = null
-    private var button1: Button? = null
-    private var button2: Button? = null
+    private lateinit var imageView1: ImageView
+    private lateinit var textView1: TextView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
 
     private val sPngUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
     private val sStrUrl = "https://api.bithumb.com/public/ticker/BTC"
@@ -28,35 +28,40 @@ class Main4Activity : AppCompatActivity() {
 
         imageView1 = findViewById(R.id.imageView1)
         textView1 = findViewById(R.id.textView1)
-
         button1 = findViewById(R.id.button1)
-        button1!!.setOnClickListener(View.OnClickListener {
+        button2 = findViewById(R.id.button2)
+
+        button1.setOnClickListener {
 
             try {
 
-                var bitmap: Bitmap? = null
-                bitmap = GetBitmapTask().execute(sPngUrl)
+                val task = GetBitmapTask()
+                val future: Future<Bitmap?> = task.execute(sPngUrl)
+                val bitmap: Bitmap? = future.get()
                 if (bitmap != null) {
-                    imageView1!!.setImageBitmap(bitmap)
+                    imageView1.setImageBitmap(bitmap)
                 }
 
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
-        })
+        }
 
-        button2 = findViewById(R.id.button2)
-        button2!!.setOnClickListener(View.OnClickListener {
+        button2.setOnClickListener {
 
             try {
 
-                var sResult: String? = ""
-                sResult = GetStringTask().execute(sStrUrl)
-                textView1!!.text = sResult
+                val task = GetStringTask()
+                val future: Future<String?> = task.execute(sStrUrl)
+                val result: String? = future.get()
+                if (result != null) {
+                    textView1.text = result
+                }
 
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
-        })
+        }
     }
+
 }

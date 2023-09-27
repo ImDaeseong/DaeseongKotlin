@@ -9,38 +9,39 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Popupmenu1Activity : AppCompatActivity() {
 
-    companion object {
-        private val tag = Popupmenu1Activity::class.java.simpleName
-    }
+    private val tag = Popupmenu1Activity::class.java.simpleName
 
-    private var button1: Button? = null
+    private lateinit var button1: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_popupmenu1)
 
-        button1 = findViewById<View>(R.id.button1) as Button
-        button1!!.setOnClickListener { v ->
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener { v -> showPopupMenu(v) }
+    }
 
-            val popupMenu = PopupMenu(this@Popupmenu1Activity, v)
-            val menuInflater = popupMenu.menuInflater
-            menuInflater.inflate(R.menu.menu1, popupMenu.menu)
+    private fun showPopupMenu(view: View) {
 
-            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.Item1 -> {
-                        Log.e(tag, "Item1")
-                        return@OnMenuItemClickListener true
-                    }
-                    R.id.Item2 -> {
-                        Log.e(tag, "Item2")
-                        return@OnMenuItemClickListener true
-                    }
+        val popupMenu = PopupMenu(this, view)
+        val menuInflater = popupMenu.menuInflater
+        menuInflater.inflate(R.menu.menu1, popupMenu.menu)
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.Item1 -> {
+                    Log.e(tag, "Item1")
+                    true
                 }
-                false
-            })
-            popupMenu.show()
+                R.id.Item2 -> {
+                    Log.e(tag, "Item2")
+                    true
+                }
+                else -> false
+            }
         }
+
+        popupMenu.show()
     }
 
 }

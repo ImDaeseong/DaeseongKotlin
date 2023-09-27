@@ -9,15 +9,13 @@ import java.lang.ref.WeakReference
 object RecycleUtil {
 
     fun recursiveRecycle(root: View?) {
+        root ?: return
 
-        var root: View? = root ?: return
-
-        root!!.background = null
+        root.background = null
 
         if (root is ViewGroup) {
-            val group = root
-            val count = group.childCount
-            for (i in 0 until count) {
+            val group = root as ViewGroup
+            for (i in 0 until group.childCount) {
                 recursiveRecycle(group.getChildAt(i))
             }
 
@@ -29,21 +27,14 @@ object RecycleUtil {
         if (root is ImageView) {
             root.setImageDrawable(null)
         }
-
-        root = null
-
-        return
     }
 
     fun recursiveRecycle(recycleList: List<WeakReference<View?>>) {
-        for (ref in recycleList) recursiveRecycle(ref.get())
+        recycleList.forEach { ref -> recursiveRecycle(ref.get()) }
     }
 
     fun unBindDrawables(view: View) {
-
-        if (view.background != null) {
-            view.background.callback = null
-        }
+        view.background?.callback = null
 
         if (view is ViewGroup && view !is AdapterView<*>) {
             for (i in 0 until view.childCount) {

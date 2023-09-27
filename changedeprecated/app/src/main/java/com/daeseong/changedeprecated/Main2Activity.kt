@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.result.ActivityResult
@@ -22,13 +21,13 @@ class Main2Activity : AppCompatActivity() {
 
     private val tag = Main2Activity::class.java.simpleName
 
-    private var imageView1: ImageView? = null
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var button3: Button? = null
+    private lateinit var imageView1: ImageView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
 
-    lateinit var  activityResultLauncherCamera: ActivityResultLauncher<Intent>
-    lateinit var  activityResultLauncherGallery: ActivityResultLauncher<Intent>
+    private lateinit var activityResultLauncherCamera: ActivityResultLauncher<Intent>
+    private lateinit var activityResultLauncherGallery: ActivityResultLauncher<Intent>
 
     private var bitmap: Bitmap? = null
     private var uri: Uri? = null
@@ -38,43 +37,37 @@ class Main2Activity : AppCompatActivity() {
         setContentView(R.layout.activity_main2)
 
         initResultCamera()
-
         initResultGallery()
 
         imageView1 = findViewById(R.id.imageView1)
-
         button1 = findViewById(R.id.button1)
-        button1!!.setOnClickListener(View.OnClickListener {
+        button2 = findViewById(R.id.button2)
+        button3 = findViewById(R.id.button3)
 
-            if (ActivityCompat.checkSelfPermission(this@Main2Activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        button1.setOnClickListener {
 
-                ActivityCompat.requestPermissions(this@Main2Activity, arrayOf(Manifest.permission.CAMERA),1)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)
             } else {
-
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 activityResultLauncherCamera.launch(intent)
             }
-        })
+        }
 
-        button2 = findViewById(R.id.button2)
-        button2!!.setOnClickListener(View.OnClickListener {
+        button2.setOnClickListener {
 
-            if (ActivityCompat.checkSelfPermission(this@Main2Activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-                ActivityCompat.requestPermissions(this@Main2Activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),2)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 2)
             } else {
-
                 val intent = Intent(Intent.ACTION_PICK)
                 intent.type = "image/*"
-                activityResultLauncherGallery!!.launch(intent)
+                activityResultLauncherGallery.launch(intent)
             }
-        })
+        }
 
-        button3 = findViewById(R.id.button3)
-        button3!!.setOnClickListener(View.OnClickListener {
-
+        button3.setOnClickListener {
             reStart()
-        })
+        }
     }
 
     //앱 완전히 종료후 재시작
@@ -90,37 +83,28 @@ class Main2Activity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == 1) {
+        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            activityResultLauncherCamera.launch(intent)
 
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                activityResultLauncherCamera!!.launch(intent)
-            }
+        } else if (requestCode == 2 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-        } else if (requestCode == 2) {
-
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.type = "image/*"
-                activityResultLauncherGallery!!.launch(intent)
-            }
-
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            activityResultLauncherGallery.launch(intent)
         }
     }
 
     private fun initResultCamera() {
 
         //startActivityForResult 변경
-        activityResultLauncherCamera = registerForActivityResult<Intent, ActivityResult>(
-            ActivityResultContracts.StartActivityForResult()) { result ->
+        activityResultLauncherCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
 
-            if (result.data != null && result.resultCode == RESULT_OK) {
-
-                val bundle = result.data!!.extras
-                bitmap = bundle!!["data"] as Bitmap?
-                imageView1!!.setImageBitmap(bitmap)
+            if (result.resultCode == RESULT_OK) {
+                val bundle = result.data?.extras
+                bitmap = bundle?.get("data") as? Bitmap
+                imageView1.setImageBitmap(bitmap)
             }
         }
     }
@@ -128,17 +112,15 @@ class Main2Activity : AppCompatActivity() {
     private fun initResultGallery() {
 
         //startActivityForResult 변경
-        activityResultLauncherGallery = registerForActivityResult<Intent, ActivityResult>(
-            ActivityResultContracts.StartActivityForResult()) { result ->
+        activityResultLauncherGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
 
-            if (result.data != null && result.resultCode == RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
 
-                uri = result.data!!.data
+                uri = result.data?.data
 
                 try {
-
                     bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-                    imageView1!!.setImageBitmap(bitmap)
+                    imageView1.setImageBitmap(bitmap)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }

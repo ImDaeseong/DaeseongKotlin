@@ -1,32 +1,19 @@
-package com.daeseong.changedeprecated.Common
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
+abstract class ThreadTask<T1, T2> {
 
-abstract class ThreadTask<T1, T2> : Runnable {
+    private var param: T1? = null
 
-    private var mParam: T1? = null
-    private var mResult: T2? = null
-
-    fun execute(Param: T1): T2? {
-        mParam = Param
-        val thread = Thread(this)
-        thread.start()
-        try {
-            thread.join()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-
-        //onPostExecute(mResult)
-        return mResult
+    fun execute(Param: T1): Future<T2?> {
+        param = Param
+        val executor = Executors.newSingleThreadExecutor()
+        return executor.submit(Callable<T2?> {
+            doInBackground(param)
+        })
     }
 
-    override fun run() {
-
-        //스레드 처리 내용 호출
-        mResult = doInBackground(mParam)
-    }
-
-    //스레드 처리 내용 호출
-    protected abstract fun doInBackground(Param: T1?): T2 //작업 완료후 최종 호출
-    //protected abstract fun onPostExecute(Result: T2?)
+    // 스레드 처리 내용 호출
+    protected abstract fun doInBackground(Param: T1?): T2 // 작업 완료 후 최종 호출
 }
