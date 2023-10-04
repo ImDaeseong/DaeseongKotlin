@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.method.ScrollingMovementMethod
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -14,9 +13,9 @@ class Main9Activity : AppCompatActivity() {
 
     private val tag = Main8Activity::class.java.simpleName
 
-    private var et1: EditText? = null
-    private var tv1: TextView? = null
-    private var button1: Button? = null
+    private lateinit var et1: EditText
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
 
     private var sEdit: String? = null
     private val list = ArrayList<String>()
@@ -43,78 +42,57 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
 미세 보통
 초미세 보통
 링크 처리 5 https://weather.naver.com/today/06110517?cpName=KMA   링크 처리 5
-
 """
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main9)
 
-        et1 = findViewById<View>(R.id.et1) as EditText
-        tv1 = findViewById<View>(R.id.tv1) as TextView
+        et1 = findViewById(R.id.et1)
+        tv1 = findViewById(R.id.tv1)
 
-        //textview scroll 추가
-        tv1!!.movementMethod = ScrollingMovementMethod()
+        // textview scroll 추가
+        tv1.movementMethod = ScrollingMovementMethod()
 
-        //데이터 검색 타입
-        et1!!.setText(sData)
+        // 데이터 검색 타입
+        et1.setText(sData)
 
-        button1 = findViewById<View>(R.id.button1) as Button
-        button1!!.setOnClickListener {
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
+            tv1.text = ""
+            sEdit = et1.text.toString()
+            tv1.text = sEdit
 
-            tv1!!.text = ""
-            sEdit = et1!!.text.toString()
-            tv1!!.text = sEdit
-
-            setLink(tv1!!.text.toString())
+            setLink(tv1.text.toString())
         }
+
     }
 
     private fun setLink(sValue: String) {
-
         val spannableString = SpannableString(sValue)
 
         list.clear()
         getLinkList(sValue)
 
-        for (i in list.indices) {
-            val sLink = list[i]
-            spannableString.setSpan(ClickableSpanEx(this, sLink), sValue.indexOf(sLink),sValue.indexOf(sLink) + sLink.length,0)
+        for (sLink in list) {
+            val start = sValue.indexOf(sLink)
+            val end = start + sLink.length
+            spannableString.setSpan(ClickableSpanEx(this, sLink), start, end, 0)
         }
 
-        tv1!!.text = spannableString
-        tv1!!.movementMethod = LinkMovementMethod.getInstance()
+        tv1.text = spannableString
+        tv1.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun getLinkList(sInput: String) {
-
-        var slink: String
-        var slast: String
-        var nEnd = 0
-
-        val sRead: Array<String?> = sInput.split("\n".toRegex()).toTypedArray()
-        for (i in sRead.indices) {
-
-            if (sRead[i] != null) {
-
-                val sCheck = sRead[i]
-
-                if (sCheck!!.indexOf("https") >= 0) {
-
-                    //링크 부분
-                    slast = sCheck.substring(sCheck.indexOf("https"))
-                    nEnd = slast.indexOf(" ")
-
-                    slink = if (nEnd != -1) {
-                        slast.substring(0, nEnd)
-                    } else {
-                        slast
-                    }
-
-                    list.add(slink)
-                }
+        val sRead: List<String?> = sInput.split("\n")
+        for (sCheck in sRead) {
+            if (sCheck != null && sCheck.contains("https")) {
+                val slast = sCheck.substring(sCheck.indexOf("https"))
+                val nEnd = slast.indexOf(" ")
+                val slink = if (nEnd != -1) slast.substring(0, nEnd) else slast
+                list.add(slink)
             }
         }
     }
-
 }

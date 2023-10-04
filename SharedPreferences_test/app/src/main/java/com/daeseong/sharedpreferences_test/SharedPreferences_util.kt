@@ -3,64 +3,56 @@ package com.daeseong.sharedpreferences_test
 import android.content.Context
 import android.content.SharedPreferences
 
+class SharedPreferencesUtil {
 
-class SharedPreferences_util {
+    companion object {
+        private const val FILE_NAME = "ShareData"
+    }
 
-    private val FILE_NAME = "ShareData"
+    private fun getSharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+    }
 
-    fun setValue(context: Context, sKey: String, oData: Any) {
+    fun setValue(context: Context, key: String, data: Any) {
+        val editor = getSharedPreferences(context).edit()
 
-        val sharedPreferences: SharedPreferences = context.getSharedPreferences(
-            FILE_NAME,
-            Context.MODE_PRIVATE
-        )
+        when (data) {
+            is String -> editor.putString(key, data)
+            is Int -> editor.putInt(key, data)
+            is Boolean -> editor.putBoolean(key, data)
+            is Float -> editor.putFloat(key, data)
+            is Long -> editor.putLong(key, data)
+        }
 
-        when(oData) {
-            is String -> sharedPreferences!!.edit().putString(sKey, oData).commit()
-            is Int -> sharedPreferences!!.edit().putInt(sKey, oData).commit()
-            is Boolean -> sharedPreferences!!.edit().putBoolean(sKey, oData).commit()
-            is Float -> sharedPreferences!!.edit().putFloat(sKey, oData).commit()
-            is Long -> sharedPreferences!!.edit().putLong(sKey, oData).commit()
+        editor.apply()
+    }
+
+    fun getValue(context: Context, key: String, defaultData: Any): Any {
+        val sharedPreferences = getSharedPreferences(context)
+
+        return when (defaultData) {
+            is String -> sharedPreferences.getString(key, defaultData)!!
+            is Int -> sharedPreferences.getInt(key, defaultData)
+            is Boolean -> sharedPreferences.getBoolean(key, defaultData)
+            is Float -> sharedPreferences.getFloat(key, defaultData)
+            is Long -> sharedPreferences.getLong(key, defaultData)
+            else -> sharedPreferences.getString(key, defaultData.toString())!!
         }
     }
 
-    fun getValue(context: Context, sKey: String, oData: Any): Any {
-
-        val sharedPreferences: SharedPreferences = context.getSharedPreferences(
-            FILE_NAME,
-            Context.MODE_PRIVATE
-        )
-        return when(oData) {
-            is String -> sharedPreferences!!.getString(sKey, oData.toString())!!
-            is Int -> sharedPreferences!!.getInt(sKey, oData)
-            is Boolean -> sharedPreferences!!.getBoolean(sKey, oData)
-            is Float -> sharedPreferences!!.getFloat(sKey, oData)
-            is Long -> sharedPreferences!!.getLong(sKey, oData)
-            else -> sharedPreferences!!.getString(sKey, oData.toString())!!
-        }
-    }
-
-    fun remove(context: Context, sKey: String?) {
-        val sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.remove(sKey)
-        editor.commit()
+    fun remove(context: Context, key: String?) {
+        getSharedPreferences(context).edit().remove(key).apply()
     }
 
     fun clear(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.clear()
-        editor.commit()
+        getSharedPreferences(context).edit().clear().apply()
     }
 
-    fun contains(context: Context, sKey: String): Boolean {
-        val sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences!!.contains(sKey)
+    fun contains(context: Context, key: String): Boolean {
+        return getSharedPreferences(context).contains(key)
     }
 
-    fun getAll(context: Context): Map<String?, *>? {
-        val sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.all
+    fun getAll(context: Context): Map<String, *> {
+        return getSharedPreferences(context).all
     }
 }

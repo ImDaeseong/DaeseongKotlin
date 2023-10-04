@@ -1,14 +1,12 @@
 package com.daeseong.swipe_test
 
-
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.daeseong.swipe_test.AnimatorUtil.Animato10
-import com.daeseong.swipe_test.AnimatorUtil.Animato11
-import com.daeseong.swipe_test.AnimatorUtil.Animato8
+import com.daeseong.swipe_test.AnimatorUtil.animate10
+import com.daeseong.swipe_test.AnimatorUtil.animate11
+import com.daeseong.swipe_test.AnimatorUtil.animate8
 import com.daeseong.swipe_test.SwipeConstraintLayout.OnSwipeConstraintListener
-
 
 class Swipe4Activity : AppCompatActivity() {
 
@@ -16,20 +14,19 @@ class Swipe4Activity : AppCompatActivity() {
 
     private var swipeConstraintLayout: SwipeConstraintLayout? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swipe4)
 
-        swipeConstraintLayout = findViewById<SwipeConstraintLayout>(R.id.swCL)
-        swipeConstraintLayout!!.setOnSwipeListener(object : OnSwipeConstraintListener {
+        swipeConstraintLayout = findViewById(R.id.swCL)
+        swipeConstraintLayout?.setOnSwipeListener(object : OnSwipeConstraintListener {
 
             override fun swipeLeft() {
-                Animato10(swipeConstraintLayout!!)
+                animate10(swipeConstraintLayout!!)
             }
 
             override fun swipeRight() {
-                Animato11(swipeConstraintLayout!!)
+                animate11(swipeConstraintLayout!!)
             }
 
             override fun swipeUp() {
@@ -41,13 +38,11 @@ class Swipe4Activity : AppCompatActivity() {
             }
         })
 
-        AnimatoTopBottom()
+        animatoTopBottom()
     }
 
-    private fun AnimatoTopBottom() {
-
+    private fun animatoTopBottom() {
         Log.e(tag, "swipeTop-Bottom")
-        Animato8(swipeConstraintLayout!!)
+        animate8(swipeConstraintLayout!!)
     }
-
 }

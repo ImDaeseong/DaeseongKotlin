@@ -13,7 +13,7 @@ import android.view.animation.LinearInterpolator
 object AnimatorUtil {
 
     //x,y 사이즈 변경, 알파값 변경, 회전
-    fun Animato1(view: View) {
+    fun animate1(view: View) {
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(
             ObjectAnimator.ofFloat(view, "scaleX", 0.1f, 0.5f, 1f),
@@ -26,8 +26,8 @@ object AnimatorUtil {
     }
 
     //알파값에 따른 변화
-    fun Animato2(view: View) {
-        val objectAnimator: ObjectAnimator = ObjectAnimator.ofFloat(view, "alpha", 1f, 0.2f)
+    fun animate2(view: View) {
+        val objectAnimator = ObjectAnimator.ofFloat(view, "alpha", 1f, 0.2f)
         objectAnimator.duration = 1000
         objectAnimator.repeatMode = ValueAnimator.REVERSE
         objectAnimator.repeatCount = 1
@@ -35,7 +35,7 @@ object AnimatorUtil {
     }
 
     //커졌다 작아졌다 반복
-    fun Animato3(view: View) {
+    fun animate3(view: View) {
         val animatorSet = AnimatorSet()
         val scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 0.8f, 1f)
         val scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 0.8f, 1f)
@@ -51,14 +51,13 @@ object AnimatorUtil {
             scaleX,
             fadeOut
         )
-        //animatorSet.playTogether(scaleY, scaleX);
         animatorSet.duration = 1000
         animatorSet.start()
     }
 
     //좌우 반복
-    fun Animato4(view: View) {
-        val objectAnimator: ObjectAnimator = ObjectAnimator.ofFloat(view, "TranslationX", -10f, 10f)
+    fun animate4(view: View) {
+        val objectAnimator = ObjectAnimator.ofFloat(view, "TranslationX", -10f, 10f)
         objectAnimator.duration = 1000
         objectAnimator.repeatCount = -1
         objectAnimator.repeatMode = ObjectAnimator.REVERSE
@@ -66,8 +65,8 @@ object AnimatorUtil {
     }
 
     //위 아래 반복
-    fun Animato5(view: View) {
-        val objectAnimator: ObjectAnimator = ObjectAnimator.ofFloat(view, "TranslationY", -10f, 10f)
+    fun animate5(view: View) {
+        val objectAnimator = ObjectAnimator.ofFloat(view, "TranslationY", -10f, 10f)
         objectAnimator.duration = 1000
         objectAnimator.repeatCount = -1
         objectAnimator.repeatMode = ObjectAnimator.REVERSE
@@ -75,8 +74,8 @@ object AnimatorUtil {
     }
 
     //360 도 회전후 원래대로
-    fun Animato6(view: View) {
-        val objectAnimator: ObjectAnimator = ObjectAnimator.ofFloat(view, "rotation", 0f, 360f)
+    fun animate6(view: View) {
+        val objectAnimator = ObjectAnimator.ofFloat(view, "rotation", 0f, 360f)
         objectAnimator.duration = 1000
         objectAnimator.repeatCount = 1
         objectAnimator.repeatMode = ObjectAnimator.REVERSE
@@ -84,8 +83,8 @@ object AnimatorUtil {
     }
 
     //360 도 회전 반복
-    fun Animato7(view: View) {
-        val objectAnimator: ObjectAnimator = ObjectAnimator.ofFloat(view, "rotation", 360f)
+    fun animate7(view: View) {
+        val objectAnimator = ObjectAnimator.ofFloat(view, "rotation", 360f)
         objectAnimator.interpolator = LinearInterpolator()
         objectAnimator.duration = 2000
         objectAnimator.repeatCount = ValueAnimator.INFINITE
@@ -93,21 +92,21 @@ object AnimatorUtil {
     }
 
     //위에서 아래로
-    fun Animato8(view: View) {
-        val objectAnimator: ObjectAnimator = ObjectAnimator.ofFloat(view, "translationY", -1000f, -500f, -200f, -50f, 0f)
+    fun animate8(view: View) {
+        val objectAnimator = ObjectAnimator.ofFloat(view, "translationY", -1000f, -500f, -200f, -50f, 0f)
         objectAnimator.duration = 1000
         objectAnimator.start()
     }
 
     //아래에서 위로
-    fun Animato9(view: View) {
-        val objectAnimator: ObjectAnimator = ObjectAnimator.ofFloat(view, "translationY", 1000f, 500f, 200f, 50f, 0f)
+    fun animate9(view: View) {
+        val objectAnimator = ObjectAnimator.ofFloat(view, "translationY", 1000f, 500f, 200f, 50f, 0f)
         objectAnimator.duration = 1000
         objectAnimator.start()
     }
 
     //왼쪽으로 swipe
-    fun Animato10(view: View) {
+    fun animate10(view: View) {
         val animator1 = ObjectAnimator.ofFloat(view, "translationX", 0f, -1000f)
         animator1.duration = 500
         val animator2 = ObjectAnimator.ofFloat(view, "translationX", 1000f, 0f)
@@ -118,7 +117,7 @@ object AnimatorUtil {
     }
 
     //오른쪽으로 swipe
-    fun Animato11(view: View) {
+    fun animate11(view: View) {
         val animator1 = ObjectAnimator.ofFloat(view, "translationX", 0f, 1000f)
         animator1.duration = 500
         val animator2 = ObjectAnimator.ofFloat(view, "translationX", -1000f, 0f)

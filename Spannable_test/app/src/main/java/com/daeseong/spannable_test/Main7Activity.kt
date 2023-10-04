@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.text.method.ScrollingMovementMethod
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -14,10 +13,10 @@ class Main7Activity : AppCompatActivity() {
 
     private val tag = Main7Activity::class.java.simpleName
 
-    private var et1: EditText? = null
-    private var tv1: TextView? = null
-    private var button1: Button? = null
-    private var button2: Button? = null
+    private lateinit var et1: EditText
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
 
     private var sEdit: String? = null
 
@@ -45,45 +44,38 @@ class Main7Activity : AppCompatActivity() {
 미세 보통
 초미세 보통
 링크 처리 5 [https://weather.naver.com/today/06110517?cpName=KMA]   링크 처리 5
-
 """
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main7)
 
-        et1 = findViewById<View>(R.id.et1) as EditText
-        tv1 = findViewById<View>(R.id.tv1) as TextView
+        et1 = findViewById(R.id.et1)
+        tv1 = findViewById(R.id.tv1)
 
-        //textview scroll 추가
-        tv1!!.movementMethod = ScrollingMovementMethod()
+        // textview scroll 추가
+        tv1.movementMethod = ScrollingMovementMethod()
 
-        et1!!.setText(sData)
+        et1.setText(sData)
 
-        button1 = findViewById<View>(R.id.button1) as Button
-        button1!!.setOnClickListener(View.OnClickListener {
-
-            tv1!!.text = ""
-
-            sEdit = et1!!.text.toString()
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
+            tv1.text = ""
+            sEdit = et1.text.toString()
             readLink(sEdit!!)
-        })
+        }
 
-        button2 = findViewById<View>(R.id.button2) as Button
-        button2!!.setOnClickListener(View.OnClickListener {
-
-            tv1!!.text = ""
-
-            sEdit = et1!!.text.toString()
-
+        button2 = findViewById(R.id.button2)
+        button2.setOnClickListener {
+            tv1.text = ""
+            sEdit = et1.text.toString()
             val slink = checkLink(sEdit!!)
             setTextViewLink(slink!!)
-        })
+        }
     }
 
     //첫번째
     private fun readLink(sInput: String) {
-
         var slink1: String
         var slink2: String
         var slink3: String?
@@ -96,46 +88,28 @@ class Main7Activity : AppCompatActivity() {
 
         val sRead: Array<String?> = sInput.split("\n".toRegex()).toTypedArray()
         for (i in sRead.indices) {
-
             if (sRead[i] != null) {
-
                 val sCheck = sRead[i]
                 if (sCheck!!.indexOf("[") >= 0 && sCheck.indexOf("]") >= 0) {
-
-                    //링크 아닌부분
                     slink1 = sCheck.substring(0, sCheck.indexOf("["))
-
-                    //링크 부분
                     slink2 = sCheck.substring(sCheck.indexOf("[") + 1, sCheck.indexOf("]"))
-
-                    //링크 끝나는 부분
                     slink3 = sCheck.substring(sCheck.indexOf("]") + 1)
-
-                    //링크 자체 텍스트
-                    //sHtml = "<a href='$slink2'><font color='#66ccff'>$slink2</font></a>";
-
-                    //링크 다른 문자열로 변경
                     nIndex++
                     sIndex = String.format("Index%d", nIndex)
                     sHtml = "<a href='$slink2'><font color='#66ccff'>$sIndex</font></a>"
-
                     sTotal += "$slink1$sHtml$slink3<br>"
-
                 } else {
-
-                    //링크 없는 라인
                     slink4 = sCheck
                     sTotal += "$slink4<br>"
                 }
             }
         }
-        tv1!!.text = Html.fromHtml(sTotal)
-        tv1!!.movementMethod = LinkMovementMethod.getInstance()
+        tv1.text = Html.fromHtml(sTotal)
+        tv1.movementMethod = LinkMovementMethod.getInstance()
     }
 
     //두번째
     private fun setTextViewLink(sInput: String) {
-
         var slink1: String
         var slink2: String?
         var slink3: String?
@@ -149,67 +123,48 @@ class Main7Activity : AppCompatActivity() {
 
         val sRead: Array<String?> = sInput.split("\n".toRegex()).toTypedArray()
         for (i in sRead.indices) {
-
             if (sRead[i] != null) {
-
                 val sCheck = sRead[i]
-
                 if (sCheck!!.contains("Index")) {
-
                     nIndex++
                     sIndex = String.format("Index%d", nIndex)
-
-                    //링크 아닌부분
                     slink1 = sCheck.substring(0, sCheck.indexOf(sIndex))
-
-                    //링크 부분
                     slink2 = linkmap!![sIndex]
-
-                    //링크 끝나는 부분 IndexN 뒤에 모든 문자열
                     slink3 = sCheck.substring(sCheck.lastIndexOf(sIndex) + 6)
-
-                    //링크 이름
                     slinkName = getNameURL(slink2!!)!!
-
                     sHtml = "<a href='$slink2'><font color='#66ccff'>$slinkName</font></a>"
-
                     sTotal += "$slink1$sHtml$slink3<br>"
-
                 } else {
-
-                    //링크 없는 라인
                     slink4 = sCheck
                     sTotal += "$slink4<br>"
                 }
             }
         }
-        tv1!!.text = Html.fromHtml(sTotal)
-        tv1!!.movementMethod = LinkMovementMethod.getInstance()
+        tv1.text = Html.fromHtml(sTotal)
+        tv1.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun getNameURL(sInput: String): String? {
-        var sReturn = ""
         val nStart = sInput.lastIndexOf("/") + 1
         var nEnd = sInput.lastIndexOf("?")
         if (nEnd < 0) {
             nEnd = sInput.length
         }
-        sReturn = sInput.substring(nStart, nEnd)
-        return sReturn
+        return sInput.substring(nStart, nEnd)
     }
 
-    private fun removeTags(sInput: String): String? {
-        var sReturn = ""
+    private fun removeTags(sInput: String): String {
         val nStart = sInput.indexOf("[")
         val nEnd = sInput.indexOf("]")
-        if (nStart >= 0) {
-            sReturn = sInput.substring(nStart + 1, nEnd)
+
+        return if (nStart >= 0 && nEnd > nStart) {
+            sInput.substring(nStart + 1, nEnd)
+        } else {
+            sInput
         }
-        return sReturn
     }
 
     private fun checkLink(sInput: String): String? {
-
         var slink1: String
         var slink2: String
         var slink3: String?
@@ -227,36 +182,21 @@ class Main7Activity : AppCompatActivity() {
         val sRead: Array<String?> = sInput.split("\n".toRegex()).toTypedArray()
         for (i in sRead.indices) {
             if (sRead[i] != null) {
-
                 val sCheck = sRead[i]
-
                 if (sCheck!!.indexOf("[") >= 0 && sCheck.indexOf("]") >= 0) {
-
-                    //링크 아닌부분
                     slink1 = sCheck.substring(0, sCheck.indexOf("["))
-
-                    //링크 부분
                     slink2 = sCheck.substring(sCheck.indexOf("[") + 1, sCheck.indexOf("]"))
-
-                    //링크 끝나는 부분
                     slink3 = sCheck.substring(sCheck.indexOf("]") + 1, sCheck.length)
-
-                    //링크 다른 문자열로 변경
                     nIndex++
                     sIndex = String.format("Index%d", nIndex)
                     linkmap!![sIndex] = slink2
-
-                    sTotal = sTotal + slink1 + sIndex + slink3 + "\n";
-
+                    sTotal = "$sTotal$slink1$sIndex$slink3\n"
                 } else {
-
-                    //링크 없는 라인
                     slink4 = sCheck
-                    sTotal = sTotal + slink4 + "\n"
+                    sTotal = "$sTotal$slink4\n"
                 }
             }
         }
         return sTotal
     }
-
 }

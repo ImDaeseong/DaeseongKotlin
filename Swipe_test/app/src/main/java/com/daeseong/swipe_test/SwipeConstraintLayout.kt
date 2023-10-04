@@ -5,12 +5,11 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
-import androidx.annotation.Nullable
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.annotation.Nullable
 import kotlin.math.abs
 
-
-class SwipeConstraintLayout : ConstraintLayout {
+class SwipeConstraintLayout @JvmOverloads constructor(context: Context, @Nullable attrs: AttributeSet? = null) : ConstraintLayout(context, attrs) {
 
     companion object {
         private const val SWIPE_THRESHOLD = 30
@@ -20,11 +19,7 @@ class SwipeConstraintLayout : ConstraintLayout {
     private var gestureDetector: GestureDetector? = null
     private var swipeConstraintListener: OnSwipeConstraintListener? = null
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
-
-    constructor(context: Context, @Nullable attrs: AttributeSet?) : super(context, attrs) {
+    init {
         init()
     }
 
@@ -37,7 +32,6 @@ class SwipeConstraintLayout : ConstraintLayout {
             }
 
             override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-
                 var result = false
                 val diffX = e2.x - e1.x
                 val diffY = e2.y - e1.y
@@ -46,27 +40,20 @@ class SwipeConstraintLayout : ConstraintLayout {
 
                     if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffX > 0) {
-                            if (swipeConstraintListener != null) {
-                                swipeConstraintListener!!.swipeRight()
-                            }
+                            swipeConstraintListener?.swipeRight()
                         } else {
-                            if (swipeConstraintListener != null) {
-                                swipeConstraintListener!!.swipeLeft()
-                            }
+                            swipeConstraintListener?.swipeLeft()
                         }
                         result = true
                     }
+
                 } else {
 
                     if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffY < 0) {
-                            if (swipeConstraintListener != null) {
-                                swipeConstraintListener!!.swipeUp()
-                            }
+                            swipeConstraintListener?.swipeUp()
                         } else {
-                            if (swipeConstraintListener != null) {
-                                swipeConstraintListener!!.swipeDown()
-                            }
+                            swipeConstraintListener?.swipeDown()
                         }
                         result = true
                     }
@@ -76,12 +63,12 @@ class SwipeConstraintLayout : ConstraintLayout {
         })
     }
 
-    fun setOnSwipeListener(swipeConstraintListener: OnSwipeConstraintListener?) {
-        this.swipeConstraintListener = swipeConstraintListener
+    fun setOnSwipeListener(listener: OnSwipeConstraintListener?) {
+        swipeConstraintListener = listener
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return gestureDetector!!.onTouchEvent(event)
+        return gestureDetector?.onTouchEvent(event) ?: false
     }
 
     interface OnSwipeConstraintListener {

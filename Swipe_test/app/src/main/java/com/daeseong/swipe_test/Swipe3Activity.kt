@@ -1,11 +1,9 @@
 package com.daeseong.swipe_test
 
-
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.daeseong.swipe_test.SwipeFrameLayout.OnSwipeFrameListener
-
 
 class Swipe3Activity : AppCompatActivity() {
 
@@ -17,8 +15,8 @@ class Swipe3Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swipe3)
 
-        swipeFrameLayout = findViewById<SwipeFrameLayout>(R.id.swFL)
-        swipeFrameLayout!!.setOnSwipeListener(object : OnSwipeFrameListener {
+        swipeFrameLayout = findViewById(R.id.swFL)
+        swipeFrameLayout?.setOnSwipeListener(object : OnSwipeFrameListener {
 
             override fun swipeLeft() {
                 Log.e(tag, "swipeLeft")

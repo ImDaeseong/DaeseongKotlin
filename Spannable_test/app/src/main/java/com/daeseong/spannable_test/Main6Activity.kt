@@ -6,7 +6,6 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.method.ScrollingMovementMethod
 import android.text.style.AbsoluteSizeSpan
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -17,11 +16,11 @@ class Main6Activity : AppCompatActivity() {
 
     private val tag = Main6Activity::class.java.simpleName
 
-    private var et1: EditText? = null
-    private var tv1: TextView? = null
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var button3: Button? = null
+    private lateinit var et1: EditText
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
 
     private var sEdit: String? = null
 
@@ -47,7 +46,6 @@ class Main6Activity : AppCompatActivity() {
 미세 보통
 초미세 보통
 링크 처리 5 [https://weather.naver.com/today/06110517?cpName=KMA]   링크 처리 5
-
 """
 
     private val sData1 = """서울          서울         서울
@@ -72,47 +70,40 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
 미세 보통
 초미세 보통
 링크 처리 5 https://weather.naver.com/today/06110517?cpName=KMA   링크 처리 5
-
 """
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main6)
 
-        et1 = findViewById<View>(R.id.et1) as EditText
-        tv1 = findViewById<View>(R.id.tv1) as TextView
+        et1 = findViewById(R.id.et1)
+        tv1 = findViewById(R.id.tv1)
 
-        //textview scroll 추가
-        tv1!!.movementMethod = ScrollingMovementMethod()
+        // textview scroll 추가
+        tv1.movementMethod = ScrollingMovementMethod()
 
-        et1!!.setText(sData)
+        et1.setText(sData)
 
-        button1 = findViewById<View>(R.id.button1) as Button
-        button1!!.setOnClickListener(View.OnClickListener {
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
+            sEdit = checkReturn(et1.text.toString())
+            tv1.text = sEdit
+        }
 
-            sEdit = CheckReturn(et1!!.text.toString())
+        button2 = findViewById(R.id.button2)
+        button2.setOnClickListener {
+            checkLink(et1.text.toString())
+        }
 
-            tv1!!.text = sEdit
-        })
-
-        button2 = findViewById<View>(R.id.button2) as Button
-        button2!!.setOnClickListener(View.OnClickListener {
-
-            CheckLink(et1!!.text.toString())
-        })
-
-        button3 = findViewById<View>(R.id.button3) as Button
-        button3!!.setOnClickListener {
-
-            et1!!.setText(sData1)
-
-            CheckHttp(et1!!.text.toString())
+        button3 = findViewById(R.id.button3)
+        button3.setOnClickListener {
+            et1.setText(sData1)
+            checkHttp(et1.text.toString())
         }
     }
 
-    private fun CheckLink(sInput: String) {
-
-        //[] 감싼 부분이 링크
+    private fun checkLink(sInput: String) {
+        // [] 감싼 부분이 링크
         val spannableString = SpannableString(sInput)
         val matcher = Pattern.compile("\\[[^\\]]+\\]").matcher(sInput)
         var sFind: String
@@ -125,12 +116,11 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
             sUrl = sFind.substring(1, nLength - 1)
             spannableString.setSpan(ClickableSpanEx(this, sUrl), matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-        tv1!!.text = spannableString
-        tv1!!.movementMethod = LinkMovementMethod.getInstance()
+        tv1.text = spannableString
+        tv1.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    private fun CheckHttp(sInput: String) {
-
+    private fun checkHttp(sInput: String) {
         val sRegex = "(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?"
 
         val spannableString = SpannableString(sInput)
@@ -138,6 +128,7 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
         var sFind: String
         var sUrl: String
         var nLength: Int
+
         while (matcher.find()) {
             sFind = matcher.group()
             nLength = sFind.length
@@ -145,16 +136,16 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
             spannableString.setSpan(ClickableSpanEx(this, sUrl), matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
-        tv1!!.text = spannableString
-        tv1!!.movementMethod = LinkMovementMethod.getInstance()
+        tv1.text = spannableString
+        tv1.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    private fun CheckReturn(sInput: String): String? {
-
-        //\n(줄바꿈) 기준으로 문자열 정리
+    private fun checkReturn(sInput: String): String? {
+        // \n(줄바꿈) 기준으로 문자열 정리
         val spannableString = SpannableString(sInput)
         val pattern = Pattern.compile("\n")
         val matcher = pattern.matcher(spannableString)
+
         while (matcher.find()) {
             val start = matcher.start()
             val end = matcher.end()

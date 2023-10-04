@@ -3,41 +3,28 @@ package com.daeseong.splash_test
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
+import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-
 
 class Splash2Activity : AppCompatActivity() {
 
     private val tag: String = Splash2Activity::class.java.simpleName
 
-    private var handler: Handler? = null
-    private var runnable: Runnable? = null
-
-    private var rootView : View? = null
+    private var handler: Handler = Handler(Looper.getMainLooper())
+    private var rootView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash2)
 
-        handler = Handler()
-        runnable = Runnable {
-
-            //Log.e(tag, "run")
-            dismissSplah()
-        }
-
         //액티비티 메인 화면 클릭시 인식
-        rootView = findViewById<View>(R.id.content)
-        /*
-        rootView!!.setOnClickListener {
+        rootView = findViewById(R.id.content)
+    }
 
-            Log.e(tag, "onClick")
-            dismissSplah()
-        }
-        */
-
+    private val dismissSplashRunnable: Runnable = Runnable {
+        // Log.e(tag, "run")
+        dismissSplah()
     }
 
     private fun dismissSplah() {
@@ -50,14 +37,13 @@ class Splash2Activity : AppCompatActivity() {
         super.onResume()
 
         //Log.e(tag, "onResume")
-        handler!!.postDelayed(runnable, 5000)
+        handler.postDelayed(dismissSplashRunnable, 5000)
     }
 
     override fun onPause() {
         super.onPause()
 
         //Log.e(tag, "onPause")
-        handler!!.removeCallbacks(runnable)
+        handler.removeCallbacks(dismissSplashRunnable)
     }
-
 }

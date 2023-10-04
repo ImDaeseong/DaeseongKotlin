@@ -2,12 +2,12 @@ package com.daeseong.splash_test
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-
 
 class Splash3Activity : AppCompatActivity() {
 
@@ -19,38 +19,29 @@ class Splash3Activity : AppCompatActivity() {
 
         StartAnimation()
 
-        val thread: Thread = object : Thread() {
-            override fun run() {
-                try {
-                    Log.e(tag, "run")
-                    sleep(5000)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                } finally {
-                    startActivity(Intent(this@Splash3Activity, MainActivity::class.java))
-                }
-                finish()
-            }
-        }
-        thread.start()
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            startActivity(Intent(this@Splash3Activity, MainActivity::class.java))
+            finish()
+        }, 5000)
     }
 
     private fun StartAnimation() {
 
         //Log.e(tag, "StartAnimation")
 
-        var anim = AnimationUtils.loadAnimation(this, R.anim.alpha)
-        anim.reset()
+        val animationAlpha = AnimationUtils.loadAnimation(this, R.anim.alpha)
+        animationAlpha.reset()
 
-        val l = findViewById<ConstraintLayout>(R.id.lin)
-        l.clearAnimation()
-        l.startAnimation(anim)
+        val constraintLayout = findViewById<ConstraintLayout>(R.id.lin)
+        constraintLayout.clearAnimation()
+        constraintLayout.startAnimation(animationAlpha)
 
-        anim = AnimationUtils.loadAnimation(this, R.anim.translate)
-        anim.reset()
+        val animationTranslate = AnimationUtils.loadAnimation(this, R.anim.translate)
+        animationTranslate.reset()
 
-        val imageView2: ImageView = findViewById<ImageView>(R.id.imageView2)
+        val imageView2: ImageView = findViewById(R.id.imageView2)
         imageView2.clearAnimation()
-        imageView2.startAnimation(anim)
+        imageView2.startAnimation(animationTranslate)
     }
 }

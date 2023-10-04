@@ -2,12 +2,11 @@ package com.daeseong.swipe_test
 
 import android.os.Bundle
 import android.util.Log
-import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GestureDetectorCompat
 import kotlin.math.abs
-
 
 class Swipe2Activity : AppCompatActivity() {
 
@@ -26,26 +25,19 @@ class Swipe2Activity : AppCompatActivity() {
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-
-        if(event == null || gestureDetectorCompat == null)
-            return false
-
-        return gestureDetectorCompat!!.onTouchEvent(event)
+        return gestureDetectorCompat?.onTouchEvent(event) ?: false
     }
 
-    inner class MyGestureListener : SimpleOnGestureListener() {
+    inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
 
-        override fun onDown(e: MotionEvent): Boolean {
-            return true
-        }
+        override fun onDown(e: MotionEvent): Boolean = true
 
         override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
 
-            var result = false
-            val diffX = e2.x - e1.x
+            val diffX = e2?.x!! - e1?.x!!
             val diffY = e2.y - e1.y
 
-            if (abs(diffX) > abs(diffY)) {
+            return if (abs(diffX) > abs(diffY)) {
 
                 if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffX > 0) {
@@ -53,8 +45,11 @@ class Swipe2Activity : AppCompatActivity() {
                     } else {
                         Log.e(tag, "onSwipeLeft")
                     }
-                    result = true
+                    true
+                } else {
+                    false
                 }
+
             } else {
 
                 if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
@@ -63,10 +58,12 @@ class Swipe2Activity : AppCompatActivity() {
                     } else {
                         Log.e(tag, "onSwipeDown")
                     }
-                    result = true
+                    true
+                } else {
+                    false
                 }
             }
-            return result
+
         }
     }
 }

@@ -9,8 +9,7 @@ import android.widget.FrameLayout
 import androidx.annotation.Nullable
 import kotlin.math.abs
 
-
-class SwipeFrameLayout : FrameLayout {
+class SwipeFrameLayout @JvmOverloads constructor(context: Context, @Nullable attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
     companion object {
         private const val SWIPE_THRESHOLD = 30
@@ -20,11 +19,7 @@ class SwipeFrameLayout : FrameLayout {
     private var gestureDetector: GestureDetector? = null
     private var swipeFrameListener: OnSwipeFrameListener? = null
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
-
-    constructor(context: Context, @Nullable attrs: AttributeSet?) : super(context, attrs) {
+    init {
         init()
     }
 
@@ -46,42 +41,36 @@ class SwipeFrameLayout : FrameLayout {
 
                     if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffX > 0) {
-                            if (swipeFrameListener != null) {
-                                swipeFrameListener!!.swipeRight()
-                            }
+                            swipeFrameListener?.swipeRight()
                         } else {
-                            if (swipeFrameListener != null) {
-                                swipeFrameListener!!.swipeLeft()
-                            }
+                            swipeFrameListener?.swipeLeft()
                         }
                         result = true
                     }
+
                 } else {
 
                     if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffY < 0) {
-                            if (swipeFrameListener != null) {
-                                swipeFrameListener!!.swipeUp()
-                            }
+                            swipeFrameListener?.swipeUp()
                         } else {
-                            if (swipeFrameListener != null) {
-                                swipeFrameListener!!.swipeDown()
-                            }
+                            swipeFrameListener?.swipeDown()
                         }
                         result = true
                     }
+
                 }
                 return result
             }
         })
     }
 
-    fun setOnSwipeListener(swipeFrameListener: OnSwipeFrameListener?) {
-        this.swipeFrameListener = swipeFrameListener
+    fun setOnSwipeListener(listener: OnSwipeFrameListener?) {
+        swipeFrameListener = listener
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return gestureDetector!!.onTouchEvent(event)
+        return gestureDetector?.onTouchEvent(event) ?: false
     }
 
     interface OnSwipeFrameListener {

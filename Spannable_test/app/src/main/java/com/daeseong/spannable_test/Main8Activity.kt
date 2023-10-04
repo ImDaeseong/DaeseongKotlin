@@ -7,7 +7,6 @@ import android.text.SpannedString
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.method.ScrollingMovementMethod
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -17,13 +16,13 @@ class Main8Activity : AppCompatActivity() {
 
     private val tag = Main8Activity::class.java.simpleName
 
-    private var et1: EditText? = null
-    private var tv1: TextView? = null
-    private var button1: Button? = null
+    private lateinit var et1: EditText
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
 
     private var sEdit: String? = null
 
-    private val stringArray = ArrayList<SpannedString>()
+    private val stringArray = mutableListOf<SpannedString>()
 
     private val sData = """서울          서울         서울
 구름많음
@@ -81,28 +80,23 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main8)
 
-        et1 = findViewById<View>(R.id.et1) as EditText
-        tv1 = findViewById<View>(R.id.tv1) as TextView
+        et1 = findViewById(R.id.et1)
+        tv1 = findViewById(R.id.tv1)
 
-        //textview scroll 추가
-        tv1!!.movementMethod = ScrollingMovementMethod()
+        // Text view scroll 추가
+        tv1.movementMethod = ScrollingMovementMethod()
 
-        //데이터 검색 타입
-        if (bHttp) {
-            et1!!.setText(sData1)
-        } else {
-            et1!!.setText(sData)
-        }
+        // 데이터 검색 타입
+        et1.setText(if (bHttp) sData1 else sData)
 
-        button1 = findViewById<View>(R.id.button1) as Button
-        button1!!.setOnClickListener {
-
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
             stringArray.clear()
-            tv1!!.text = ""
+            tv1.text = ""
 
-            sEdit = et1!!.text.toString()
+            sEdit = et1.text.toString()
 
-            //데이터 검색 타입
+            // 데이터 검색 타입
             if (bHttp) {
                 checkLinkhttps(sEdit!!)
             } else {
@@ -113,8 +107,8 @@ https://weather.naver.com/today/01110580?cpName=KMA 링크 처리 1
             for (item in stringArray) {
                 finalString = TextUtils.concat(finalString, item) as SpannedString
             }
-            tv1!!.text = finalString
-            tv1!!.movementMethod = LinkMovementMethod.getInstance()
+            tv1.text = finalString
+            tv1.movementMethod = LinkMovementMethod.getInstance()
         }
     }
 

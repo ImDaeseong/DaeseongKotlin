@@ -12,7 +12,8 @@
 
         <activity android:name=".Splash6Activity"
             android:configChanges="orientation"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="fullSensor"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Splash5Activity"></activity>
+        <activity android:name=".Splash5Activity" />
         <activity android:name=".Splash4Activity" />
         <activity android:name=".Splash3Activity" />
         <activity android:name=".Splash2Activity" />
