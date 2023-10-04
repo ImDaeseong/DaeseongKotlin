@@ -42,40 +42,40 @@
             android:id="@+id/tab1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/booka"
             android:text="목록"
+            android:icon="@drawable/booka"
             android:textAlignment="center"/>
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/booka"
             android:text="문장"
+            android:icon="@drawable/booka"
             android:textAlignment="center" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/booka"
             android:text="단어장"
+            android:icon="@drawable/booka"
             android:textAlignment="center" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/booka"
             android:text="나의 단어장"
+            android:icon="@drawable/booka"
             android:textAlignment="center" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/booka"
             android:text="설정"
+            android:icon="@drawable/booka"
             android:textAlignment="center" />
 
     </com.google.android.material.tabs.TabLayout>

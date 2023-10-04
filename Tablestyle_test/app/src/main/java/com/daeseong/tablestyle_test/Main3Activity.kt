@@ -17,11 +17,11 @@ class Main3Activity : AppCompatActivity() {
 
     private val tag = Main3Activity::class.java.simpleName
 
-    private var tl1: View? = null
-    private var tlmenu : View? = null
-    private var clB1 : View? = null
+    private lateinit var tl1: View
+    private lateinit var tlmenu: View
+    private lateinit var clB1: View
 
-    private var gl: GridLayout? = null
+    private lateinit var gl: GridLayout
 
     private val nRowCount = 20
     private val nColumnCount = 10
@@ -43,49 +43,27 @@ class Main3Activity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-            //Log.e(tag, "가로 방향")
-
-            tl1!!.visibility = View.GONE
-            tlmenu!!.visibility = View.GONE
-            clB1!!.visibility = View.GONE
-
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-
-            //Log.e(tag, "세로 방향")
-
-            tl1!!.visibility = View.VISIBLE
-            tlmenu!!.visibility = View.VISIBLE
-            clB1!!.visibility = View.VISIBLE
+        when (newConfig.orientation) {
+            Configuration.ORIENTATION_LANDSCAPE, Configuration.ORIENTATION_PORTRAIT -> toggleViewsVisibility(newConfig.orientation)
         }
     }
 
     private fun initConfiguration() {
 
         val configuration = Resources.getSystem().configuration
-        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        toggleViewsVisibility(configuration.orientation)
+    }
 
-            //Log.e(tag, "가로 방향")
-
-            tl1!!.visibility = View.GONE
-            tlmenu!!.visibility = View.GONE
-            clB1!!.visibility = View.GONE
-
-        } else if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-
-            //Log.e(tag, "세로 방향")
-
-            tl1!!.visibility = View.VISIBLE
-            tlmenu!!.visibility = View.VISIBLE
-            clB1!!.visibility = View.VISIBLE
-        }
+    private fun toggleViewsVisibility(orientation: Int) {
+        val visibility = if (orientation == Configuration.ORIENTATION_LANDSCAPE) View.GONE else View.VISIBLE
+        tl1.visibility = visibility
+        tlmenu.visibility = visibility
+        clB1.visibility = visibility
     }
 
     private fun InitTitleBar() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = Color.rgb(255, 255, 255)
         }
@@ -93,24 +71,23 @@ class Main3Activity : AppCompatActivity() {
     }
 
     private fun init() {
-        tl1 = findViewById<View>(R.id.tl1)
-        tlmenu = findViewById<View>(R.id.tlmenu)
-        clB1 = findViewById<View>(R.id.clB1)
 
-        gl = findViewById<GridLayout>(R.id.gl)
+        tl1 = findViewById(R.id.tl1)
+        tlmenu = findViewById(R.id.tlmenu)
+        clB1 = findViewById(R.id.clB1)
+        gl = findViewById(R.id.gl)
     }
 
     private fun initData() {
 
-        gl!!.removeAllViews()
+        gl.removeAllViews()
 
-        gl!!.rowCount = nRowCount
-        gl!!.columnCount = nColumnCount
+        gl.rowCount = nRowCount
+        gl.columnCount = nColumnCount
 
         var nIndex = 1
         for (i in 0 until nRowCount) {
             for (k in 0 until nColumnCount) {
-
                 val btn = Button(this)
                 btn.setPadding(0, 0, 0, 0)
                 btn.id = nIndex
@@ -120,19 +97,15 @@ class Main3Activity : AppCompatActivity() {
                 btn.text = String.format("번호%d", nIndex)
                 btn.setOnClickListener(btnClick)
                 nIndex++
-                gl!!.addView(btn)
+                gl.addView(btn)
             }
         }
     }
 
     //버튼 클릭 이벤트
-    var btnClick = View.OnClickListener { v ->
-
-        //Log.e(tag, v.id.toString())
-
-        //버튼 텍스트
+    private val btnClick = View.OnClickListener { v ->
         val btn = v as Button
         val sText = btn.text.toString()
-        //Log.e(tag, sText)
+        Log.e(tag, sText)
     }
 }

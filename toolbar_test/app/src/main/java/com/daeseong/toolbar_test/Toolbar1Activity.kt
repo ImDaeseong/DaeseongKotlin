@@ -1,18 +1,16 @@
 package com.daeseong.toolbar_test
 
-import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
 
 class Toolbar1Activity : AppCompatActivity() {
 
     private val tag: String = Toolbar1Activity::class.java.simpleName
 
-    private var textView1: TextView? = null
+    private lateinit var textView1: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,8 +19,8 @@ class Toolbar1Activity : AppCompatActivity() {
 
         setContentView(R.layout.activity_toolbar1)
 
-        textView1 = findViewById<TextView>(R.id.textview_doc)
-        textView1!!.text = "<ScrollView\n" +
+        textView1 = findViewById(R.id.textview_doc)
+        textView1.text = "<ScrollView\n" +
                 "        android:id=\"@+id/scrollviewTextarea\"\n" +
                 "        android:layout_width=\"fill_parent\"\n" +
                 "        android:layout_height=\"fill_parent\"\n" +
@@ -72,10 +70,20 @@ class Toolbar1Activity : AppCompatActivity() {
     //타이틀바 숨기기/가로보기 고정/풀스크린
     private fun InitTitleBar() {
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        try {
+            //안드로이드 8.0 오레오 버전에서만 오류 발생
+            supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        } catch (ex: Exception) {
+        }
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.decorView.windowInsetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            @Suppress("DEPRECATION")
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
     }
 }

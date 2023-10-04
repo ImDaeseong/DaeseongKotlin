@@ -1,7 +1,6 @@
 package com.daeseong.tablestyle_test
 
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -16,13 +15,13 @@ class Main1Activity : AppCompatActivity() {
 
     private val tag = Main1Activity::class.java.simpleName
 
-    private var tl1 : View? = null
-    private var tlmenu : View? = null
-    private var clB1 : View? = null
+    private lateinit var tl1: View
+    private lateinit var tlmenu: View
+    private lateinit var clB1: View
 
-    private var sv1: ScrollView? = null
-    private var hv1: HorizontalScrollView? = null
-    private var tl: TableLayout? = null
+    private lateinit var sv1: ScrollView
+    private lateinit var hv1: HorizontalScrollView
+    private lateinit var tl: TableLayout
 
     private val nRowCount = 20
     private val nColumnCount = 10
@@ -45,48 +44,44 @@ class Main1Activity : AppCompatActivity() {
         super.onConfigurationChanged(newConfig)
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
             //Log.e(tag, "가로 방향")
-
-            tl1!!.visibility = View.GONE
-            tlmenu!!.visibility = View.GONE
-            clB1!!.visibility = View.GONE
-
+            hideViews()
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-
             //Log.e(tag, "세로 방향")
-
-            tl1!!.visibility = View.VISIBLE
-            tlmenu!!.visibility = View.VISIBLE
-            clB1!!.visibility = View.VISIBLE
+            showViews()
         }
     }
 
     private fun initConfiguration() {
 
-        val configuration = Resources.getSystem().configuration
+        val configuration = resources.configuration
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
             //Log.e(tag, "가로 방향")
-
-            tl1!!.visibility = View.GONE
-            tlmenu!!.visibility = View.GONE
-            clB1!!.visibility = View.GONE
+            hideViews()
 
         } else if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
 
             //Log.e(tag, "세로 방향")
-
-            tl1!!.visibility = View.VISIBLE
-            tlmenu!!.visibility = View.VISIBLE
-            clB1!!.visibility = View.VISIBLE
+            showViews()
         }
+    }
+
+    private fun hideViews() {
+        tl1.visibility = View.GONE
+        tlmenu.visibility = View.GONE
+        clB1.visibility = View.GONE
+    }
+
+    private fun showViews() {
+        tl1.visibility = View.VISIBLE
+        tlmenu.visibility = View.VISIBLE
+        clB1.visibility = View.VISIBLE
     }
 
     private fun InitTitleBar() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = Color.rgb(255, 255, 255)
         }
@@ -95,27 +90,25 @@ class Main1Activity : AppCompatActivity() {
 
     private fun init() {
 
-        tl1 = findViewById<View>(R.id.tl1)
-        tlmenu = findViewById<View>(R.id.tlmenu)
-        clB1 = findViewById<View>(R.id.clB1)
+        tl1 = findViewById(R.id.tl1)
+        tlmenu = findViewById(R.id.tlmenu)
+        clB1 = findViewById(R.id.clB1)
 
-        sv1 = findViewById<ScrollView>(R.id.sv1)
-        hv1 = findViewById<HorizontalScrollView>(R.id.hv1)
-        tl = findViewById<TableLayout>(R.id.tl)
+        sv1 = findViewById(R.id.sv1)
+        hv1 = findViewById(R.id.hv1)
+        tl = findViewById(R.id.tl)
     }
 
     private fun initData() {
 
-        tl!!.removeAllViews()
+        tl.removeAllViews()
 
         var nIndex = 1
         for (i in 0 until nRowCount) {
-
             val tableRow = TableRow(this)
             tableRow.id = i
 
             for (k in 0 until nColumnCount) {
-
                 val btn = Button(this)
                 btn.setPadding(0, 0, 0, 0)
                 btn.id = nIndex
@@ -127,19 +120,14 @@ class Main1Activity : AppCompatActivity() {
                 tableRow.addView(btn)
                 nIndex++
             }
-            tl!!.addView(tableRow)
+            tl.addView(tableRow)
         }
     }
 
     //버튼 클릭 이벤트
-    var btnClick = View.OnClickListener { v ->
-
-        //Log.e(tag, v.id.toString())
-
-        //버튼 텍스트
+    private val btnClick = View.OnClickListener { v ->
         val btn = v as Button
         val sText = btn.text.toString()
-        //Log.e(tag, sText)
+        Log.e(tag, sText)
     }
-
 }
