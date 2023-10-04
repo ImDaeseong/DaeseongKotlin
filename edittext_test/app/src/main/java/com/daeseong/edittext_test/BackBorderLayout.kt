@@ -22,18 +22,21 @@ open class BackBorderLayout : ConstraintLayout {
     }
 
     private fun init(context: Context) {
-        this.mContext = context
+        mContext = context
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        // Custom measurement logic if needed
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
+        // Custom layout logic if needed
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        // Custom drawing logic if needed
     }
 }

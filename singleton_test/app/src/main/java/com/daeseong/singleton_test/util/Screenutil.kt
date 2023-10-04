@@ -1,9 +1,8 @@
-package com.daeseong.singleton_test.util
+package com.im.daeseong.singleton_test.util
 
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.WindowManager
-
 
 class Screenutil {
 

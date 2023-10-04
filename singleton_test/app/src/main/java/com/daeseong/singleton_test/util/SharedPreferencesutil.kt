@@ -1,69 +1,70 @@
-package com.daeseong.singleton_test.util
+package com.im.daeseong.singleton_test.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 
-
-class SharedPreferencesutil {
-
-    private val tag: String = SharedPreferencesutil::class.java.simpleName
-
-    private var sharedPreferences: SharedPreferences? = null
-
-    private val FILE_NAME = "ShareData"
+class SharedPreferencesUtil private constructor() {
 
     companion object {
-        private var instance: SharedPreferencesutil? = null
-        fun getInstance(): SharedPreferencesutil {
-            if (instance == null) {
-                instance = SharedPreferencesutil()
-            }
-            return instance as SharedPreferencesutil
+        private var instance: SharedPreferencesUtil? = null
+        fun getInstance(): SharedPreferencesUtil {
+            return instance ?: SharedPreferencesUtil().also { instance = it }
         }
     }
+
+    private val FILE_NAME = "ShareData"
+    private lateinit var sharedPreferences: SharedPreferences
 
     fun init(context: Context) {
         sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
     }
 
-    fun setData(sKey: String, oData: Any) {
+    fun setValue(sKey: String, oData: Any) {
 
-        when(oData) {
-            is String -> sharedPreferences!!.edit().putString(sKey, oData).commit()
-            is Int -> sharedPreferences!!.edit().putInt(sKey, oData).commit()
-            is Boolean -> sharedPreferences!!.edit().putBoolean(sKey, oData).commit()
-            is Float -> sharedPreferences!!.edit().putFloat(sKey, oData).commit()
-            is Long -> sharedPreferences!!.edit().putLong(sKey, oData).commit()
-            else -> Log.e(tag, "")
+        val sType = oData.javaClass.simpleName
+        val editor = sharedPreferences.edit()
+
+        when (sType) {
+            "String" -> editor.putString(sKey, oData as String)
+            "Integer" -> editor.putInt(sKey, oData as Int)
+            "Boolean" -> editor.putBoolean(sKey, oData as Boolean)
+            "Float" -> editor.putFloat(sKey, oData as Float)
+            "Long" -> editor.putLong(sKey, oData as Long)
         }
+        editor.apply()
     }
 
-    fun getData(sKey: String, oData: Any): Any {
+    fun getValue(sKey: String, oData: Any): Any? {
 
-        return when(oData) {
-            is String -> sharedPreferences!!.getString(sKey, oData.toString())!!
-            is Int -> sharedPreferences!!.getInt(sKey, oData)
-            is Boolean -> sharedPreferences!!.getBoolean(sKey, oData)
-            is Float -> sharedPreferences!!.getFloat(sKey, oData)
-            is Long -> sharedPreferences!!.getLong(sKey, oData)
-            else -> sharedPreferences!!.getString(sKey, oData.toString())!!
+        val sType = oData.javaClass.simpleName
+
+        return when (sType) {
+            "String" -> sharedPreferences.getString(sKey, oData as String)
+            "Integer" -> sharedPreferences.getInt(sKey, oData as Int)
+            "Boolean" -> sharedPreferences.getBoolean(sKey, oData as Boolean)
+            "Float" -> sharedPreferences.getFloat(sKey, oData as Float)
+            "Long" -> sharedPreferences.getLong(sKey, oData as Long)
+            else -> null
         }
     }
 
     fun remove(sKey: String) {
-        val editor = sharedPreferences!!.edit()
+        val editor = sharedPreferences.edit()
         editor.remove(sKey)
-        editor.commit()
+        editor.apply()
     }
 
     fun clear() {
-        val editor = sharedPreferences!!.edit()
+        val editor = sharedPreferences.edit()
         editor.clear()
-        editor.commit()
+        editor.apply()
     }
 
-    operator fun contains(sKey: String): Boolean {
-        return sharedPreferences!!.contains(sKey)
+    fun contains(sKey: String): Boolean {
+        return sharedPreferences.contains(sKey)
+    }
+
+    fun getAll(): Map<String, *> {
+        return sharedPreferences.all
     }
 }

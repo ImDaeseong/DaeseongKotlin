@@ -1,12 +1,12 @@
 package com.daeseong.encryptedsharedpreference_test
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 
 class SharedResultActivity : AppCompatActivity() {
 
@@ -15,64 +15,60 @@ class SharedResultActivity : AppCompatActivity() {
     private val REQUEST_DATA = 1
     private val RESULT_OK = 0
 
-    private var editText10: EditText? = null
-    private var editText11: EditText? = null
-    private var editText12: EditText? = null
-    private var editText13: EditText? = null
-    private var editText14: EditText? = null
+    private lateinit var editText10: EditText
+    private lateinit var editText11: EditText
+    private lateinit var editText12: EditText
+    private lateinit var editText13: EditText
+    private lateinit var editText14: EditText
+    private lateinit var btn_change: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shared_result)
 
-        editText10 = findViewById<EditText>(R.id.editText10)
-        editText11 = findViewById<EditText>(R.id.editText11)
-        editText12 = findViewById<EditText>(R.id.editText12)
-        editText13 = findViewById<EditText>(R.id.editText13)
-        editText14 = findViewById<EditText>(R.id.editText14)
+        editText10 = findViewById(R.id.editText10)
+        editText11 = findViewById(R.id.editText11)
+        editText12 = findViewById(R.id.editText12)
+        editText13 = findViewById(R.id.editText13)
+        editText14 = findViewById(R.id.editText14)
+
+        btn_change = findViewById(R.id.btn_change)
+        btn_change.setOnClickListener {
+            changeData()
+        }
 
         try {
+            intent.apply {
+                val sLoadID = getStringExtra("sID")
+                val sLoadPassword = getStringExtra("sPassword")
+                val sLoadMemberNumber = getIntExtra("sMemberNumber", 1)
+                val sLoadSaved = getBooleanExtra("sSaved", false)
+                val sLoadtemp = getStringExtra("stemp")
 
-            val sLoadID = intent.getStringExtra("sID")
-            val sLoadPassword = intent.getStringExtra("sPassword")
-            val sLoadMemberNumber = intent.getIntExtra("sMemberNumber", 1)
-            val sLoadSaved = intent.getBooleanExtra("sSaved", false)
-            val sLoadtemp = intent.getStringExtra("stemp")
+                if (sLoadSaved) editText13.setText("true")
+                else editText13.setText("false")
 
-            //Log.d(tag, "sLoadID:$sLoadID")
-            //Log.d(tag, "sLoadPassword:$sLoadPassword")
-            //Log.d(tag, "sLoadMemberNumber:$sLoadMemberNumber")
-            //Log.d(tag, "sLoadSaved:$sLoadSaved")
-            //Log.d(tag, "sLoadtemp:$sLoadtemp")
-
-            if (sLoadSaved) editText13!!.setText("true")
-            else editText13!!.setText("false")
-
-            editText10!!.setText(sLoadID)
-            editText11!!.setText(sLoadPassword)
-            editText12!!.setText(sLoadMemberNumber.toString())
-            editText14!!.setText(sLoadtemp)
-
+                editText10.setText(sLoadID)
+                editText11.setText(sLoadPassword)
+                editText12.setText(sLoadMemberNumber.toString())
+                editText14.setText(sLoadtemp)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun btn_change(v: View?) {
-        ChangeData()
-    }
-
     override fun onBackPressed() {
-        //super.onBackPressed();
-        //백버튼 기능 막음
+        // super.onBackPressed()
+        // 백버튼 기능 막음
         return
     }
 
-    private fun ChangeData() {
+    private fun changeData() {
 
-        val sID = editText10!!.text.toString()
-        val sPassword = editText11!!.text.toString()
-        val sLoadMemberNumber = editText12!!.text.toString()
+        val sID = editText10.text.toString()
+        val sPassword = editText11.text.toString()
+        val sLoadMemberNumber = editText12.text.toString()
 
         if (TextUtils.isEmpty(sID)) {
             Log.d(tag, "sID=null")
@@ -83,10 +79,11 @@ class SharedResultActivity : AppCompatActivity() {
             return
         }
 
-        val intent = Intent()
-        intent.putExtra("sID", sID)
-        intent.putExtra("sPassword", sPassword)
-        intent.putExtra("sMemberNumber", sLoadMemberNumber)
+        val intent = Intent().apply {
+            putExtra("sID", sID)
+            putExtra("sPassword", sPassword)
+            putExtra("sMemberNumber", sLoadMemberNumber)
+        }
         setResult(RESULT_OK, intent)
         finish()
     }

@@ -9,16 +9,17 @@ class Main4Activity : AppCompatActivity() {
 
     private val tag: String = Main4Activity::class.java.simpleName
 
-    private var pb1: ProgressBar? = null
+    private lateinit var pb1: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main4)
 
-        pb1 = findViewById<ProgressBar>(R.id.pb1)
-        pb1!!.setOnClickListener(View.OnClickListener {
-            pb1!!.visibility = View.GONE
-        })
+        pb1 = findViewById(R.id.pb1)
+
+        pb1.setOnClickListener {
+            pb1.visibility = View.GONE
+        }
 
     }
 }

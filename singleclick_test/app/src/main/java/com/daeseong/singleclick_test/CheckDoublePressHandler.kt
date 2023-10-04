@@ -1,42 +1,25 @@
 package com.daeseong.singleclick_test
 
-import android.util.Log
-
-class CheckDoublePressHandler {
+class CheckDoublePressHandler private constructor() {
 
     private val tag: String = CheckDoublePressHandler::class.java.simpleName
-
     private var lastTime: Long = 0
 
     companion object {
 
         private var instance: CheckDoublePressHandler? = null
 
+        @Synchronized
         fun getInstance(): CheckDoublePressHandler {
-
-            if (instance == null) {
-
-                synchronized(CheckDoublePressHandler::class.java) {
-                    instance = CheckDoublePressHandler()
-                }
-            }
-            return instance as CheckDoublePressHandler
+            return instance ?: CheckDoublePressHandler().also { instance = it }
         }
     }
 
-    fun isDoubleClick() : Boolean {
-
-        //Log.e(tag , "isDoubleClick start: $lastTime")
-
+    fun isDoubleClick(): Boolean {
         if (System.currentTimeMillis() - lastTime <= 500) {
-
-            //Log.e(tag , "onCheckDoublePressed")
             return true
         }
         lastTime = System.currentTimeMillis()
-
-        //Log.e(tag , "isDoubleClick end: $lastTime")
-
         return false
     }
 }

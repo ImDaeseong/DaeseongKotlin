@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
+import android.widget.Button
 import android.widget.EditText
-import com.daeseong.encryptedsharedpreference_test.util.encryptedsharedpreference_util
+import com.daeseong.encryptedsharedpreference_test.util.EncryptedSharedPreferencesUtil
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,36 +16,62 @@ class MainActivity : AppCompatActivity() {
     private val REQUEST_DATA = 1
     private val RESULT_OK = 0
 
-    private var editText1: EditText? = null
-    private var editText2:EditText? = null
-    private var editText3:EditText? = null
+    private lateinit var editText1: EditText
+    private lateinit var editText2: EditText
+    private lateinit var editText3: EditText
+
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        editText1 = findViewById<EditText>(R.id.editText1)
-        editText2 = findViewById<EditText>(R.id.editText2)
-        editText3 = findViewById<EditText>(R.id.editText3)
+        editText1 = findViewById(R.id.editText1)
+        editText2 = findViewById(R.id.editText2)
+        editText3 = findViewById(R.id.editText3)
+
+        button1 = findViewById(R.id.button1)
+        button2 = findViewById(R.id.button2)
+        button3 = findViewById(R.id.button3)
+        button4 = findViewById(R.id.button4)
+
+        button1.setOnClickListener {
+            Save()
+        }
+
+        button2.setOnClickListener {
+            Remove()
+        }
+
+        button3.setOnClickListener {
+            getData()
+        }
+
+        button4.setOnClickListener {
+            Clear()
+        }
 
         try {
 
             //조회
-            val sLoadID = encryptedsharedpreference_util.getInstance(this).getValue("sID", "") as String
-            val sLoadPassword = encryptedsharedpreference_util.getInstance(this).getValue("sPassword", "") as String
-            val sLoadMemberNumber = encryptedsharedpreference_util.getInstance(this).getValue("sMemberNumber", 1) as Int
-            val sLoadSaved = encryptedsharedpreference_util.getInstance(this).getValue("sSaved", false) as Boolean
-            val sLoadtemp = encryptedsharedpreference_util.getInstance(this).getValue("stemp", "") as String
+            val sLoadID = EncryptedSharedPreferencesUtil.getInstance(this).getValue("sID", "") as String
+            val sLoadPassword = EncryptedSharedPreferencesUtil.getInstance(this).getValue("sPassword", "") as String
+            val sLoadMemberNumber = EncryptedSharedPreferencesUtil.getInstance(this).getValue("sMemberNumber", 1) as Int
+            val sLoadSaved = EncryptedSharedPreferencesUtil.getInstance(this).getValue("sSaved", false) as Boolean
+            val sLoadtemp = EncryptedSharedPreferencesUtil.getInstance(this).getValue("stemp", "") as String
 
-            //Log.d(tag, "sLoadID:$sLoadID")
-            //Log.d(tag, "sLoadPassword:$sLoadPassword")
-            //Log.d(tag, "sLoadMemberNumber:$sLoadMemberNumber")
-            //Log.d(tag, "sLoadSaved:$sLoadSaved")
-            //Log.d(tag, "sLoadtemp:$sLoadtemp")
+            Log.e(tag, "sLoadID:$sLoadID")
+            Log.e(tag, "sLoadPassword:$sLoadPassword")
+            Log.e(tag, "sLoadMemberNumber:$sLoadMemberNumber")
+            Log.e(tag, "sLoadSaved:$sLoadSaved")
+            Log.e(tag, "sLoadtemp:$sLoadtemp")
 
-            editText1!!.setText(sLoadID)
-            editText2!!.setText(sLoadPassword)
-            editText3!!.setText(sLoadMemberNumber.toString())
+            editText1.setText(sLoadID)
+            editText2.setText(sLoadPassword)
+            editText3.setText(sLoadMemberNumber.toString())
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -55,121 +81,97 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == REQUEST_DATA) {
+        if (requestCode == REQUEST_DATA && resultCode == RESULT_OK) {
 
-            if(resultCode == RESULT_OK) {
+            val sID = data?.getStringExtra("sID") ?: ""
+            val sPassword = data?.getStringExtra("sPassword") ?: ""
+            val sMemberNumber = data?.getStringExtra("sMemberNumber") ?: ""
 
-                val sID = data!!.getStringExtra("sID")
-                val sPassword = data!!.getStringExtra("sPassword")
-                val sMemberNumber = data!!.getStringExtra("sMemberNumber")
+            editText1.setText(sID)
+            editText2.setText(sPassword)
+            editText3.setText(sMemberNumber)
 
-                //Log.d(tag, "sID:$sID")
-                //Log.d(tag, "sPassword:$sPassword")
-                //Log.d(tag, "sMemberNumber:$sMemberNumber")
-
-                editText1!!.setText(sID)
-                editText2!!.setText(sPassword)
-                editText3!!.setText(sMemberNumber)
-
-                encryptedsharedpreference_util.getInstance(this).setValue("sID", sID!!)
-                encryptedsharedpreference_util.getInstance(this).setValue("sPassword", sPassword!!)
-                encryptedsharedpreference_util.getInstance(this).setValue("sMemberNumber", sMemberNumber!!.toInt())
-
+            EncryptedSharedPreferencesUtil.getInstance(this).apply {
+                setValue("sID", sID)
+                setValue("sPassword", sPassword)
+                setValue("sMemberNumber", sMemberNumber.toInt())
             }
         }
     }
 
-    fun btn_Save(v: View?) {
+    private fun Save() {
 
         val sID = editText1!!.text.toString()
         val sPassword = editText2!!.text.toString()
         val sMemberNumber = editText3!!.text.toString()
 
         if (TextUtils.isEmpty(sID)) {
-            //Log.d(tag, "sID=null")
+            //Log.e(tag, "sID=null")
             return
         }
         if (TextUtils.isEmpty(sPassword)) {
-            //Log.d(tag, "sPassword=null")
+            //Log.e(tag, "sPassword=null")
             return
         }
         if (TextUtils.isEmpty(sMemberNumber)) {
-            //Log.d(tag, "sMemberNumber=null")
+            //Log.e(tag, "sMemberNumber=null")
             return
         }
 
         //저장
-        encryptedsharedpreference_util.getInstance(this).setValue("sID", sID)
-        encryptedsharedpreference_util.getInstance(this).setValue("sPassword", sPassword)
-        encryptedsharedpreference_util.getInstance(this).setValue("sMemberNumber", sMemberNumber.toInt())
-        encryptedsharedpreference_util.getInstance(this).setValue("sSaved", true)
-        encryptedsharedpreference_util.getInstance(this).setValue("stemp", "")
+        EncryptedSharedPreferencesUtil.getInstance(this).setValue("sID", sID)
+        EncryptedSharedPreferencesUtil.getInstance(this).setValue("sPassword", sPassword)
+        EncryptedSharedPreferencesUtil.getInstance(this).setValue("sMemberNumber", sMemberNumber.toInt())
+        EncryptedSharedPreferencesUtil.getInstance(this).setValue("sSaved", true)
+        EncryptedSharedPreferencesUtil.getInstance(this).setValue("stemp", "")
         editText1!!.setText("")
         editText2!!.setText("")
         editText3!!.setText("")
         editText1!!.requestFocus()
     }
 
-    fun btn_Clear(v: View?) {
-
-        //전체 해제
-        encryptedsharedpreference_util.getInstance(this).clear()
-        editText1!!.setText("")
-        editText2!!.setText("")
-        editText3!!.setText("")
-        editText1!!.requestFocus()
+    private fun Clear() {
+        // 전체 해제
+        EncryptedSharedPreferencesUtil.getInstance(this).clear()
+        clearEditTexts()
     }
 
-    fun btn_Remove(v: View?) {
-
-        //전체 삭제
-        val alls: Map<String?, *>? = encryptedsharedpreference_util.getInstance(this).getAll()
-        for (sKey in alls!!.keys) {
-            Log.d(tag, "sKey:$sKey")
-            encryptedsharedpreference_util.getInstance(this).remove(sKey)
+    private fun Remove() {
+        // 전체 삭제
+        val allKeys = EncryptedSharedPreferencesUtil.getInstance(this).getAll()?.keys
+        allKeys?.forEach { key ->
+            Log.e(tag, "sKey:$key")
+            EncryptedSharedPreferencesUtil.getInstance(this).remove(key)
         }
-        editText1!!.setText("")
-        editText2!!.setText("")
-        editText3!!.setText("")
-        editText1!!.requestFocus()
+        clearEditTexts()
     }
 
-    fun btn_Get(v: View?) {
+    private fun getData() {
 
-        /*
-        //단순 Activity 호출
-        val intent = Intent(this, SharedPreferencesActivity::class.java)
-        startActivity(intent)
-        */
+        val sLoadID = EncryptedSharedPreferencesUtil.getInstance(this).getValue("sID", "") as String
+        val sLoadPassword = EncryptedSharedPreferencesUtil.getInstance(this).getValue("sPassword", "") as String
+        val sLoadMemberNumber = EncryptedSharedPreferencesUtil.getInstance(this).getValue("sMemberNumber", 1) as Int
+        val sLoadSaved = EncryptedSharedPreferencesUtil.getInstance(this).getValue("sSaved", false) as Boolean
+        val sLoadtemp = EncryptedSharedPreferencesUtil.getInstance(this).getValue("stemp", "") as String
 
-        //Activity 호출후 결과값 받음
-        val sLoadID = encryptedsharedpreference_util.getInstance(this).getValue("sID", "") as String
-        val sLoadPassword = encryptedsharedpreference_util.getInstance(this).getValue("sPassword", "") as String
-        val sLoadMemberNumber = encryptedsharedpreference_util.getInstance(this).getValue("sMemberNumber", 1) as Int
-        val sLoadSaved = encryptedsharedpreference_util.getInstance(this).getValue("sSaved", false) as Boolean
-        val sLoadtemp = encryptedsharedpreference_util.getInstance(this).getValue("stemp", "") as String
-
-        if (TextUtils.isEmpty(sLoadID)) {
-            Log.d(tag, "sID=null")
-            return
+        if (sLoadID.isEmpty() || sLoadPassword.isEmpty() || sLoadMemberNumber.toString().isEmpty()) {
+           return
         }
 
-        if (TextUtils.isEmpty(sLoadPassword)) {
-            Log.d(tag, "sPassword=null")
-            return
+        val intent = Intent(this, SharedResultActivity::class.java).apply {
+            putExtra("sID", sLoadID)
+            putExtra("sPassword", sLoadPassword)
+            putExtra("sMemberNumber", sLoadMemberNumber)
+            putExtra("sSaved", sLoadSaved)
+            putExtra("stemp", sLoadtemp)
         }
-
-        if (TextUtils.isEmpty(sLoadMemberNumber.toString())) {
-            Log.d(tag, "sMemberNumber=null")
-            return
-        }
-
-        val intent = Intent(this, SharedResultActivity::class.java)
-        intent.putExtra("sID", sLoadID)
-        intent.putExtra("sPassword", sLoadPassword)
-        intent.putExtra("sMemberNumber", sLoadMemberNumber)
-        intent.putExtra("sSaved", sLoadSaved)
-        intent.putExtra("stemp", sLoadtemp)
         startActivityForResult(intent, REQUEST_DATA)
+    }
+
+    private fun clearEditTexts() {
+        editText1.text.clear()
+        editText2.text.clear()
+        editText3.text.clear()
+        editText1.requestFocus()
     }
 }

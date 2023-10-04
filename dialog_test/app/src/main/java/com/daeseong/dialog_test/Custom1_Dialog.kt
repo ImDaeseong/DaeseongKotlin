@@ -1,42 +1,34 @@
 package com.daeseong.dialog_test
 
-
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 
+class Custom1Dialog(context: Context, private val closeListener: View.OnClickListener) : Dialog(context) {
 
-class Custom1_Dialog(context: Context, closeListener: View.OnClickListener) :  Dialog(context) {
+    private val tag: String = Custom1Dialog::class.java.simpleName
 
-    private val tag: String = Custom1_Dialog::class.java.simpleName
-
-    private var mcloseListener: View.OnClickListener? = null
-
-    private var btncancel_dialog: Button? = null
-    private var btnclose_dialog: Button? = null
+    private var btnCancelDialog: Button? = null
+    private var btnCloseDialog: Button? = null
 
     init {
-        mcloseListener = closeListener
+        setCancelable(false)
+        setCanceledOnTouchOutside(true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.custom1_dialog)
-        setCancelable(false)
-        setCanceledOnTouchOutside(true) // dialog 밖에 터치했을 때 사라지기
 
-        btncancel_dialog = findViewById<Button>(R.id.btncancel_dialog)
-        btncancel_dialog!!.setOnClickListener {
-
+        btnCancelDialog = findViewById(R.id.btncancel_dialog)
+        btnCancelDialog?.setOnClickListener {
             dismiss()
         }
 
-        btnclose_dialog = findViewById<Button>(R.id.btnclose_dialog)
-        btnclose_dialog!!.setOnClickListener {
-
+        btnCloseDialog = findViewById(R.id.btnclose_dialog)
+        btnCloseDialog?.setOnClickListener {
             dismiss()
         }
     }

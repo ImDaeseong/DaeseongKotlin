@@ -12,9 +12,9 @@ class Main4Activity : AppCompatActivity() {
 
     private val tag = Main4Activity::class.java.simpleName
 
-    private var tv1: TextView? = null
-    private var button1 : Button? = null
-    private var button2: Button? = null
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
 
     private lateinit var myThread: MyThread
     private lateinit var handler: Handler
@@ -28,28 +28,22 @@ class Main4Activity : AppCompatActivity() {
         tv1 = findViewById(R.id.tv1)
 
         button1 = findViewById(R.id.button1)
-        button1!!.setOnClickListener {
-
-            if (handler != null) {
-                handler.sendEmptyMessage(1)
-            }
+        button1.setOnClickListener {
+            handler.sendEmptyMessage(1)
         }
 
         button2 = findViewById(R.id.button2)
-        button2!!.setOnClickListener {
-
-            if (handler != null) {
-                val message = Message.obtain()
-                message.what = 2
-                message.obj = "sendMessage"
-                handler.sendMessage(message)
+        button2.setOnClickListener {
+            val message = Message.obtain().apply {
+                what = 2
+                obj = "sendMessage"
             }
+            handler.sendMessage(message)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
         clear()
     }
 
@@ -60,17 +54,10 @@ class Main4Activity : AppCompatActivity() {
                 super.handleMessage(msg)
 
                 try {
-
-                    var sMsg: String = if(msg.obj == null){
-                        String.format("%d null", msg.what)
-                    } else{
-                        String.format("%d %s", msg.what, msg.obj.toString()!!)
-                    }
-                    tv1!!.text = sMsg
-
+                    val sMsg = msg.obj?.toString() ?: "${msg.what} null"
+                    tv1.text = sMsg
                 } catch (ex: Exception) {
                     Log.e(tag, ex.message.toString())
-                } finally {
                 }
             }
         }
@@ -80,60 +67,43 @@ class Main4Activity : AppCompatActivity() {
     }
 
     private fun clear() {
-
         try {
-
-            if (handler != null) {
-                handler.removeMessages(0)
-            }
-
-            if (myThread != null) {
-                myThread.clear()
-                myThread.interrupt()
-            }
-        } catch (ex: java.lang.Exception) {
+            handler.removeMessages(0)
+            myThread.clear()
+            myThread.interrupt()
+        } catch (ex: Exception) {
             Log.e(tag, ex.message.toString())
-        } finally {
         }
     }
 
-    private class MyThread(handler: Handler?, bRun: Boolean, sParam: String) : Thread() {
-
-        private var handler: Handler? = null
-        private val sParam: String
-        private var bRun = false
-
-        init {
-            this.handler = handler
-            this.bRun = bRun
-            this.sParam = sParam
-        }
+    private class MyThread(private val handler: Handler?, private var bRun: Boolean, private val sParam: String) :
+        Thread() {
 
         override fun run() {
             super.run()
             while (bRun) {
-
-                //Log.e("TAG", "MyThread run")
-
                 try {
                     handler?.sendEmptyMessage(0)
 
-                    //1초에 한번씩 전달
+                    // 1초에 한 번씩 전달
                     sleep(1000)
-                } catch (ex: java.lang.Exception) {
+                } catch (ex: Exception) {
+                    Log.e("TAG", "MyThread run")
                 }
             }
         }
 
         fun sendMessage() {
-            val message = Message.obtain()
-            message.what = 2
-            message.obj = "sendMessage"
-            handler!!.sendMessage(message)
+            val message = Message.obtain().apply {
+                what = 2
+                obj = "sendMessage"
+            }
+            handler?.sendMessage(message)
         }
 
         fun clear() {
             bRun = false
         }
     }
+
 }

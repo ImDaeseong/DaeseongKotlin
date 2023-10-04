@@ -1,27 +1,26 @@
-package com.daeseong.singleton_test
+package com.im.daeseong.singleton_test
 
 import android.app.Application
 import android.content.Context
 import android.os.Build
-import com.daeseong.singleton_test.Db.DbHandler
-import com.daeseong.singleton_test.util.Screenutil
-import com.daeseong.singleton_test.util.SharedPreferencesutil
-
+import com.im.daeseong.singleton_test.util.Screenutil
+import com.im.daeseong.singleton_test.util.SharedPreferencesUtil
 
 class MyApplication : Application() {
 
     private val tag: String = MyApplication::class.java.simpleName
 
     companion object {
+
         private lateinit var mContext: Context
-        private lateinit var mInstance: MyApplication
+        private lateinit var instance: MyApplication
 
         fun getContext(): Context {
             return mContext.applicationContext
         }
 
         fun getInstance(): MyApplication {
-            return mInstance
+            return instance
         }
     }
 
@@ -29,11 +28,13 @@ class MyApplication : Application() {
         super.onCreate()
 
         mContext = this
-        mInstance = this
+        instance = this
 
-        Screenutil.getInstance().init(this);
-        SharedPreferencesutil.getInstance().init(this);
+        SharedPreferencesUtil.getInstance().init(this)
+
         DbHandler.getInstance().init(this)
+
+        Screenutil.getInstance().init(this)
     }
 
     fun getVersionSDK(): Int {

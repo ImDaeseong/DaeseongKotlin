@@ -7,107 +7,82 @@ import androidx.security.crypto.MasterKeys
 import java.io.IOException
 import java.security.GeneralSecurityException
 
-class encryptedsharedpreference_util(context: Context) {
-
-    private val TAG = encryptedsharedpreference_util::class.java.simpleName
-
-    var context: Context = context
+class EncryptedSharedPreferencesUtil private constructor(context: Context) {
 
     companion object {
 
-        private val FILE_NAME = "ShareData"
+        private const val FILE_NAME = "ShareData"
 
-        private var EncsharedPreferences: SharedPreferences? = null
+        private var instance: EncryptedSharedPreferencesUtil? = null
 
-        private var instance: encryptedsharedpreference_util? = null
-        fun getInstance(context: Context): encryptedsharedpreference_util {
-            if (instance == null) {
-                instance = encryptedsharedpreference_util(context)
-            }
-            return instance as encryptedsharedpreference_util
+        fun getInstance(context: Context): EncryptedSharedPreferencesUtil {
+            return instance ?: EncryptedSharedPreferencesUtil(context).also { instance = it }
         }
     }
 
-    init {
-
-        var strMasterkey: String? = null
-
+    private val strMasterkey: String by lazy {
         try {
-            strMasterkey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+            MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
         } catch (e: GeneralSecurityException) {
-            e.printStackTrace()
+            throw RuntimeException("Failed to create MasterKey", e)
         } catch (e: IOException) {
-            e.printStackTrace()
+            throw RuntimeException("Failed to create MasterKey", e)
         }
+    }
 
+    private val encryptedSharedPreferences: SharedPreferences by lazy {
         try {
-            EncsharedPreferences = EncryptedSharedPreferences.create(
+            EncryptedSharedPreferences.create(
                 FILE_NAME,
-                strMasterkey!!,
-                context!!,
+                strMasterkey,
+                context,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
         } catch (e: GeneralSecurityException) {
-            e.printStackTrace()
+            throw RuntimeException("Failed to create EncryptedSharedPreferences", e)
         } catch (e: IOException) {
-            e.printStackTrace()
+            throw RuntimeException("Failed to create EncryptedSharedPreferences", e)
         }
     }
 
     fun setValue(sKey: String?, oData: Any) {
-        when (oData.javaClass.simpleName) {
-            "String" -> {
-                EncsharedPreferences!!.edit().putString(sKey, oData as String).apply()
+        with(encryptedSharedPreferences.edit()) {
+            when (oData) {
+                is String -> putString(sKey, oData)
+                is Int -> putInt(sKey, oData)
+                is Boolean -> putBoolean(sKey, oData)
+                is Float -> putFloat(sKey, oData)
+                is Long -> putLong(sKey, oData)
             }
-            "Integer" -> {
-                EncsharedPreferences!!.edit().putInt(sKey, (oData as Int)).apply()
-            }
-            "Boolean" -> {
-                EncsharedPreferences!!.edit().putBoolean(sKey, (oData as Boolean)).apply()
-            }
-            "Float" -> {
-                EncsharedPreferences!!.edit().putFloat(sKey, (oData as Float)).apply()
-            }
-            "Long" -> {
-                EncsharedPreferences!!.edit().putLong(sKey, (oData as Long)).apply()
-            }
+            apply()
         }
     }
 
     operator fun getValue(sKey: String?, oData: Any): Any? {
-        when (oData.javaClass.simpleName) {
-            "String" -> {
-                return EncsharedPreferences!!.getString(sKey, oData as String)
-            }
-            "Integer" -> {
-                return EncsharedPreferences!!.getInt(sKey, (oData as Int))
-            }
-            "Boolean" -> {
-                return EncsharedPreferences!!.getBoolean(sKey, (oData as Boolean))
-            }
-            "Float" -> {
-                return EncsharedPreferences!!.getFloat(sKey, (oData as Float))
-            }
-            "Long" -> {
-                return EncsharedPreferences!!.getLong(sKey, (oData as Long))
-            }
-            else -> return null
+        return when (oData) {
+            is String -> encryptedSharedPreferences.getString(sKey, oData)
+            is Int -> encryptedSharedPreferences.getInt(sKey, oData)
+            is Boolean -> encryptedSharedPreferences.getBoolean(sKey, oData)
+            is Float -> encryptedSharedPreferences.getFloat(sKey, oData)
+            is Long -> encryptedSharedPreferences.getLong(sKey, oData)
+            else -> null
         }
     }
 
     fun remove(sKey: String?) {
-        EncsharedPreferences!!.edit().remove(sKey).apply()
+        encryptedSharedPreferences.edit().remove(sKey).apply()
     }
 
     fun clear() {
-        EncsharedPreferences!!.edit().clear().apply()
+        encryptedSharedPreferences.edit().clear().apply()
     }
 
     operator fun contains(sKey: String?): Boolean {
-        return EncsharedPreferences!!.contains(sKey)
+        return encryptedSharedPreferences.contains(sKey)
     }
 
     fun getAll(): Map<String?, *>? {
-        return EncsharedPreferences!!.all
+        return encryptedSharedPreferences.all
     }
 }

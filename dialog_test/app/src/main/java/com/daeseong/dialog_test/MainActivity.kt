@@ -1,5 +1,6 @@
 package com.daeseong.dialog_test
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        Custom1_Dialog(this) {
+        Custom1Dialog(this) {
             finish()
         }.show()
     }

@@ -8,19 +8,17 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-
 class Main3Activity : AppCompatActivity() {
 
     private val tag = Main3Activity::class.java.simpleName
 
-    private var tv1: TextView? = null
-    private var button1 : Button? = null
-    private var button2: Button? = null
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
 
-    private lateinit var thread: Thread
     private lateinit var handler: Handler
-    private lateinit var myRunnable1 : MyRunnable1
-    private lateinit var myRunnable2 : MyRunnable2
+    private lateinit var myRunnable1: MyRunnable1
+    private lateinit var myRunnable2: MyRunnable2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,28 +29,22 @@ class Main3Activity : AppCompatActivity() {
         tv1 = findViewById(R.id.tv1)
 
         button1 = findViewById(R.id.button1)
-        button1!!.setOnClickListener {
-
-            if (handler != null) {
-                handler.sendEmptyMessage(1)
-            }
+        button1.setOnClickListener {
+            handler.sendEmptyMessage(1)
         }
 
         button2 = findViewById(R.id.button2)
-        button2!!.setOnClickListener {
-
-            if (handler != null) {
-                val message = Message.obtain()
-                message.what = 2
-                message.obj = "sendMessage"
-                handler.sendMessage(message)
+        button2.setOnClickListener {
+            val message = Message.obtain().apply {
+                what = 2
+                obj = "sendMessage"
             }
+            handler.sendMessage(message)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
         clear()
     }
 
@@ -63,64 +55,41 @@ class Main3Activity : AppCompatActivity() {
                 super.handleMessage(msg)
 
                 try {
-
-                    var sMsg: String = if(msg.obj == null){
-                        String.format("%d null", msg.what)
-                    } else{
-                        String.format("%d %s", msg.what, msg.obj.toString()!!)
-                    }
-                    tv1!!.text = sMsg
-
+                    val sMsg = msg.obj?.toString() ?: "${msg.what} null"
+                    tv1.text = sMsg
                 } catch (ex: Exception) {
                     Log.e(tag, ex.message.toString())
-                } finally {
                 }
             }
         }
 
         myRunnable1 = MyRunnable1()
         myRunnable2 = MyRunnable2()
-
-        thread = Thread(myRunnable1)
-        thread.start()
+        Thread(myRunnable1).start()
     }
 
     private fun clear() {
-
         try {
-
-            if (handler != null) {
-                handler.removeCallbacks(myRunnable2)
-                handler.removeCallbacks(myRunnable1)
-            }
-
-            if (handler != null) {
-                handler.removeMessages(0)
-            }
-
-            if (thread != null) {
-                thread.interrupt()
-            }
+            handler.removeCallbacks(myRunnable2)
+            handler.removeCallbacks(myRunnable1)
+            handler.removeMessages(0)
         } catch (ex: Exception) {
             Log.e(tag, ex.message.toString())
-        } finally {
         }
     }
 
     inner class MyRunnable1 : Runnable {
         override fun run() {
-
-            handler.post(myRunnable2);
+            handler.post(myRunnable2)
         }
     }
 
     inner class MyRunnable2 : Runnable {
         override fun run() {
-
-            val message = Message.obtain()
-            message.what = 0
-            message.obj = "myRunnable2"
-            handler.sendMessage(message)
+            handler.sendMessage(Message.obtain().apply {
+                what = 0
+                obj = "myRunnable2"
+            })
         }
     }
 }
