@@ -2,7 +2,6 @@ package com.daeseong.library_test
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.daeseong.stringutilslib.Stringutils.getDateToString
@@ -26,20 +25,20 @@ class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
 
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var button3: Button? = null
-    private var button4: Button? = null
-    private var button5: Button? = null
-    private var button6: Button? = null
-    private var button7: Button? = null
-    private var button8: Button? = null
-    private var button9: Button? = null
-    private var button10: Button? = null
-    private var button11: Button? = null
-    private var button12: Button? = null
-    private var button13: Button? = null
-    private var button14: Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
+    private lateinit var button5: Button
+    private lateinit var button6: Button
+    private lateinit var button7: Button
+    private lateinit var button8: Button
+    private lateinit var button9: Button
+    private lateinit var button10: Button
+    private lateinit var button11: Button
+    private lateinit var button12: Button
+    private lateinit var button13: Button
+    private lateinit var button14: Button
 
     private var sInput: String? = null
     private var dInput = 0.0
@@ -52,63 +51,56 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         button1 = findViewById(R.id.button1)
-        button1!!.setOnClickListener(View.OnClickListener {
-
+        button1.setOnClickListener {
             sInput = "https://daeseong.com/board/mainfolder?index=1"
             sResult = getlastStringUrl(sInput!!)
             Log.e(tag, "getlastStringUrl:$sResult")
-        })
+        }
 
         button2 = findViewById(R.id.button2)
-        button2!!.setOnClickListener(View.OnClickListener {
-
+        button2.setOnClickListener {
             sInput = "https://daeseong.com/board/mainfolder?index=1"
             sResult = getSubStringUrl(sInput!!)
             Log.e(tag, "getFileNameURL:$sResult")
-        })
+        }
 
         button3 = findViewById(R.id.button3)
-        button3!!.setOnClickListener(View.OnClickListener {
-
+        button3.setOnClickListener {
             sInput = "https://daeseong.com/board/mainfolder?index=test.exe"
             sResult = getStringExt(sInput!!)
             Log.e(tag, "getStringExt:$sResult")
-        })
+        }
 
         button4 = findViewById(R.id.button4)
-        button4!!.setOnClickListener(View.OnClickListener {
-
+        button4.setOnClickListener {
             sInput = "https://daeseong.com/board/mainfolder?index=1"
             sResult = getStringUpper(sInput)
             Log.e(tag, "getStringUpper:$sResult")
-        })
+        }
 
         button5 = findViewById(R.id.button5)
-        button5!!.setOnClickListener(View.OnClickListener {
-
+        button5.setOnClickListener {
             sInput = "https://daeseong.com/board/mainfolder?index=test.exe"
             sResult = getStringLower(sInput)
             Log.e(tag, "getStringLower:$sResult")
-        })
+        }
 
         button6 = findViewById(R.id.button6)
-        button6!!.setOnClickListener(View.OnClickListener {
-
+        button6.setOnClickListener {
             sInput = "3154055"
             sResult = getStringDecimalFormat(sInput!!)
             Log.e(tag, "getStringDecimalFormat:$sResult")
-        })
+        }
 
         button7 = findViewById(R.id.button7)
-        button7!!.setOnClickListener(View.OnClickListener {
-
+        button7.setOnClickListener {
             dInput = 3154055.0
             sResult = getDoubleCovnertToString(dInput)
             Log.e(tag, "getDoubleCovnertToString:$sResult")
-        })
+        }
 
         button8 = findViewById(R.id.button8)
-        button8!!.setOnClickListener(View.OnClickListener {
+        button8.setOnClickListener {
 
             nType = 1
             sResult = getStringTime(nType)
@@ -129,10 +121,10 @@ class MainActivity : AppCompatActivity() {
             nType = 5
             sResult = getStringTime(nType)
             Log.e(tag, "getStringTime:$sResult")
-        })
+        }
 
         button9 = findViewById(R.id.button9)
-        button9!!.setOnClickListener(View.OnClickListener {
+        button9.setOnClickListener {
 
             nType = 3
             sResult = getStringTime(nType)
@@ -143,50 +135,46 @@ class MainActivity : AppCompatActivity() {
 
             sResult = getDateToString(dDate, nType)
             Log.e(tag, "getDateToString:$sResult")
-        })
+        }
 
         button10 = findViewById(R.id.button10)
-        button10!!.setOnClickListener(View.OnClickListener {
-
+        button10.setOnClickListener {
             sInput = "\"test\""
             sResult = removeStringQuoted(sInput!!)
             Log.e(tag, "removeStringQuoted:$sResult")
-        })
+        }
 
         button11 = findViewById(R.id.button11)
-        button11!!.setOnClickListener(View.OnClickListener {
-
+        button11.setOnClickListener {
             sInput = "test1,test2,test3"
             val sArray = splitString(sInput, ",")
             for (i in sArray.indices) {
                 Log.e(tag, "splitString:" + sArray[i])
             }
-        })
+        }
 
         button12 = findViewById(R.id.button12)
-        button12!!.setOnClickListener(View.OnClickListener {
-
+        button12.setOnClickListener {
             sInput = "010-1100-7001"
             if (isPhone(sInput!!)) {
                 Log.e(tag, "isPhone number")
             } else {
                 Log.e(tag, "Not isPhone number")
             }
-        })
+        }
 
         button13 = findViewById(R.id.button13)
-        button13!!.setOnClickListener(View.OnClickListener {
-
+        button13.setOnClickListener {
             sInput = "test@gmail.com"
             if (isEmail(sInput!!)) {
                 Log.e(tag, "isEmail number")
             } else {
                 Log.e(tag, "Not isEmail number")
             }
-        })
+        }
 
         button14 = findViewById(R.id.button14)
-        button14!!.setOnClickListener(View.OnClickListener {
+        button14.setOnClickListener {
 
             sInput = "01011007001"
             if (isNumeric(sInput!!)) {
@@ -194,7 +182,6 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Log.e(tag, "Not isNumeric number")
             }
-        })
-
+        }
     }
 }
