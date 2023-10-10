@@ -18,14 +18,12 @@ class FlexboxLayout3Activity : AppCompatActivity() {
 
     private val tag = FlexboxLayout3Activity::class.java.simpleName
 
-    private var btn1: Button? = null
-
-    private var fL1: FlexboxLayout? = null
+    private lateinit var btn1: Button
+    private lateinit var fL1: FlexboxLayout
     private var cLBG: ConstraintLayout? = null
     private var tv1: TextView? = null
 
     private val checkMap = HashMap<Int, Boolean>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +39,11 @@ class FlexboxLayout3Activity : AppCompatActivity() {
     private fun init() {
 
         btn1 = findViewById<Button>(R.id.btn1)
-        btn1!!.setOnClickListener(View.OnClickListener {
-
+        btn1.setOnClickListener {
             for (i in 0 until checkMap.size) {
-                Log.e(tag, "select:" + i + checkMap[i].toString())
+                Log.e(tag, "select: $i ${checkMap[i]}")
             }
-        })
+        }
 
         fL1 = findViewById<FlexboxLayout>(R.id.fL1)
     }
@@ -58,17 +55,20 @@ class FlexboxLayout3Activity : AppCompatActivity() {
         cLBG!!.setBackgroundResource(R.drawable.border_normal)
         cLBG!!.setOnClickListener(flexClicked)
 
-        tv1 = cLBG!!.findViewById<TextView>(R.id.tv1)
+        tv1 = cLBG!!.findViewById(R.id.tv1)
         tv1!!.setTextColor(Color.parseColor("#8B8E97"))
         tv1!!.setTypeface(null, Typeface.BOLD)
         tv1!!.text = "testtesst"
 
-        val params = FlexboxLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val params = FlexboxLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         val marginLeft = dip2px(this, 6f)
         val marginTop = dip2px(this, 8f)
         params.setMargins(marginLeft, marginTop, 0, 0)
         cLBG!!.layoutParams = params
-        fL1!!.addView(cLBG)
+        fL1.addView(cLBG)
     }
 
     private fun initData() {
@@ -103,9 +103,9 @@ class FlexboxLayout3Activity : AppCompatActivity() {
 
         try {
 
-            for (i in 0 until fL1!!.childCount) {
+            for (i in 0 until fL1.childCount) {
 
-                val cL = fL1!!.getChildAt(i) as ConstraintLayout
+                val cL = fL1.getChildAt(i) as ConstraintLayout
                 if (v.tag === cL.tag) {
 
                     var nTextColor: Int
@@ -142,6 +142,5 @@ class FlexboxLayout3Activity : AppCompatActivity() {
         } catch (ex: Exception) {
         }
     }
-
 
 }

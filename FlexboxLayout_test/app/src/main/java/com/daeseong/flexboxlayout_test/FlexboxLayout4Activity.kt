@@ -11,27 +11,27 @@ class FlexboxLayout4Activity : AppCompatActivity() {
 
     private val tag = FlexboxLayout4Activity::class.java.simpleName
 
-    private var cl1: View? = null
-    private var cl2: View? = null
-    private var cl3: View? = null
-    private var cl4: View? = null
-    private var cl5: View? = null
-    private var t1: TextView? = null
-    private var t2: TextView? = null
-    private var t3: TextView? = null
-    private var t4: TextView? = null
-    private var t5: TextView? = null
+    private lateinit var cl1: View
+    private lateinit var cl2: View
+    private lateinit var cl3: View
+    private lateinit var cl4: View
+    private lateinit var cl5: View
+    private lateinit var t1: TextView
+    private lateinit var t2: TextView
+    private lateinit var t3: TextView
+    private lateinit var t4: TextView
+    private lateinit var t5: TextView
 
-    private var cl11: View? = null
-    private var cl22: View? = null
-    private var cl33: View? = null
-    private var cl44: View? = null
-    private var cl55: View? = null
-    private var t11: TextView? = null
-    private var t22: TextView? = null
-    private var t33: TextView? = null
-    private var t44: TextView? = null
-    private var t55: TextView? = null
+    private lateinit var cl11: View
+    private lateinit var cl22: View
+    private lateinit var cl33: View
+    private lateinit var cl44: View
+    private lateinit var cl55: View
+    private lateinit var t11: TextView
+    private lateinit var t22: TextView
+    private lateinit var t33: TextView
+    private lateinit var t44: TextView
+    private lateinit var t55: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,11 +50,11 @@ class FlexboxLayout4Activity : AppCompatActivity() {
         cl4 = findViewById(R.id.cl4)
         cl5 = findViewById(R.id.cl5)
 
-        t1 = findViewById<TextView>(R.id.t1)
-        t2 = findViewById<TextView>(R.id.t2)
-        t3 = findViewById<TextView>(R.id.t3)
-        t4 = findViewById<TextView>(R.id.t4)
-        t5 = findViewById<TextView>(R.id.t5)
+        t1 = findViewById(R.id.t1)
+        t2 = findViewById(R.id.t2)
+        t3 = findViewById(R.id.t3)
+        t4 = findViewById(R.id.t4)
+        t5 = findViewById(R.id.t5)
 
         cl11 = findViewById(R.id.cl11)
         cl22 = findViewById(R.id.cl22)
@@ -62,11 +62,11 @@ class FlexboxLayout4Activity : AppCompatActivity() {
         cl44 = findViewById(R.id.cl44)
         cl55 = findViewById(R.id.cl55)
 
-        t11 = findViewById<TextView>(R.id.t11)
-        t22 = findViewById<TextView>(R.id.t22)
-        t33 = findViewById<TextView>(R.id.t33)
-        t44 = findViewById<TextView>(R.id.t44)
-        t55 = findViewById<TextView>(R.id.t55)
+        t11 = findViewById(R.id.t11)
+        t22 = findViewById(R.id.t22)
+        t33 = findViewById(R.id.t33)
+        t44 = findViewById(R.id.t44)
+        t55 = findViewById(R.id.t55)
     }
 
     private fun initData() {

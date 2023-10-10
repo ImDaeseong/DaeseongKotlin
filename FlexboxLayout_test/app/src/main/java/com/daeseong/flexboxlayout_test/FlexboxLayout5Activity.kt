@@ -16,8 +16,8 @@ class FlexboxLayout5Activity : AppCompatActivity() {
 
     private val tag = FlexboxLayout5Activity::class.java.simpleName
 
-    private var fL1: FlexboxLayout? = null
-    private var tv1: TextView? = null
+    private lateinit var fL1: FlexboxLayout
+    private lateinit var tv1: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,35 +29,37 @@ class FlexboxLayout5Activity : AppCompatActivity() {
     }
 
     private fun init() {
-        fL1 = findViewById<FlexboxLayout>(R.id.fL1)
+        fL1 = findViewById(R.id.fL1)
     }
 
     private fun initData() {
 
-        fL1!!.removeAllViews()
+        fL1.removeAllViews()
 
         for (i in 0..9) {
-
             val cl = LayoutInflater.from(this@FlexboxLayout5Activity).inflate(R.layout.flexbox_item, null) as ConstraintLayout
             cl.setOnClickListener(flexClicked)
             cl.tag = i
 
-            tv1 = cl.findViewById<View>(R.id.tv1) as TextView
-            tv1!!.setTextColor(Color.parseColor("#8B8E97"))
-            tv1!!.setTypeface(null, Typeface.NORMAL)
+            tv1 = cl.findViewById(R.id.tv1) as TextView
+            tv1.setTextColor(Color.parseColor("#8B8E97"))
+            tv1.setTypeface(null, Typeface.NORMAL)
 
-            if (i % 2 == 0) {
-                tv1!!.text = String.format("Index Index:%d", i)
+            tv1.text = if (i % 2 == 0) {
+                String.format("Index Index:%d", i)
             } else {
-                tv1!!.text = String.format("Index:%d", i)
+                String.format("Index:%d", i)
             }
 
-            val params = FlexboxLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            val params = FlexboxLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             val marginLeft = dip2px(this, 6f)
             val marginTop = dip2px(this, 8f)
             params.setMargins(marginLeft, marginTop, 0, 0)
             cl.layoutParams = params
-            fL1!!.addView(cl)
+            fL1.addView(cl)
         }
     }
 
