@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class Main4Activity : AppCompatActivity() {
 
     private val tag = Main4Activity::class.java.simpleName
 
-    private var bottomNavigationView: BottomNavigationView? = null
-    private var viewPager: ViewPager? = null
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var viewPager: ViewPager
     private var menuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,46 +19,42 @@ class Main4Activity : AppCompatActivity() {
         setContentView(R.layout.activity_main4)
 
         viewPager = findViewById(R.id.viewPager)
-
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-        bottomNavigationView!!.setOnNavigationItemSelectedListener { menuItem ->
 
-            when (menuItem.itemId) {
-                R.id.list -> viewPager!!.currentItem = 0
-                R.id.sentence -> viewPager!!.currentItem = 1
-                R.id.word -> viewPager!!.currentItem = 2
-                R.id.myword -> viewPager!!.currentItem = 3
-                R.id.setting -> viewPager!!.currentItem = 4
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            viewPager.currentItem = when (menuItem.itemId) {
+                R.id.list -> 0
+                R.id.sentence -> 1
+                R.id.word -> 2
+                R.id.myword -> 3
+                R.id.setting -> 4
+                else -> 0 // Default to the first item
             }
             false
         }
 
-        viewPager!!.addOnPageChangeListener(object : OnPageChangeListener {
-
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                if (menuItem != null) {
-                    menuItem!!.isChecked = false
-                } else {
-                    bottomNavigationView!!.menu.getItem(0).isChecked = false
-                }
-                bottomNavigationView!!.menu.getItem(position).isChecked = true
-                menuItem = bottomNavigationView!!.menu.getItem(position)
+                menuItem?.isChecked = false
+                menuItem = bottomNavigationView.menu.getItem(position)
+                menuItem?.isChecked = true
             }
         })
 
         setupViewPager(viewPager)
     }
 
-    private fun setupViewPager(v: ViewPager?) {
-        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
-        Fragment1().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment1())
-        Fragment2().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment2())
-        Fragment3().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment3())
-        Fragment4().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment4())
-        Fragment5().newInstance()?.let { viewPagerAdapter.addFragment(it) }//Fragment5())
-        v!!.adapter = viewPagerAdapter
+    private fun setupViewPager(viewPager: ViewPager) {
+        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager).apply {
+            addFragment(Fragment1.newInstance())
+            addFragment(Fragment2.newInstance())
+            addFragment(Fragment3.newInstance())
+            addFragment(Fragment4.newInstance())
+            addFragment(Fragment5.newInstance())
+        }
+        viewPager.adapter = viewPagerAdapter
     }
 }

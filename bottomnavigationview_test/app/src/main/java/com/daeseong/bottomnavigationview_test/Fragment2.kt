@@ -11,12 +11,13 @@ import androidx.fragment.app.Fragment
 class Fragment2 : Fragment() {
 
     companion object {
+
         private val tag = Fragment2::class.java.simpleName
         private var webView: WebView? = null
-    }
 
-    fun newInstance(): Fragment2? {
-        return Fragment2()
+        fun newInstance(): Fragment2 {
+            return Fragment2()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

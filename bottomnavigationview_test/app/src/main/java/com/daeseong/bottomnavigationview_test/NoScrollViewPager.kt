@@ -7,21 +7,11 @@ import androidx.viewpager.widget.ViewPager
 
 class NoScrollViewPager : ViewPager {
 
-    constructor(context: Context) : super(context) {
+    constructor(context: Context) : super(context)
 
-    }
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean = false
 
-    }
-
-    override fun onInterceptHoverEvent(event: MotionEvent): Boolean {
-        return false
-        //return super.onInterceptHoverEvent(event);
-    }
-
-    override fun onTouchEvent(ev: MotionEvent): Boolean {
-        return false
-        //return super.onTouchEvent(ev);
-    }
+    override fun onTouchEvent(ev: MotionEvent): Boolean = false
 }
