@@ -12,95 +12,95 @@ class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
 
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var button3: Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         button1 = findViewById(R.id.button1)
-        button1!!.setOnClickListener(View.OnClickListener {
+        button1.setOnClickListener {
 
             try {
 
-                val jsonWrite = JSONObject()
-                jsonWrite.put("index", 1)
-                jsonWrite.put("id", "com.netmarble.lineageII")
-                jsonWrite.put("title", "리니지2 레볼루션")
-                //Log.e(tag, "jsonWrite:$jsonWrite")
-
-                if (jsonWrite.has("index")) {
-                    Log.e(tag, "index:" + jsonWrite.getInt("index"))
+                val jsonWrite = JSONObject().apply {
+                    put("index", 1)
+                    put("id", "com.netmarble.lineageII")
+                    put("title", "리니지2 레볼루션")
                 }
 
-                if (jsonWrite.has("id")) {
-                    Log.e(tag, "id:" + jsonWrite.getString("id"))
-                }
+                with(jsonWrite) {
+                    if (has("index")) {
+                        val indexValue = getInt("index")
+                        Log.e(tag, "index:$indexValue")
+                    }
 
-                if (jsonWrite.has("title")) {
-                    Log.e(tag, "title:" + jsonWrite.getString("title"))
-                }
+                    if (has("id")) {
+                        Log.e(tag, "id:" + getString("id"))
+                    }
 
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        })
-
-        button2 = findViewById(R.id.button2)
-        button2!!.setOnClickListener(View.OnClickListener {
-
-            try {
-
-                //json array 생성
-                val jsonWrite = JSONObject()
-                val jsonArray = JSONArray()
-                for (i in 0..1) {
-                    jsonArray.put("title$i")
-                }
-                jsonWrite.put("ary", jsonArray)
-                //Log.e(tag, "ary:$jsonWrite")
-
-                //json array 조회
-                val arykey = JSONObject(jsonWrite.toString())
-                if (arykey.has("ary")) {
-                    val ary = arykey.getJSONArray("ary")
-                    for (i in 0 until ary.length()) {
-                        Log.e(tag, "ary value:" + ary[i])
+                    if (has("title")) {
+                        Log.e(tag, "title:" + getString("title"))
                     }
                 }
 
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
-        })
+        }
 
-        button3 = findViewById(R.id.button3)
-        button3!!.setOnClickListener(View.OnClickListener {
+        button2 = findViewById(R.id.button2)
+        button2.setOnClickListener {
 
             try {
 
-                //json array 생성
-                val jsonWrite = JSONObject()
-                val jsonArray = JSONArray()
-
-                for (i in 0..1) {
-                    val jsonObject = JSONObject()
-                    jsonObject.put("index", i + 1)
-                    jsonObject.put("id", "com.netmarble.lineageII")
-                    jsonObject.put("title", "리니지2 레볼루션")
-                    jsonArray.put(jsonObject)
+                val jsonWrite = JSONObject().apply {
+                    val jsonArray = JSONArray().apply {
+                        for (i in 0..1) {
+                            put("title$i")
+                        }
+                    }
+                    put("ary", jsonArray)
                 }
-                jsonWrite.put("ary", jsonArray)
-                //Log.e(tag, "ary:$jsonWrite")
 
-                //json array 조회
                 val arykey = JSONObject(jsonWrite.toString())
                 if (arykey.has("ary")) {
                     val ary = arykey.getJSONArray("ary")
                     for (i in 0 until ary.length()) {
-                        //Log.e(tag, "ary value:$ary.getJSONObject(i)")
+                        Log.e(tag, "ary value:${ary[i]}")
+                    }
+                }
+
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
+        button3 = findViewById(R.id.button3)
+        button3.setOnClickListener {
+
+            try {
+
+                val jsonWrite = JSONObject().apply {
+                    val jsonArray = JSONArray().apply {
+                        for (i in 0..1) {
+                            val jsonObject = JSONObject().apply {
+                                put("index", i + 1)
+                                put("id", "com.netmarble.lineageII")
+                                put("title", "리니지2 레볼루션")
+                            }
+                            put(jsonObject)
+                        }
+                    }
+                    put("ary", jsonArray)
+                }
+
+                val arykey = JSONObject(jsonWrite.toString())
+                if (arykey.has("ary")) {
+                    val ary = arykey.getJSONArray("ary")
+                    for (i in 0 until ary.length()) {
                         val jsonObject = ary.getJSONObject(i)
                         val index = jsonObject.getString("index")
                         val id = jsonObject.getString("id")
@@ -112,7 +112,6 @@ class MainActivity : AppCompatActivity() {
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
-        })
+        }
     }
-
 }

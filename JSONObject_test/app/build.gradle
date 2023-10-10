@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33//30
 
     defaultConfig {
         applicationId "com.daeseong.jsonobject_test"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 33//30
         versionCode 1
         versionName "1.0"
 
