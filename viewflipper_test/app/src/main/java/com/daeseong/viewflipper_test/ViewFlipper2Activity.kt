@@ -6,18 +6,17 @@ import android.widget.TextView
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
 
-
 class ViewFlipper2Activity : AppCompatActivity() {
 
     private val tag: String = ViewFlipper2Activity::class.java.simpleName
 
-    private var button1: Button? = null
+    private lateinit var button1: Button
 
-    private var textview1: TextView? = null
-    private var textview2: TextView? = null
-    private var textview3: TextView? = null
+    private lateinit var textview1: TextView
+    private lateinit var textview2: TextView
+    private lateinit var textview3: TextView
 
-    private var viewFlipper1: ViewFlipper? = null
+    private lateinit var viewFlipper1: ViewFlipper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,22 +24,19 @@ class ViewFlipper2Activity : AppCompatActivity() {
 
         title = tag
 
-        textview1 = findViewById<TextView>(R.id.textview1)
-        textview2 = findViewById<TextView>(R.id.textview2)
-        textview3 = findViewById<TextView>(R.id.textview3)
+        textview1 = findViewById(R.id.textview1)
+        textview2 = findViewById(R.id.textview2)
+        textview3 = findViewById(R.id.textview3)
 
-        viewFlipper1 = findViewById<ViewFlipper>(R.id.viewFlipper1)
+        viewFlipper1 = findViewById(R.id.viewFlipper1)
 
+        textview1.text = "textview1textview1textview1textview1textview1textview1textview1textview1textview1"
+        textview2.text = "textview2textview2textview2textview2textview2textview2textview2textview2textview2"
+        textview3.text = "textview3textview3textview3textview3textview3textview3textview3textview3textview3"
 
-        textview1!!.text = "textview1textview1textview1textview1textview1textview1textview1textview1textview1"
-        textview2!!.text = "textview2textview2textview2textview2textview2textview2textview2textview2textview2"
-        textview3!!.text = "textview3textview3textview3textview3textview3textview3textview3textview3textview3"
-
-
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
-
-            viewFlipper1!!.showNext()
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
+            viewFlipper1.showNext()
         }
 
     }

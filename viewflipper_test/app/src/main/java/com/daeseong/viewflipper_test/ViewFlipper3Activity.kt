@@ -6,15 +6,14 @@ import android.view.animation.AnimationUtils
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
 
-
 class ViewFlipper3Activity : AppCompatActivity() {
 
     private val tag: String = ViewFlipper3Activity::class.java.simpleName
 
-    private var viewFlipper1: ViewFlipper? = null
+    private lateinit var viewFlipper1: ViewFlipper
 
-    private var Fade_in: Animation? = null
-    private var Fade_out:Animation? = null
+    private lateinit var fade_in: Animation
+    private lateinit var fade_out: Animation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,16 +21,16 @@ class ViewFlipper3Activity : AppCompatActivity() {
 
         title = tag
 
-        viewFlipper1 = findViewById<ViewFlipper>(R.id.viewFlipper1)
+        viewFlipper1 = findViewById(R.id.viewFlipper1)
 
-        Fade_in = AnimationUtils.loadAnimation(this,android.R.anim.fade_in)
-        Fade_out = AnimationUtils.loadAnimation(this,android.R.anim.fade_out)
+        fade_in = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+        fade_out = AnimationUtils.loadAnimation(this, android.R.anim.fade_out)
 
-        viewFlipper1!!.inAnimation = Fade_in
-        viewFlipper1!!.outAnimation = Fade_out
+        viewFlipper1.inAnimation = fade_in
+        viewFlipper1.outAnimation = fade_out
 
-        viewFlipper1!!.isAutoStart = true
-        viewFlipper1!!.flipInterval = 5000
-        viewFlipper1!!.startFlipping()
+        viewFlipper1.isAutoStart = true
+        viewFlipper1.flipInterval = 5000
+        viewFlipper1.startFlipping()
     }
 }

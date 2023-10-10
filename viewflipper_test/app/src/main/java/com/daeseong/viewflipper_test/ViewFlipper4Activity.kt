@@ -5,12 +5,11 @@ import android.view.MotionEvent
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
 
-
 class ViewFlipper4Activity : AppCompatActivity() {
 
     private val tag: String = ViewFlipper4Activity::class.java.simpleName
 
-    private var viewFlipper1: ViewFlipper? = null
+    private lateinit var viewFlipper1: ViewFlipper
 
     private var lastX = 0f
     private var currentX = 0f
@@ -21,14 +20,14 @@ class ViewFlipper4Activity : AppCompatActivity() {
 
         title = tag
 
-        viewFlipper1 = findViewById<ViewFlipper>(R.id.viewFlipper1)
-        viewFlipper1!!.startFlipping()
-        viewFlipper1!!.flipInterval = 3000
+        viewFlipper1 = findViewById(R.id.viewFlipper1)
+        viewFlipper1.startFlipping()
+        viewFlipper1.flipInterval = 3000
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
-        viewFlipper1!!.stopFlipping()
+        viewFlipper1.stopFlipping()
 
         when (event.action) {
 
@@ -45,12 +44,12 @@ class ViewFlipper4Activity : AppCompatActivity() {
                 if (lastX < currentX) {
 
                     //첫번째화면이면
-                    if (viewFlipper1!!.displayedChild != 0) {
+                    if (viewFlipper1.displayedChild != 0) {
 
                         //애니메이션 설정
-                        viewFlipper1!!.setInAnimation(this, R.anim.in_from_left)
-                        viewFlipper1!!.setOutAnimation(this, R.anim.out_to_right)
-                        viewFlipper1!!.showNext()
+                        viewFlipper1.setInAnimation(this, R.anim.in_from_left)
+                        viewFlipper1.setOutAnimation(this, R.anim.out_to_right)
+                        viewFlipper1.showNext()
                     }
                 }
 
@@ -58,12 +57,12 @@ class ViewFlipper4Activity : AppCompatActivity() {
                 if (lastX > currentX) {
 
                     //첫번째화면이면
-                    if (viewFlipper1!!.displayedChild != 1) {
+                    if (viewFlipper1.displayedChild != 1) {
 
                         //애니메이션 설정
-                        viewFlipper1!!.setInAnimation(this, R.anim.in_from_right)
-                        viewFlipper1!!.setOutAnimation(this, R.anim.out_to_left)
-                        viewFlipper1!!.showPrevious()
+                        viewFlipper1.setInAnimation(this, R.anim.in_from_right)
+                        viewFlipper1.setOutAnimation(this, R.anim.out_to_left)
+                        viewFlipper1.showPrevious()
                     }
                 }
             }

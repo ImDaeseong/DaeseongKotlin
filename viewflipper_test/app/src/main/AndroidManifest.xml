@@ -12,11 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewFlipper4Activity"></activity>
+        <activity android:name=".ViewFlipper4Activity" />
         <activity android:name=".ViewFlipper3Activity" />
         <activity android:name=".ViewFlipper2Activity" />
         <activity android:name=".ViewFlipper1Activity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
