@@ -1,10 +1,8 @@
 package com.daeseong.bottomsheetdialog_test
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,16 +13,19 @@ class Main3Activity : AppCompatActivity() {
 
     private val tag: String = Main3Activity::class.java.simpleName
 
-    private var button1: Button? = null
+    private lateinit var button1: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
-        button1 = findViewById<View>(R.id.button1) as Button
-        button1!!.setOnClickListener { showBottomSheetDialog(this) }
+
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
+            showBottomSheetDialog()
+        }
     }
 
-    private fun showBottomSheetDialog(context: Context) {
+    private fun showBottomSheetDialog() {
 
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottonSheetDialogTheme)
 
@@ -32,13 +33,11 @@ class Main3Activity : AppCompatActivity() {
 
         val tv1 = view.findViewById<TextView>(R.id.tv1)
 
-        view.findViewById<View>(R.id.btn1).setOnClickListener {
-
-            Log.e(tag, tv1.text.toString() )
+        view.findViewById<Button>(R.id.btn1).setOnClickListener {
+            Log.e(tag, tv1.text.toString())
         }
 
-        view.findViewById<View>(R.id.btn2).setOnClickListener {
-
+        view.findViewById<Button>(R.id.btn2).setOnClickListener {
             bottomSheetDialog.dismiss()
         }
 

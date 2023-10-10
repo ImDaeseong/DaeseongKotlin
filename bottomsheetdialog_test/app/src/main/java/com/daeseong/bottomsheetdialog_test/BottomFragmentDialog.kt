@@ -14,26 +14,23 @@ class BottomFragmentDialog : BottomSheetDialogFragment() {
         private val tag = BottomFragmentDialog::class.java.simpleName
     }
 
-    private var tvl1: TextInputLayout? = null
-    private var tvl2:TextInputLayout? = null
-    private var button1: Button? = null
+    private lateinit var tvl1: TextInputLayout
+    private lateinit var tvl2: TextInputLayout
+    private lateinit var button1: Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.dialog_bottomlayout, container, false)
-        tvl1 = view.findViewById<View>(R.id.tvl1) as TextInputLayout
-        tvl2 = view.findViewById<View>(R.id.tvl2) as TextInputLayout
-        button1 = view.findViewById<View>(R.id.button1) as Button
 
-        button1!!.setOnClickListener {
-            var bCehck = false
-            if (checkID()) {
-                bCehck = true
-            }
-            if (checkPwd()) {
-                bCehck = true
-            }
-            if (bCehck) {
+        tvl1 = view.findViewById(R.id.tvl1)
+        tvl2 = view.findViewById(R.id.tvl2)
+        button1 = view.findViewById(R.id.button1)
+
+        button1.setOnClickListener {
+            val isIdValid = checkID()
+            val isPwdValid = checkPwd()
+
+            if (isIdValid && isPwdValid) {
                 dismiss()
             }
         }
@@ -42,24 +39,26 @@ class BottomFragmentDialog : BottomSheetDialogFragment() {
     }
 
     private fun checkID(): Boolean {
-        val sID = tvl1!!.editText!!.text.toString()
-        if (sID.isEmpty()) {
-            tvl1!!.error = "아이디를 입력하세요"
+        val sID = tvl1.editText?.text.toString()
+        return if (sID.isNullOrEmpty()) {
+            tvl1.error = "아이디를 입력하세요"
+            false
         } else {
-            tvl1!!.error = null
-            tvl1!!.isErrorEnabled = false
+            tvl1.error = null
+            tvl1.isErrorEnabled = false
+            true
         }
-        return true
     }
 
     private fun checkPwd(): Boolean {
-        val sPwd = tvl2!!.editText!!.text.toString()
-        if (sPwd.isEmpty()) {
-            tvl2!!.error = "비밀번호를 입력하세요"
+        val sPwd = tvl2.editText?.text.toString()
+        return if (sPwd.isNullOrEmpty()) {
+            tvl2.error = "비밀번호를 입력하세요"
+            false
         } else {
-            tvl2!!.error = null
-            tvl2!!.isErrorEnabled = false
+            tvl2.error = null
+            tvl2.isErrorEnabled = false
+            true
         }
-        return true
     }
 }

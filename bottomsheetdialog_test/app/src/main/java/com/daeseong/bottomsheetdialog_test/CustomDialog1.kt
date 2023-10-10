@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 
@@ -14,9 +13,9 @@ class CustomDialog1(context: Context) :  Dialog(context) {
 
     private val tag: String = CustomDialog1::class.java.simpleName
 
-    private var btn1: Button? = null
-    private var btn2: Button? = null
-    private var btn3: Button? = null
+    private lateinit var btn1: Button
+    private lateinit var btn2: Button
+    private lateinit var btn3: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,29 +32,28 @@ class CustomDialog1(context: Context) :  Dialog(context) {
         btn2 = findViewById(R.id.btn2)
         btn3 = findViewById(R.id.btn3)
 
-        btn1!!.setOnClickListener(View.OnClickListener {
-
+        btn1.setOnClickListener {
             showCustomDialog2()
-        })
+        }
 
-        btn2!!.setOnClickListener(View.OnClickListener {
-
+        btn2.setOnClickListener {
             showCustomDialog2()
-        })
+        }
 
-        btn3!!.setOnClickListener(View.OnClickListener {
-
+        btn3.setOnClickListener {
             showCustomDialog2()
-        })
+        }
     }
 
     private fun showCustomDialog2() {
 
         val customDialog2 = CustomDialog2(context)
         customDialog2.show()
-        customDialog2.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        customDialog2.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        customDialog2.window!!.attributes.windowAnimations = R.style.DialogTheme
-        customDialog2.window!!.setGravity(Gravity.BOTTOM)
+        customDialog2.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes.windowAnimations = R.style.DialogTheme
+            setGravity(Gravity.BOTTOM)
+        }
     }
 }

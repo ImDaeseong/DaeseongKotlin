@@ -15,26 +15,25 @@ class BottomFragment : BottomSheetDialogFragment() {
         private val tag = BottomFragment::class.java.simpleName
     }
 
-    private var tv1: TextView? = null
-    private var btn1: Button? = null
-    private var btn2: Button? = null
+    private lateinit var tv1: TextView
+    private lateinit var btn1: Button
+    private lateinit var btn2: Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.dialog_layout, container, false)
+
         tv1 = view.findViewById(R.id.tv1)
         btn1 = view.findViewById(R.id.btn1)
         btn2 = view.findViewById(R.id.btn2)
 
-        btn1!!.setOnClickListener(View.OnClickListener {
+        btn1.setOnClickListener {
+            Log.e(tag, tv1.text.toString())
+        }
 
-            Log.e(tag, tv1!!.text.toString())
-        })
-
-        btn2!!.setOnClickListener(View.OnClickListener {
-
+        btn2.setOnClickListener {
             dismiss()
-        })
+        }
 
         return view
     }

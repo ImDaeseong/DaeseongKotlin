@@ -15,15 +15,15 @@ class Main8Activity : AppCompatActivity() {
 
     private val tag = Main8Activity::class.java.simpleName
 
-    private var cL1: View? = null
-    private var btn1_1: Button? = null
-    private var btn2_1: Button? = null
-    private var btn3_1: Button? = null
+    private lateinit var cL1: View
+    private lateinit var btn1_1: Button
+    private lateinit var btn2_1: Button
+    private lateinit var btn3_1: Button
 
-    private var cL2: View? = null
-    private var et1: EditText? = null
-    private var et2:EditText? = null
-    private var btn1: Button? = null
+    private lateinit var cL2: View
+    private lateinit var et1: EditText
+    private lateinit var et2: EditText
+    private lateinit var btn1: Button
 
     private var bClick = false
 
@@ -39,54 +39,20 @@ class Main8Activity : AppCompatActivity() {
         setVisibleView()
 
         btn1_1 = findViewById(R.id.btn1_1)
-        btn1_1!!.setOnClickListener(View.OnClickListener {
-            bClick = !bClick
-            setVisibleView()
-        })
-
         btn2_1 = findViewById(R.id.btn2_1)
-        btn2_1!!.setOnClickListener(View.OnClickListener {
-            bClick = !bClick
-            setVisibleView()
-        })
-
         btn3_1 = findViewById(R.id.btn3_1)
-        btn3_1!!.setOnClickListener(View.OnClickListener {
-            bClick = !bClick
-            setVisibleView()
-        })
 
-        et1 = findViewById<View>(R.id.et1) as EditText
-        et1!!.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        setButtonClickListeners()
 
-            }
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        et1 = findViewById(R.id.et1)
+        et2 = findViewById(R.id.et2)
 
-            }
-            override fun afterTextChanged(s: Editable) {
-
-            }
-        })
-
-        et2 = findViewById<View>(R.id.et2) as EditText
-        et2!!.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-            }
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-            }
-            override fun afterTextChanged(s: Editable) {
-
-            }
-        })
+        setEditTextListeners()
 
         btn1 = findViewById(R.id.btn1)
-        btn1!!.setOnClickListener(View.OnClickListener {
-
+        btn1.setOnClickListener {
             finish()
-        })
+        }
     }
 
     override fun onBackPressed() {
@@ -98,7 +64,7 @@ class Main8Activity : AppCompatActivity() {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 
-        if (event!!.action == MotionEvent.ACTION_DOWN && isOutOfBounds(this, event)) {
+        if (event?.action == MotionEvent.ACTION_DOWN && isOutOfBounds(this, event)) {
 
             //Log.e(tag, "다이얼로그 영역밖 터치")
 
@@ -111,13 +77,11 @@ class Main8Activity : AppCompatActivity() {
     private fun setVisibleView() {
 
         if (bClick) {
-
-            cL1!!.visibility = View.GONE
-            cL2!!.visibility = View.VISIBLE
+            cL1.visibility = View.GONE
+            cL2.visibility = View.VISIBLE
         } else {
-
-            cL1!!.visibility = View.VISIBLE
-            cL2!!.visibility = View.GONE
+            cL1.visibility = View.VISIBLE
+            cL2.visibility = View.GONE
         }
     }
 
@@ -149,5 +113,46 @@ class Main8Activity : AppCompatActivity() {
         return (x < -slop || y < -slop
                 || x > decorView?.width!! + slop
                 || y > decorView.height + slop)
+    }
+
+    private fun setButtonClickListeners() {
+        btn1_1.setOnClickListener {
+            bClick = !bClick
+            setVisibleView()
+        }
+
+        btn2_1.setOnClickListener {
+            bClick = !bClick
+            setVisibleView()
+        }
+
+        btn3_1.setOnClickListener {
+            bClick = !bClick
+            setVisibleView()
+        }
+    }
+
+    private fun setEditTextListeners() {
+        et1.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
+        et2.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
     }
 }
