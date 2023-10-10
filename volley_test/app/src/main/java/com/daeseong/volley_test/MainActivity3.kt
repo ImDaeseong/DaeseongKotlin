@@ -16,9 +16,9 @@ class MainActivity3 : AppCompatActivity() {
 
     private val TAG = MainActivity3::class.java.simpleName
 
-    private var button1: Button? = null
-    private var tv1: TextView? = null
-    private var tv2:TextView? = null
+    private lateinit var button1: Button
+    private lateinit var tv1: TextView
+    private lateinit var tv2: TextView
 
     private var requestQueue: RequestQueue? = null
 
@@ -28,17 +28,17 @@ class MainActivity3 : AppCompatActivity() {
 
         initVolley()
 
-        tv1 = findViewById<TextView>(R.id.tv1)
-        tv1!!.movementMethod = ScrollingMovementMethod()
+        tv1 = findViewById(R.id.tv1)
+        tv1.movementMethod = ScrollingMovementMethod()
 
-        tv2 = findViewById<TextView>(R.id.tv2)
-        tv2!!.movementMethod = ScrollingMovementMethod()
+        tv2 = findViewById(R.id.tv2)
+        tv2.movementMethod = ScrollingMovementMethod()
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
 
-            //get
-            requestQueue!!.add(requestGetJson())
+            // get
+            requestQueue?.add(requestGetJson())
         }
     }
 
@@ -46,9 +46,7 @@ class MainActivity3 : AppCompatActivity() {
         super.onDestroy()
 
         try {
-            if (requestQueue != null) {
-                requestQueue!!.cancelAll(this)
-            }
+            requestQueue?.cancelAll(this)
         } catch (e: Exception) {
             Log.e(TAG, e.message.toString())
         }
@@ -58,63 +56,61 @@ class MainActivity3 : AppCompatActivity() {
         requestQueue = Volley.newRequestQueue(this)
     }
 
-    private fun requestGetJson(): JsonObjectRequest? {
+    private fun requestGetJson(): JsonObjectRequest {
+        val url = "https://api.bithumb.com/public/ticker/BTC"
 
-        val sUrl = "https://api.bithumb.com/public/ticker/BTC"
-        val jr = JsonObjectRequest(Request.Method.GET, sUrl, null,
+        return JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
-                    tv1!!.text = response.toString()
-                    val sStatus = response.getString("status")
-                    if (sStatus == "0000") {
+                    tv1.text = response.toString()
+                    val status = response.getString("status")
+
+                    if (status == "0000") {
                         val data = response.getJSONObject("data")
-                        val opening_price = data.getString("opening_price")
-                        val closing_price = data.getString("closing_price")
-                        val min_price = data.getString("min_price")
-                        val max_price = data.getString("max_price")
-                        val units_traded = data.getString("units_traded")
-                        val acc_trade_value = data.getString("acc_trade_value")
-                        val prev_closing_price = data.getString("prev_closing_price")
-                        val units_traded_24H = data.getString("units_traded_24H")
-                        val acc_trade_value_24H = data.getString("acc_trade_value_24H")
-                        val fluctate_24H = data.getString("fluctate_24H")
-                        val fluctate_rate_24H = data.getString("fluctate_rate_24H")
+                        val openingPrice = data.getString("opening_price")
+                        val closingPrice = data.getString("closing_price")
+                        val minPrice = data.getString("min_price")
+                        val maxPrice = data.getString("max_price")
+                        val unitsTraded = data.getString("units_traded")
+                        val accTradeValue = data.getString("acc_trade_value")
+                        val prevClosingPrice = data.getString("prev_closing_price")
+                        val unitsTraded24H = data.getString("units_traded_24H")
+                        val accTradeValue24H = data.getString("acc_trade_value_24H")
+                        val fluctuate24H = data.getString("fluctate_24H")
+                        val fluctuateRate24H = data.getString("fluctate_rate_24H")
                         val date = data.getString("date")
+
                         val stringBuilder = StringBuilder()
-                        stringBuilder.append(opening_price)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(closing_price)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(min_price)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(max_price)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(units_traded)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(acc_trade_value)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(prev_closing_price)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(units_traded_24H)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(acc_trade_value_24H)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(fluctate_24H)
-                        stringBuilder.append("\n")
-                        stringBuilder.append(fluctate_rate_24H)
-                        stringBuilder.append("\n")
+                        stringBuilder.append(openingPrice).append("\n")
+                        stringBuilder.append(closingPrice).append("\n")
+                        stringBuilder.append(minPrice).append("\n")
+                        stringBuilder.append(maxPrice).append("\n")
+                        stringBuilder.append(unitsTraded).append("\n")
+                        stringBuilder.append(accTradeValue).append("\n")
+                        stringBuilder.append(prevClosingPrice).append("\n")
+                        stringBuilder.append(unitsTraded24H).append("\n")
+                        stringBuilder.append(accTradeValue24H).append("\n")
+                        stringBuilder.append(fluctuate24H).append("\n")
+                        stringBuilder.append(fluctuateRate24H).append("\n")
                         stringBuilder.append(date)
-                        tv2!!.text = stringBuilder.toString()
+
+                        tv2.text = stringBuilder.toString()
                     }
-                } catch (ex: java.lang.Exception) {
-                    Log.e(TAG, "onResponse Exception: " + ex.message.toString())
+                } catch (ex: Exception) {
+                    Log.e(TAG, "onResponse Exception: ${ex.message}")
                 }
+            },
+            { error ->
+                Log.e(TAG, "requestGetJson onErrorResponse: ${error.message}")
             }
-        ) { error ->
-            Log.e(TAG,"requestGetData onErrorResponse: " + error.message.toString())
+        ).apply {
+            retryPolicy = DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            )
+            setShouldCache(false)
         }
-        jr.retryPolicy = DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-        jr.setShouldCache(false)
-        return jr
     }
+
 }

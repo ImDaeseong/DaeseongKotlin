@@ -15,9 +15,9 @@ class MainActivity1 : AppCompatActivity() {
 
     private val TAG = MainActivity1::class.java.simpleName
 
-    private var button1: Button? = null
-    private var tv1: TextView? = null
-    private var tv2:TextView? = null
+    private lateinit var button1: Button
+    private lateinit var tv1: TextView
+    private lateinit var tv2: TextView
 
     private var requestQueue: RequestQueue? = null
 
@@ -35,20 +35,20 @@ class MainActivity1 : AppCompatActivity() {
 
         initVolley()
 
-        tv1 = findViewById<TextView>(R.id.tv1)
-        tv1!!.movementMethod = ScrollingMovementMethod()
+        tv1 = findViewById(R.id.tv1)
+        tv1.movementMethod = ScrollingMovementMethod()
 
-        tv2 = findViewById<TextView>(R.id.tv2)
-        tv2!!.movementMethod = ScrollingMovementMethod()
+        tv2 = findViewById(R.id.tv2)
+        tv2.movementMethod = ScrollingMovementMethod()
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
 
-            //get
-            requestQueue!!.add(requestGetData())
+            // GET
+            requestQueue?.add(requestGetData())
 
-            //post
-            requestQueue!!.add(requestPOSTData())
+            // POST
+            requestQueue?.add(requestPOSTData())
         }
     }
 
@@ -56,9 +56,7 @@ class MainActivity1 : AppCompatActivity() {
         super.onDestroy()
 
         try {
-            if (requestQueue != null) {
-                requestQueue!!.cancelAll(this)
-            }
+            requestQueue?.cancelAll(this)
         } catch (e: Exception) {
             Log.e(TAG, e.message.toString())
         }
@@ -68,18 +66,18 @@ class MainActivity1 : AppCompatActivity() {
         requestQueue = Volley.newRequestQueue(this)
     }
 
-    private fun requestGetData(): StringRequest? {
+    private fun requestGetData(): StringRequest {
         val sUrl = String.format("%sdobType=%s&dsptcKsco=%s&continent=%s&showItemListCount=%s&sepmt61=%s", sPage, sdobType, sdsptcKsco, scontinent, sshowItemListCount, sepmt61)
         val sr = StringRequest(Request.Method.GET, sUrl,
             { response ->
 
-                tv1!!.text = response
-                val nTop = tv1!!.layout.getLineTop(tv1!!.lineCount)
-                val nScrollY = nTop - tv1!!.height
+                tv1.text = response
+                val nTop = tv1.layout.getLineTop(tv1.lineCount)
+                val nScrollY = nTop - tv1.height
                 if (nScrollY > 0) {
-                    tv1!!.scrollTo(0, nScrollY)
+                    tv1.scrollTo(0, nScrollY)
                 } else {
-                    tv1!!.scrollTo(0, 0)
+                    tv1.scrollTo(0, 0)
                 }
             }
         ) { error ->
@@ -90,19 +88,19 @@ class MainActivity1 : AppCompatActivity() {
         return sr
     }
 
-    private fun requestPOSTData(): StringRequest? {
+    private fun requestPOSTData(): StringRequest {
 
         val sUrl = sPage
         val sr: StringRequest = object : StringRequest(Method.POST, sUrl,
             Response.Listener { response ->
 
-                tv2!!.text = response
-                val nTop = tv2!!.layout.getLineTop(tv2!!.lineCount)
-                val nScrollY = nTop - tv2!!.height
+                tv2.text = response
+                val nTop = tv2.layout.getLineTop(tv2.lineCount)
+                val nScrollY = nTop - tv2.height
                 if (nScrollY > 0) {
-                    tv2!!.scrollTo(0, nScrollY)
+                    tv2.scrollTo(0, nScrollY)
                 } else {
-                    tv2!!.scrollTo(0, 0)
+                    tv2.scrollTo(0, 0)
                 }
             },
             Response.ErrorListener { error ->

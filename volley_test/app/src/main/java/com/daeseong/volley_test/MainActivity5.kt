@@ -13,10 +13,10 @@ class MainActivity5 : AppCompatActivity() {
 
     private val TAG = MainActivity5::class.java.simpleName
 
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var tv1: TextView? = null
-    private var tv2:TextView? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var tv1: TextView
+    private lateinit var tv2: TextView
     private var progressDialog: ProgressDialog? = null
 
     //호출 정보
@@ -31,25 +31,25 @@ class MainActivity5 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main5)
 
-        tv1 = findViewById<TextView>(R.id.tv1)
-        tv1!!.movementMethod = ScrollingMovementMethod()
+        tv1 = findViewById(R.id.tv1)
+        tv1.movementMethod = ScrollingMovementMethod()
 
-        tv2 = findViewById<TextView>(R.id.tv2)
-        tv2!!.movementMethod = ScrollingMovementMethod()
+        tv2 = findViewById(R.id.tv2)
+        tv2.movementMethod = ScrollingMovementMethod()
 
         button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
+        button1.setOnClickListener {
 
-            tv1!!.text = ""
+            tv1.text = ""
             progressDialog = ProgressDialog.show(this@MainActivity5,"volleygetdata","volleygetdata.getData",true)
             val sUrl = String.format("%sdobType=%s&dsptcKsco=%s&continent=%s&showItemListCount=%s&sepmt61=%s", sPage, sdobType, sdsptcKsco, scontinent, sshowItemListCount, sepmt61)
             getData(sUrl, this@MainActivity5, progressDialog!!, tv1!!)
         }
 
         button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
+        button2.setOnClickListener {
 
-            tv2!!.text = ""
+            tv2.text = ""
             progressDialog = ProgressDialog.show(this@MainActivity5,"volleypostdata","volleypostdata.getPostData",true)
             val sUrl = sPage
             getPostData(sUrl, this@MainActivity5, progressDialog!!, tv2!!, sdobType, sdsptcKsco, scontinent, sshowItemListCount, sepmt61)

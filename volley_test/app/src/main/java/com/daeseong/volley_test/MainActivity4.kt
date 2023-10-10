@@ -11,10 +11,10 @@ class MainActivity4 : AppCompatActivity() {
 
     private val TAG = MainActivity4::class.java.simpleName
 
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var tv1: TextView? = null
-    private var tv2:TextView? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var tv1: TextView
+    private lateinit var tv2: TextView
 
     //호출 정보
     private val sPage = "http://www.worldjob.or.kr/openapi/openapi.do?" ////https://www.data.go.kr/dataset/3038249/openapi.do
@@ -30,27 +30,27 @@ class MainActivity4 : AppCompatActivity() {
 
         GetRequestData.getInstance().init(this)
 
-        tv1 = findViewById<TextView>(R.id.tv1)
-        tv1!!.movementMethod = ScrollingMovementMethod()
+        tv1 = findViewById(R.id.tv1)
+        tv1.movementMethod = ScrollingMovementMethod()
 
-        tv2 = findViewById<TextView>(R.id.tv2)
-        tv2!!.movementMethod = ScrollingMovementMethod()
+        tv2 = findViewById(R.id.tv2)
+        tv2.movementMethod = ScrollingMovementMethod()
 
         button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
+        button1.setOnClickListener {
 
             tv1!!.text = ""
             val sUrl = String.format("%sdobType=%s&dsptcKsco=%s&continent=%s&showItemListCount=%s&sepmt61=%s", sPage, sdobType, sdsptcKsco, scontinent, sshowItemListCount, sepmt61)
             GetRequestData.getInstance().getData(sUrl,
                 { response ->
 
-                    tv1!!.text = response
-                    val nTop = tv1!!.layout.getLineTop(tv1!!.lineCount)
-                    val nScrollY = nTop - tv1!!.height
+                    tv1.text = response
+                    val nTop = tv1.layout.getLineTop(tv1.lineCount)
+                    val nScrollY = nTop - tv1.height
                     if (nScrollY > 0) {
-                        tv1!!.scrollTo(0, nScrollY)
+                        tv1.scrollTo(0, nScrollY)
                     } else {
-                        tv1!!.scrollTo(0, 0)
+                        tv1.scrollTo(0, 0)
                     }
                 }, { error ->
                     Log.e(TAG,"getData onErrorResponse: " + error.message.toString())
@@ -58,20 +58,20 @@ class MainActivity4 : AppCompatActivity() {
         }
 
         button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
+        button2.setOnClickListener {
 
             tv2!!.text = ""
             val sUrl = sPage
             GetRequestData.getInstance().getPostData(sUrl,
                 { response ->
 
-                    tv2!!.text = response
-                    val nTop = tv2!!.layout.getLineTop(tv2!!.lineCount)
-                    val nScrollY = nTop - tv2!!.height
+                    tv2.text = response
+                    val nTop = tv2.layout.getLineTop(tv2.lineCount)
+                    val nScrollY = nTop - tv2.height
                     if (nScrollY > 0) {
-                        tv2!!.scrollTo(0, nScrollY)
+                        tv2.scrollTo(0, nScrollY)
                     } else {
-                        tv2!!.scrollTo(0, 0)
+                        tv2.scrollTo(0, 0)
                     }
                 },
                 { error ->

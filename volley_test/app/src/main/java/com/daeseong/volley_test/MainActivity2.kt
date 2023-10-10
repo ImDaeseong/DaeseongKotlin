@@ -15,8 +15,8 @@ class MainActivity2 : AppCompatActivity() {
 
     private val TAG = MainActivity2::class.java.simpleName
 
-    private var button1: Button? = null
-    private var iv1: ImageView? = null
+    private lateinit var button1: Button
+    private lateinit var iv1: ImageView
 
     private var requestQueue: RequestQueue? = null
 
@@ -26,12 +26,11 @@ class MainActivity2 : AppCompatActivity() {
 
         initVolley()
 
-        iv1 = findViewById<ImageView>(R.id.iv1)
+        iv1 = findViewById(R.id.iv1)
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
-
-            requestQueue!!.add(requestImage())
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
+            requestQueue?.add(requestImage())
         }
     }
 
@@ -39,9 +38,7 @@ class MainActivity2 : AppCompatActivity() {
         super.onDestroy()
 
         try {
-            if (requestQueue != null) {
-                requestQueue!!.cancelAll(this)
-            }
+            requestQueue?.cancelAll(this)
         } catch (e: Exception) {
             Log.e(TAG, e.message.toString())
         }
@@ -51,22 +48,25 @@ class MainActivity2 : AppCompatActivity() {
         requestQueue = Volley.newRequestQueue(this)
     }
 
-    private fun requestImage(): ImageRequest? {
-        val sUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
-        val nMaxWidth = 0
-        val nMaxHeight = 0
-        val ir = ImageRequest(
-            sUrl,
-            { response -> iv1!!.setImageBitmap(response) },
-            nMaxWidth,
-            nMaxHeight,
+    private fun requestImage(): ImageRequest {
+        val imageUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
+        val maxWidth = 0
+        val maxHeight = 0
+
+        val imageRequest = ImageRequest(
+            imageUrl,
+            { response -> iv1.setImageBitmap(response) },
+            maxWidth,
+            maxHeight,
             ImageView.ScaleType.CENTER,
             Bitmap.Config.ALPHA_8
         ) { error ->
-            Log.e(TAG, "requestImage onErrorResponse: " + error.message.toString())
+            Log.e(TAG, "requestImage onErrorResponse: ${error.message}")
         }
-        ir.retryPolicy = DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-        ir.setShouldCache(false)
-        return ir
+
+        imageRequest.retryPolicy =
+            DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        imageRequest.setShouldCache(false)
+        return imageRequest
     }
 }
