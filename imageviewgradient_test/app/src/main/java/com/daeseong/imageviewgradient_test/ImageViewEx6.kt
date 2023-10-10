@@ -1,5 +1,4 @@
 package com.daeseong.imageviewgradient_test
-
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -10,6 +9,7 @@ import androidx.appcompat.widget.AppCompatImageView
 
 
 class ImageViewEx6 : AppCompatImageView {
+
     private var paint: Paint? = null
     private var path: Path? = null
     private var rect: RectF? = null
@@ -48,7 +48,7 @@ class ImageViewEx6 : AppCompatImageView {
 
         //round border
         rect = RectF(0F, 0F, nWidth.toFloat(), nHeight.toFloat())
-        path!!.addRoundRect(rect, fCornerRadius, fCornerRadius, Path.Direction.CCW)
+        path!!.addRoundRect(rect!!, fCornerRadius, fCornerRadius, Path.Direction.CCW)
     }
 
     override fun invalidate() {

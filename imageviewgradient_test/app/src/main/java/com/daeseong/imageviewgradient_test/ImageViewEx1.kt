@@ -5,16 +5,14 @@ import android.graphics.*
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 
-
 class ImageViewEx1 : AppCompatImageView {
 
-    private var paint: Paint? = null
+    private lateinit var paint: Paint
     private var gradient: LinearGradient? = null
     private var nHeight = 0
     private var nWidth = 0
-    private val nColor = Color.argb(204, 0, 0, 0) //255 * 0.8 =204 80%
+    private val nColor = Color.argb(204, 0, 0, 0) // 255 * 0.8 = 204 80%
 
-    //private int nColor = Color.argb(51, 0, 0, 0);//255 * 0.2 =51 20%
     constructor(context: Context?) : super(context!!) {
         init()
     }
@@ -45,18 +43,11 @@ class ImageViewEx1 : AppCompatImageView {
             //gradient = LinearGradient((nWidth).toFloat(), 0f, (nWidth).toFloat(), (nHeight /2).toFloat(), nColor, Color.TRANSPARENT, Shader.TileMode.CLAMP)
 
             //아래쪽
-            gradient = LinearGradient(
-                (nWidth).toFloat(),
-                (nHeight / 2).toFloat(),
-                (nWidth).toFloat(),
-                (nHeight).toFloat(),
-                Color.TRANSPARENT,
-                nColor,
-                Shader.TileMode.CLAMP
-            )
-            paint!!.shader = gradient
+            gradient = LinearGradient((nWidth).toFloat(), (nHeight / 2).toFloat(), (nWidth).toFloat(), (nHeight).toFloat(), Color.TRANSPARENT, nColor, Shader.TileMode.CLAMP)
+
+            paint.shader = gradient
         }
-        canvas.drawPaint(paint!!)
+        canvas.drawPaint(paint)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

@@ -1,14 +1,10 @@
 package com.daeseong.imageviewgradient_test
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.RectF
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
-
 
 class ImageViewEx4 : AppCompatImageView {
 
@@ -31,9 +27,9 @@ class ImageViewEx4 : AppCompatImageView {
         //round border
         val myDrawable = drawable
         if (myDrawable != null && myDrawable is BitmapDrawable && fCornerRadius > 0) {
-            val paint = myDrawable.paint
+            val paint = Paint()
             val color = -0x1000000
-            val bitmapBounds = myDrawable.getBounds()
+            val bitmapBounds = myDrawable.bounds
             val rectF = RectF(bitmapBounds)
             val saveCount = canvas.saveLayer(rectF, null, Canvas.ALL_SAVE_FLAG)
             imageMatrix.mapRect(rectF)

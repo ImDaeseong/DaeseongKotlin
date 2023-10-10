@@ -9,7 +9,6 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 
-
 class ImageViewEx5 : AppCompatImageView {
 
     private var paint: Paint? = null

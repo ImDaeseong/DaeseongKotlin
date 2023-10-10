@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatImageView
 
 class ImageViewEx8 : AppCompatImageView {
 
-    private var paint: Paint? = null
+    private lateinit var paint: Paint
     private var nHeight = 0
     private var nWidth = 0
 
@@ -27,11 +27,11 @@ class ImageViewEx8 : AppCompatImageView {
 
     private fun init() {
         paint = Paint()
-        paint!!.color = Color.parseColor("#000000")
-        paint!!.isAntiAlias = true
-        //paint.setAlpha(204)//255 * 0.8 =204 80%
-        paint!!.alpha = 51 //255 * 0.2 =51 20%
-        paint!!.style = Paint.Style.FILL
+        paint.color = Color.parseColor("#000000")
+        paint.isAntiAlias = true
+        //paint.alpha = 204 // 255 * 0.8 = 204 (80%)
+        paint.alpha = 51 // 255 * 0.2 = 51 (20%)
+        paint.style = Paint.Style.FILL
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -44,7 +44,7 @@ class ImageViewEx8 : AppCompatImageView {
         super.onDraw(canvas)
 
         //절반만 투명처리
-        canvas.drawRect(0f, (nHeight / 2).toFloat(), nWidth.toFloat(), nHeight.toFloat(), paint!!)
+        canvas.drawRect(0f, (nHeight / 2).toFloat(), nWidth.toFloat(), nHeight.toFloat(), paint)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

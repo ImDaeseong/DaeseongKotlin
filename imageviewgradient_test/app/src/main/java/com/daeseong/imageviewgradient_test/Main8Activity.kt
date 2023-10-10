@@ -8,15 +8,15 @@ class Main8Activity : AppCompatActivity() {
 
     private val tag: String = MainActivity::class.java.simpleName
 
-    private var image1: ImageView? = null
+    private lateinit var image1: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main8)
 
-        image1 = findViewById<ImageView>(R.id.image1)
+        image1 = findViewById(R.id.image1)
 
-        //전체 투명도(80%)
-        image1!!.alpha = 0.8f
+        // 전체 투명도(80%)
+        image1.alpha = 0.8f
     }
 }

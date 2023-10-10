@@ -1,5 +1,4 @@
 package com.daeseong.imageviewgradient_test
-
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint

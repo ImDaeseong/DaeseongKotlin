@@ -12,20 +12,12 @@ class ImageViewEx3 : AppCompatImageView {
     private var fRotation = 90f
 
     constructor(context: Context?) : super(context!!) {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(
-        context!!, attrs
-    ) {
-    }
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
-        context!!, attrs, defStyle
-    ) {
-    }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {}
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context!!, attrs, defStyle) {}
 
     override fun onDraw(canvas: Canvas) {
-
         //90 rotate
-        canvas.rotate(fRotation, nWidth / 2.toFloat(), nHeight / 2.toFloat())
+        canvas.rotate(fRotation, nWidth / 2f, nHeight / 2f)
         super.onDraw(canvas)
     }
 

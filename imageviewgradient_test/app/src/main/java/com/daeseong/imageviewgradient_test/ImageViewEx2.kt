@@ -5,10 +5,9 @@ import android.graphics.*
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 
-
 class ImageViewEx2 : AppCompatImageView {
 
-    private var paint: Paint? = null
+    private lateinit var paint: Paint
     private var shader: Shader? = null
     private var nHeight = 0
     private var nWidth = 0
@@ -18,15 +17,11 @@ class ImageViewEx2 : AppCompatImageView {
         init()
     }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(
-        context!!, attrs
-    ) {
+    constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {
         init()
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
-        context!!, attrs, defStyle
-    ) {
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context!!, attrs, defStyle) {
         init()
     }
 
@@ -38,17 +33,17 @@ class ImageViewEx2 : AppCompatImageView {
         super.onDraw(canvas)
 
         //가운데 좌표
-        val nX = nWidth / 2
-        val nY = nHeight / 2
+        val centerX = nWidth / 2f
+        val centerY = nHeight / 2f
 
         //표시할 영역
-        val nRadius = nWidth / 4
+        val radius = nWidth / 4f
         if (shader == null) {
-            shader = RadialGradient((nX).toFloat(), (nY).toFloat(), (nRadius).toFloat(), nColors, null, Shader.TileMode.CLAMP)
-            paint!!.shader = shader
-            canvas.drawCircle(nX.toFloat(), nY.toFloat(), nRadius.toFloat(), paint!!)
+            shader = RadialGradient(centerX, centerY, radius, nColors, null, Shader.TileMode.CLAMP)
+            paint.shader = shader
         }
-        canvas.drawCircle(nX.toFloat(), nY.toFloat(), nRadius.toFloat(), paint!!)
+
+        canvas.drawCircle(centerX, centerY, radius, paint)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
