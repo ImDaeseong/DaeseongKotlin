@@ -1,11 +1,9 @@
 package com.daeseong.viewpager_test
 
-
 import android.content.Context
-import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,17 +13,15 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
-
 class ViewPager5Activity : AppCompatActivity() {
 
     private val tag = ViewPager5Activity::class.java.simpleName
 
-    private var toolbar: Toolbar? = null
-    private var viewPager5: ViewPager? = null
+    private lateinit var toolbar: Toolbar
+    private lateinit var viewPager5: ViewPager
 
-    var handler: Handler? = null
-    var runnable: Runnable? = null
-    var timer: Timer? = null
+    private lateinit var handler: Handler
+    private lateinit var timer: Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,54 +30,50 @@ class ViewPager5Activity : AppCompatActivity() {
 
         setContentView(R.layout.activity_view_pager5)
 
-        toolbar  = findViewById<Toolbar>(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = "제목"
+        supportActionBar?.title = "제목"
 
+        val pagar5Adapter = Pagar5Adapter(this)
 
-        var pagar5Adapter = Pagar5Adapter(this)
-
-        viewPager5 = findViewById<ViewPager>(R.id.viewPager5)
-        viewPager5!!.adapter = pagar5Adapter
-
+        viewPager5 = findViewById(R.id.viewPager5)
+        viewPager5.adapter = pagar5Adapter
 
         handler = Handler()
 
-        runnable = Runnable {
-
-            var i = viewPager5!!.currentItem
-
-            i++
-
-            viewPager5!!.setCurrentItem(i, true)
+        val runnable = Runnable {
+            viewPager5.currentItem = (viewPager5.currentItem + 1) % pagar5Adapter.count
         }
 
         timer = Timer()
-        timer!!.schedule(object : TimerTask() {
+        timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                handler!!.post(runnable)
+                handler.post(runnable)
             }
         }, 2000, 2000)
-
     }
 
     //타이틀바 숨기기/가로보기 고정/풀스크린
     private fun InitTitleBar() {
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        try {
+            //안드로이드 8.0 오레오 버전에서만 오류 발생
+            supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        } catch (ex: Exception) {
+        }
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.decorView.windowInsetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            @Suppress("DEPRECATION")
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        }
     }
 
     class Pagar5Adapter(private val context: Context) : PagerAdapter() {
 
-        private var inflater: LayoutInflater? = null
-        private var images = intArrayOf(
+        private lateinit var inflater: LayoutInflater
+        private val images = intArrayOf(
             R.drawable.number1,
             R.drawable.number2,
             R.drawable.number3,
@@ -89,16 +81,13 @@ class ViewPager5Activity : AppCompatActivity() {
         )
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val view: View = inflater.inflate(R.layout.pager5_adapter, container, false)
 
-            inflater = context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val view: View = inflater!!.inflate(R.layout.pager5_adapter, container, false)
-
-
-            val imageview5 = view.findViewById<View>(R.id.imageview5) as ImageView
+            val imageview5 = view.findViewById<ImageView>(R.id.imageview5)
             imageview5.setImageResource(images[position])
             imageview5.setOnClickListener { v ->
-
-                Snackbar.make(v,"Image" + (position + 1), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(v, "Image ${position + 1}", Snackbar.LENGTH_LONG).show()
             }
 
             container.addView(view)
@@ -114,7 +103,7 @@ class ViewPager5Activity : AppCompatActivity() {
         }
 
         override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
-            container.removeView(obj as View?)
+            container.removeView(obj as View)
         }
     }
 

@@ -1,6 +1,5 @@
 package com.daeseong.viewpager_test
 
-
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
@@ -15,36 +14,32 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 
-
 class ViewPager1Activity : AppCompatActivity() {
 
     private val tag: String = ViewPager1Activity::class.java.simpleName
 
-    private var viewPager1: ViewPager? = null
+    private lateinit var viewPager1: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_pager1)
 
-        viewPager1 = findViewById<ViewPager>(R.id.viewPager1)
-
-        val Adapter1 = Adapter1(this)
-        viewPager1!!.adapter = Adapter1
+        viewPager1 = findViewById(R.id.viewPager1)
+        viewPager1.adapter = Adapter1(this)
     }
 
+    internal class Adapter1(private val context: Context) : PagerAdapter() {
 
-    internal class Adapter1(var context: Context) : PagerAdapter() {
+        private val layoutInflater: LayoutInflater = context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        private var layoutInflater: LayoutInflater? = null
-
-        private var Images = intArrayOf(
+        private val images = intArrayOf(
             R.drawable.number1,
             R.drawable.number2,
             R.drawable.number3,
             R.drawable.number4
         )
 
-        private var lstColors = intArrayOf(
+        private val colors = intArrayOf(
             Color.rgb(55, 55, 55),
             Color.rgb(239, 85, 85),
             Color.rgb(110, 49, 89),
@@ -52,37 +47,34 @@ class ViewPager1Activity : AppCompatActivity() {
         )
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            val view = layoutInflater.inflate(R.layout.pager1_adapter, container, false)
 
-            layoutInflater = context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val view: View = layoutInflater!!.inflate(R.layout.pager1_adapter, container, false)
-
-            val imageView1 = view.findViewById<View>(R.id.imageview1) as ImageView
-            imageView1.setImageResource(Images[position])
+            val imageView1 = view.findViewById<ImageView>(R.id.imageview1)
+            imageView1.setImageResource(images[position])
             imageView1.setOnClickListener { v ->
-
-                Snackbar.make( v,"position:$position", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(v, "position:$position", Snackbar.LENGTH_LONG).show()
             }
 
             val linearLayout = view.findViewById<LinearLayout>(R.id.imgLinearLayout)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-
-                linearLayout.setBackgroundColor(lstColors[position])
+                linearLayout.setBackgroundColor(colors[position])
             }
 
             container.addView(view)
             return view
         }
 
-        override fun destroyItem(container: ViewGroup, position: Int, obj : Any) {
-            container.removeView(obj as View?)
+        override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+            container.removeView(obj as View)
         }
 
-        override fun isViewFromObject(view: View, obj : Any): Boolean {
+        override fun isViewFromObject(view: View, obj: Any): Boolean {
             return view === obj
         }
 
         override fun getCount(): Int {
-            return Images.size
+            return images.size
         }
     }
+
 }

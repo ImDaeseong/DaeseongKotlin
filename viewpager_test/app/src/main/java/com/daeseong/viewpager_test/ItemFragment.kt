@@ -8,7 +8,6 @@ import android.widget.ImageView
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 
-
 class ItemFragment : Fragment() {
 
     companion object {
@@ -34,5 +33,4 @@ class ItemFragment : Fragment() {
 
         return view
     }
-
 }
