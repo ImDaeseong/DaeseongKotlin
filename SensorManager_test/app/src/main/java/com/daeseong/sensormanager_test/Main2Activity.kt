@@ -6,45 +6,41 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
 
 class Main2Activity : AppCompatActivity() , SensorEventListener {
 
     private val tag: String = Main2Activity::class.java.simpleName
 
-    private var tv1: TextView? = null
-    private var tv2: TextView? = null
+    private lateinit var tv1: TextView
+    private lateinit var tv2: TextView
 
     private var sensorManager: SensorManager? = null
-    private var Accelsensor: Sensor? = null
-    private var Lightsensor: Sensor? = null
+    private var accelSensor: Sensor? = null
+    private var lightSensor: Sensor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-        tv1 = findViewById<TextView>(R.id.tv1)
-        tv2 = findViewById<TextView>(R.id.tv2)
+        tv1 = findViewById(R.id.tv1)
+        tv2 = findViewById(R.id.tv2)
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-        if(sensorManager != null){
-            Accelsensor = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            Lightsensor = sensorManager!!.getDefaultSensor(Sensor.TYPE_LIGHT);
-            sensorManager!!.registerListener(this, Accelsensor, SensorManager.SENSOR_DELAY_NORMAL);
-            sensorManager!!.registerListener(this, Lightsensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
+        accelSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        lightSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_LIGHT)
+
+        accelSensor?.let { sensorManager?.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL) }
+        lightSensor?.let { sensorManager?.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL) }
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        if(sensorManager != null) {
-            sensorManager!!.unregisterListener(this);
-        }
+        sensorManager?.unregisterListener(this)
+
     }
 
     override fun onSensorChanged(event: SensorEvent?) {

@@ -17,6 +17,6 @@ class Main4Activity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        SensorInfo.getInstance().DestorySeonsor()
+        SensorInfo.getInstance().destroySensor()
     }
 }

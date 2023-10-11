@@ -7,59 +7,32 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
 
 class Main3Activity : AppCompatActivity() {
 
     private val tag: String = Main3Activity::class.java.simpleName
 
-    private var tv1: TextView? = null
-    private var tv2: TextView? = null
+    private lateinit var tvOrientation: TextView
+    private lateinit var tvLight: TextView
 
-    private var sensorManager: SensorManager? = null
-    private var Accelsensor: Sensor? = null
-    private var Lightsensor: Sensor? = null
+    private lateinit var sensorManager: SensorManager
+    private lateinit var accelerometerSensor: Sensor
+    private lateinit var lightSensor: Sensor
 
-    private var sensorEventListener: SensorEventListener = object : SensorEventListener {
+    private val sensorEventListener: SensorEventListener = object : SensorEventListener {
 
         override fun onSensorChanged(event: SensorEvent) {
 
-            if (event.sensor.type === Sensor.TYPE_ACCELEROMETER) {
-                val dX = event.values[0].toDouble()
-                val dY = event.values[1].toDouble()
-                val dZ = event.values[2].toDouble()
-                val angleX = Math.atan2(dX, dZ) * 180 / Math.PI
-                val angleY = Math.atan2(dY, dZ) * 180 / Math.PI
-                val fFrentX = Math.abs(angleX)
-                val fFrentY = Math.abs(angleY)
-                runOnUiThread {
-                    if (fFrentX > 170 && fFrentY > 170) {
-                        val intent = Intent(this@Main3Activity, LockActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        startActivity(intent)
-                        //DestorySeonsor()
-                        tv1!!.text = "뒤면"
-                    } else {
-                        tv1!!.text = "앞면"
-                    }
-                }
-            } else if (event.sensor.type === Sensor.TYPE_LIGHT) {
-                val fFrent = Math.abs(event.values[0])
-                runOnUiThread {
-                    if (fFrent == 0f) {
-                        tv2!!.text = "뒤면"
-                    } else {
-                        tv2!!.text = "앞면"
-                    }
-                }
+            when (event.sensor.type) {
+                Sensor.TYPE_ACCELEROMETER -> handleAccelerometerSensor(event)
+                Sensor.TYPE_LIGHT -> handleLightSensor(event)
             }
         }
 
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-            Log.e(tag, "onAccuracyChanged")
+            // Accuracy change handling, if needed
         }
     }
 
@@ -67,40 +40,57 @@ class Main3Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
 
-        tv1 = findViewById<TextView>(R.id.tv1)
-        tv2 = findViewById<TextView>(R.id.tv2)
+        tvOrientation  = findViewById(R.id.tv1)
+        tvLight  = findViewById(R.id.tv2)
 
         initSensor()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
-        DestorySeonsor()
+        destroySensors()
     }
 
     private fun initSensor() {
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        if (sensorManager != null) {
-            Accelsensor = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-            Lightsensor = sensorManager!!.getDefaultSensor(Sensor.TYPE_LIGHT)
-            sensorManager!!.registerListener(
-                sensorEventListener,
-                Accelsensor,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
-            sensorManager!!.registerListener(
-                sensorEventListener,
-                Lightsensor,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+
+        accelerometerSensor.let {
+            sensorManager.registerListener(sensorEventListener, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+
+        lightSensor.let {
+            sensorManager.registerListener(sensorEventListener, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }
 
-    private fun DestorySeonsor() {
-        if (sensorManager != null) {
-            sensorManager!!.unregisterListener(sensorEventListener)
+    private fun destroySensors() {
+        sensorManager.unregisterListener(sensorEventListener)
+    }
+
+    private fun handleAccelerometerSensor(event: SensorEvent) {
+        val angleX = Math.toDegrees(Math.atan2(event.values[0].toDouble(), event.values[2].toDouble()))
+        val angleY = Math.toDegrees(Math.atan2(event.values[1].toDouble(), event.values[2].toDouble()))
+
+        runOnUiThread {
+            if (Math.abs(angleX) > 170 && Math.abs(angleY) > 170) {
+                startActivity(Intent(this@Main3Activity, LockActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                })
+                tvOrientation.text = "뒤면"
+            } else {
+                tvOrientation.text = "앞면"
+            }
+        }
+    }
+
+    private fun handleLightSensor(event: SensorEvent) {
+        val lightValue = Math.abs(event.values[0])
+
+        runOnUiThread {
+            tvLight.text = if (lightValue == 0f) "뒤면" else "앞면"
         }
     }
 }
