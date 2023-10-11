@@ -10,17 +10,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-
 class GridLayout2Activity : AppCompatActivity() {
-
-    private val tag: String = GridLayout2Activity::class.java.simpleName
 
     private val numRows = 20
     private val numCols = 11
 
-    private var scrollView: ScrollView? = null
-    private var gridLayout: GridLayout? = null
-    private var floatingActionButton: FloatingActionButton? = null
+    private lateinit var scrollView: ScrollView
+    private lateinit var gridLayout: GridLayout
+    private lateinit var floatingActionButton: FloatingActionButton
 
     private var AlpabatList = arrayOf(
         "", "ㅏ", "ㅑ", "ㅓ", "ㅕ", "ㅗ", "ㅛ", "ㅜ", "ㅠ", "ㅡ", "ㅣ",
@@ -49,20 +46,16 @@ class GridLayout2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grid_layout2)
 
-        scrollView = findViewById<ScrollView>(R.id.sv1)
-        gridLayout  = findViewById<GridLayout>(R.id.gl1)
+        scrollView = findViewById(R.id.sv1)
+        gridLayout = findViewById(R.id.gl1)
+        floatingActionButton = findViewById(R.id.fab1)
 
-        floatingActionButton = findViewById<FloatingActionButton>(R.id.fab1)
-        floatingActionButton!!.setOnClickListener {
-            scrollView!!.scrollTo(0, 0)
+        floatingActionButton.setOnClickListener {
+            scrollView.scrollTo(0, 0)
         }
 
-        scrollView!!.viewTreeObserver.addOnScrollChangedListener {
-            if (scrollView!!.scrollY > 0) {
-                floatingActionButton!!.visibility = View.VISIBLE
-            } else {
-                floatingActionButton!!.visibility = View.INVISIBLE
-            }
+        scrollView.viewTreeObserver.addOnScrollChangedListener {
+            floatingActionButton.visibility = if (scrollView.scrollY > 0) View.VISIBLE else View.INVISIBLE
         }
 
         loadData()
@@ -73,9 +66,10 @@ class GridLayout2Activity : AppCompatActivity() {
         val size = Point()
         display.getSize(size)
         val screenWidth: Int = size.x
-        val screenHeight: Int = size.y
-        gridLayout!!.columnCount = 11
-        gridLayout!!.rowCount = 20
+
+        gridLayout.columnCount = numCols
+        gridLayout.rowCount = numRows
+
         for (element in AlpabatList) {
             val item = GridItem(this)
             item.setText(element)
@@ -85,7 +79,7 @@ class GridLayout2Activity : AppCompatActivity() {
                     Toast.makeText(this@GridLayout2Activity, sText, Toast.LENGTH_SHORT).show()
                 }
             }
-            gridLayout!!.addView(item, screenWidth / numCols, 60)
+            gridLayout.addView(item, screenWidth / numCols, 60)
         }
     }
 }

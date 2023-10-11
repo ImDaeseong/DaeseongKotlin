@@ -1,59 +1,53 @@
 package com.daeseong.horizontalscrollview_flingtest
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
-
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
 
-    private var button1: Button? = null
-    private var button2:Button? = null
-    private var button3:Button? = null
-    private var button4:Button? = null
-    private var button5:Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
+    private lateinit var button5: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
+        button1 = findViewById(R.id.button1)
+        button2 = findViewById(R.id.button2)
+        button3 = findViewById(R.id.button3)
+        button4 = findViewById(R.id.button4)
+        button5 = findViewById(R.id.button5)
 
-            val intent = Intent(this, HorizontalScrollView1Activity::class.java)
-            startActivity(intent)
+        button1.setOnClickListener {
+            callActivity(HorizontalScrollView1Activity::class.java)
         }
 
-        button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
-
-            val intent = Intent(this, HorizontalScrollView2Activity::class.java)
-            startActivity(intent)
+        button2.setOnClickListener {
+            callActivity(HorizontalScrollView2Activity::class.java)
         }
 
-        button3 = findViewById<Button>(R.id.button3)
-        button3!!.setOnClickListener {
-
-            val intent = Intent(this, HorizontalScrollView3Activity::class.java)
-            startActivity(intent)
+        button3.setOnClickListener {
+            callActivity(HorizontalScrollView3Activity::class.java)
         }
 
-        button4 = findViewById<Button>(R.id.button4)
-        button4!!.setOnClickListener {
-
-            val intent = Intent(this, HorizontalScrollView4Activity::class.java)
-            startActivity(intent)
+        button4.setOnClickListener {
+            callActivity(HorizontalScrollView4Activity::class.java)
         }
 
-        button5 = findViewById<Button>(R.id.button5)
-        button5!!.setOnClickListener {
-
-            val intent = Intent(this, HorizontalScrollView5Activity::class.java)
-            startActivity(intent)
+        button5.setOnClickListener {
+            callActivity(HorizontalScrollView5Activity::class.java)
         }
+    }
+
+    private fun callActivity(activityClass: Class<*>) {
+        val intent = Intent(this, activityClass)
+        startActivity(intent)
     }
 }

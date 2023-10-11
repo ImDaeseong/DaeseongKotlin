@@ -9,12 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HorizontalScrollView5Activity"></activity>
+        <activity android:name=".HorizontalScrollView5Activity" />
         <activity android:name=".HorizontalScrollView4Activity" />
         <activity android:name=".HorizontalScrollView3Activity" />
         <activity android:name=".HorizontalScrollView2Activity" />
         <activity android:name=".HorizontalScrollView1Activity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

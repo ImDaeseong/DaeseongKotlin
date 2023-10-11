@@ -1,23 +1,20 @@
 package com.daeseong.horizontalscrollview_flingtest
 
-
-import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
-
 class HorizontalScrollView2Activity : AppCompatActivity() {
 
     private val tag = HorizontalScrollView2Activity::class.java.simpleName
 
-    private var llayout: LinearLayout? = null
+    private lateinit var llayout: LinearLayout
 
-    private var nWidth:Int = 0
-    private var nHeight:Int = 0
-    private var nImgHeight:Int = 0
+    private var nWidth: Int = 0
+    private var nHeight: Int = 0
+    private var nImgHeight: Int = 0
 
     private val nImgCount = 8
 
@@ -30,14 +27,16 @@ class HorizontalScrollView2Activity : AppCompatActivity() {
 
     private fun init() {
 
-        llayout = findViewById<LinearLayout>(R.id.llayout)
+        llayout = findViewById(R.id.llayout)
 
         //해상도 사이즈
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        nWidth = displayMetrics.widthPixels - dip2px(this, 29F)
+        val displayMetrics = DisplayMetrics().apply {
+            windowManager.defaultDisplay.getMetrics(this)
+        }
+        nWidth = displayMetrics.widthPixels - dip2px(29F)
         nHeight = displayMetrics.heightPixels
         nImgHeight = (320 * (nWidth.toFloat() / 960)).toInt()
+
         for (i in 0 until nImgCount) {
             setImageView(i)
         }
@@ -57,21 +56,14 @@ class HorizontalScrollView2Activity : AppCompatActivity() {
         } else {
             params.setMargins(10, 0, 0, 0)
         }
-        if (nIndex % 2 == 1) {
-            imageView.setImageResource(R.drawable.a)
-        } else {
-            imageView.setImageResource(R.drawable.b)
-        }
-        llayout!!.addView(imageView)
+
+        imageView.setImageResource(if (nIndex % 2 == 1) R.drawable.a else R.drawable.b)
+
+        llayout.addView(imageView)
     }
 
-    private fun dip2px(context: Context, dpValue: Float): Int {
-        val scale: Float = context.resources.displayMetrics.density
+    private fun dip2px(dpValue: Float): Int {
+        val scale: Float = resources.displayMetrics.density
         return (dpValue * scale + 0.5f).toInt()
-    }
-
-    private fun px2dip(context: Context, pxValue: Float): Int {
-        val scale: Float = context.resources.displayMetrics.density
-        return (pxValue / scale + 0.5f).toInt()
     }
 }

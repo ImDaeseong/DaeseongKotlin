@@ -7,26 +7,22 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 
-
 class RoundedImageView : AppCompatImageView {
 
-    private var rect: RectF? = null
     private val path = Path()
     private val DEFAULT_RADIUS = 20f
+    private var rect: RectF? = null
     private val radius = DEFAULT_RADIUS
 
     constructor(context: Context) : super(context) {
-        scaleType = ScaleType.FIT_XY
         init()
     }
 
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0) {
-        scaleType = ScaleType.FIT_XY
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         init()
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        scaleType = ScaleType.FIT_XY
         init()
     }
 
@@ -36,15 +32,13 @@ class RoundedImageView : AppCompatImageView {
     }
 
     private fun init() {
-
-        rect = RectF(0F, 0F, this.width.toFloat(), this.height.toFloat())
-        path.addRoundRect(rect, radius, radius, Path.Direction.CCW)
+        rect = RectF(0F, 0F, width.toFloat(), height.toFloat())
+        path.addRoundRect(rect!!, radius, radius, Path.Direction.CCW)
         invalidate()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-
         init()
     }
 }

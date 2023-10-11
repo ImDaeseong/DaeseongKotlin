@@ -6,10 +6,9 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 
-
 class GridItem : ConstraintLayout {
 
-    private var tv1: TextView? = null
+    private lateinit var tv1: TextView
     private var sText: String? = null
 
     constructor(context: Context) : super(context) {
@@ -20,22 +19,22 @@ class GridItem : ConstraintLayout {
         init(context)
     }
 
-    constructor(context: Context, attributeSet: AttributeSet?, defStyle: Int) : super( context, attributeSet, defStyle) {
+    constructor(context: Context, attributeSet: AttributeSet?, defStyle: Int) : super(context, attributeSet, defStyle) {
         init(context)
     }
 
     private fun init(context: Context) {
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.grid_item, this, true)
-        tv1 = findViewById<TextView>(R.id.tv1)
+        tv1 = findViewById(R.id.tv1)
     }
 
     fun setText(sText: String) {
         this.sText = sText
-        tv1!!.text = sText
+        tv1.text = sText
     }
 
-    fun getText(): String {
-        return sText!!
+    fun getText(): String? {
+        return sText
     }
 }

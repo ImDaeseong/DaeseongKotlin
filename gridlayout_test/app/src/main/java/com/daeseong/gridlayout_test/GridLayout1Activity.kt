@@ -4,11 +4,11 @@ import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.widget.GridLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
 
 class GridLayout1Activity : AppCompatActivity() {
 
@@ -17,8 +17,8 @@ class GridLayout1Activity : AppCompatActivity() {
     private val numRows = 20
     private val numCols = 11
 
-    private var scrollView: ScrollView? = null
-    private var gridLayout: GridLayout? = null
+    private lateinit var scrollView: ScrollView
+    private lateinit var gridLayout: GridLayout
 
     private var AlpabatList = arrayOf(
         "", "ㅏ", "ㅑ", "ㅓ", "ㅕ", "ㅗ", "ㅛ", "ㅜ", "ㅠ", "ㅡ", "ㅣ",
@@ -47,11 +47,11 @@ class GridLayout1Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grid_layout1)
 
-        scrollView = findViewById<ScrollView>(R.id.sv1)
-        gridLayout  = findViewById<GridLayout>(R.id.gl1)
+        scrollView = findViewById(R.id.sv1)
+        gridLayout = findViewById(R.id.gl1)
 
-        scrollView!!.viewTreeObserver.addOnScrollChangedListener {
-            Log.e(tag, "X:" + scrollView!!.scrollX + " Y:" + scrollView!!.scrollY)
+        scrollView.viewTreeObserver.addOnScrollChangedListener {
+            Log.e(tag, "X:" + scrollView.scrollX + " Y:" + scrollView.scrollY)
         }
 
         loadData()
@@ -62,20 +62,18 @@ class GridLayout1Activity : AppCompatActivity() {
         val size = Point()
         display.getSize(size)
         val screenWidth: Int = size.x
-        val screenHeight: Int = size.y
 
         for (element in AlpabatList) {
-
             val tv = TextView(this)
             tv.text = element
             tv.textSize = 20f
-            tv.width = 80
+            tv.width = screenWidth / numCols
             tv.height = 100
             tv.setTextColor(Color.parseColor("#ffffff"))
             tv.setPadding(0, 0, 0, 0)
             tv.setBackgroundColor(Color.parseColor("#37474F"))
-            gridLayout!!.addView(tv, screenWidth / numCols, 60) //gridLayout.addView(tv)
+            tv.gravity = Gravity.CENTER
+            gridLayout.addView(tv)
         }
     }
-
 }

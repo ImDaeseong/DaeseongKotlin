@@ -2,6 +2,7 @@ package com.daeseong.horizontalscrollview_test
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -12,8 +13,8 @@ class HorScroll3Activity : AppCompatActivity() {
 
     private val tag = HorScroll3Activity::class.java.simpleName
 
-    private var cL3: View? = null
-    private var LL1: LinearLayout? = null
+    private lateinit var LL1: LinearLayout
+    private lateinit var cL3: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,19 +26,18 @@ class HorScroll3Activity : AppCompatActivity() {
 
     private fun init() {
 
-        LL1 = findViewById<View>(R.id.LL1) as LinearLayout
+        LL1 = findViewById(R.id.LL1)
+        cL3 = findViewById(R.id.cL3)
+        cL3.setOnClickListener {
 
-        cL3 = findViewById<View>(R.id.cL3)
-        cL3!!.setOnClickListener(View.OnClickListener {
-
-        })
+        }
     }
 
     private fun initData() {
 
-        for (i in 0..9) {
+        for (i in 0 until 10) {
 
-            val clview = layoutInflater.inflate(R.layout.image_scroll_item, null) as ConstraintLayout
+            val clview = LayoutInflater.from(this).inflate(R.layout.image_scroll_item, null) as ConstraintLayout
             clview.tag = i
             clview.setOnClickListener(cLClicked)
 
@@ -45,16 +45,19 @@ class HorScroll3Activity : AppCompatActivity() {
             val ivImg = clview.findViewById<View>(R.id.ivreservation) as ImageView
 
             //마진 설정
-            val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+            val params = ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+            )
             params.setMargins(0, 0, UnitUtils.dip2px(this, 6), 0)
             clview.layoutParams = params
 
             //추가
-            LL1!!.addView(clview)
+            LL1.addView(clview)
         }
     }
 
-    var cLClicked = View.OnClickListener { v ->
+    private val cLClicked = View.OnClickListener { v ->
         try {
             val nIndex = v.tag as Int
             Log.e(tag, nIndex.toString())
