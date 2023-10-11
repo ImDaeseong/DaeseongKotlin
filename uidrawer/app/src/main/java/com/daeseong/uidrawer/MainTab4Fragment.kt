@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 
-
 class MainTab4Fragment : Fragment() {
 
     companion object {

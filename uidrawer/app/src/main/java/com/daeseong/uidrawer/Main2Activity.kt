@@ -1,6 +1,5 @@
 package com.daeseong.uidrawer
 
-
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -13,64 +12,56 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
-
 class Main2Activity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
 
-    private var Main_drawerLayout: DrawerLayout? = null
-    private var Main_picabi: ImageView? = null
-    private var Main_picareser:ImageView? = null
-    private var Main_picamenu:ImageView? = null
-    private var Main_tabLayout: TabLayout? = null
-    private var Main_navigationView: NavigationView? = null
-    private var Main_viewPager: ViewPager? = null
+    private lateinit var mainDrawerLayout: DrawerLayout
+    private lateinit var mainPicAbi: ImageView
+    private lateinit var mainPicAreser: ImageView
+    private lateinit var mainPicAmenu: ImageView
+    private lateinit var mainTabLayout: TabLayout
+    private lateinit var mainNavigationView: NavigationView
+    private lateinit var mainViewPager: ViewPager
     private var mainPagerAdapter: MainPagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-        Main_drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        mainDrawerLayout = findViewById(R.id.drawer_layout)
+        mainTabLayout = findViewById(R.id.maintabLayout)
+        mainPicAbi = findViewById(R.id.picabi)
+        mainPicAreser = findViewById(R.id.picareser)
+        mainPicAmenu = findViewById(R.id.picamenu)
+        mainViewPager = findViewById(R.id.mainviewPager)
+        mainNavigationView = findViewById(R.id.mainnav_view)
 
-        Main_tabLayout = findViewById<TabLayout>(R.id.maintabLayout)
 
-        Main_picabi = findViewById<ImageView>(R.id.picabi)
-        Main_picareser = findViewById<ImageView>(R.id.picareser)
-        Main_picamenu = findViewById<ImageView>(R.id.picamenu)
-
-        Main_viewPager = findViewById<ViewPager>(R.id.mainviewPager)
-
-        Main_navigationView = findViewById<NavigationView>(R.id.mainnav_view)
-
-        val toggle = ActionBarDrawerToggle(this, Main_drawerLayout,null, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        Main_drawerLayout!!.setDrawerListener(toggle)
+        val toggle = ActionBarDrawerToggle(this, mainDrawerLayout, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        mainDrawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        Main_navigationView!!.setNavigationItemSelectedListener { item ->
-
+        mainNavigationView.setNavigationItemSelectedListener { item ->
             val id: Int = item.itemId
-            Main_drawerLayout!!.closeDrawer(GravityCompat.END)
+            mainDrawerLayout.closeDrawer(GravityCompat.END)
             true
         }
 
-        Main_picabi!!.setOnClickListener {
-
+        mainPicAbi.setOnClickListener {
             Log.e(tag, "picabi")
         }
 
-        Main_picareser!!.setOnClickListener {
-
+        mainPicAreser.setOnClickListener {
             Log.e(tag, "picareser")
         }
 
-        Main_picamenu!!.setOnClickListener {
-
+        mainPicAmenu.setOnClickListener {
             try {
-                if (Main_drawerLayout!!.isDrawerOpen(GravityCompat.END)) {
-                    Main_drawerLayout!!.closeDrawer(GravityCompat.END)
+                if (mainDrawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    mainDrawerLayout.closeDrawer(GravityCompat.END)
                 } else {
-                    Main_drawerLayout!!.openDrawer(GravityCompat.END)
+                    mainDrawerLayout.openDrawer(GravityCompat.END)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -83,8 +74,8 @@ class Main2Activity : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        if (Main_drawerLayout!!.isDrawerOpen(GravityCompat.END)) {
-            Main_drawerLayout!!.closeDrawer(GravityCompat.END)
+        if (mainDrawerLayout.isDrawerOpen(GravityCompat.END)) {
+            mainDrawerLayout.closeDrawer(GravityCompat.END)
         } else {
             super.onBackPressed()
         }
@@ -92,11 +83,9 @@ class Main2Activity : AppCompatActivity() {
 
     private fun setInitTabLayout() {
 
-        Main_tabLayout!!.addOnTabSelectedListener(object : OnTabSelectedListener {
+        mainTabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-
-                Log.e(tag, "tab.getPosition():" + tab.position)
-
+                Log.e(tag, "tab.getPosition():${tab.position}")
                 when (tab.position) {
                     0 -> { }
                     1 -> { }
@@ -113,8 +102,8 @@ class Main2Activity : AppCompatActivity() {
     private fun setViewPager() {
 
         mainPagerAdapter = MainPagerAdapter(supportFragmentManager)
-        Main_viewPager!!.adapter = mainPagerAdapter
-        Main_tabLayout!!.setupWithViewPager(Main_viewPager)
+        mainViewPager.adapter = mainPagerAdapter
+        mainTabLayout.setupWithViewPager(mainViewPager)
     }
 
 }

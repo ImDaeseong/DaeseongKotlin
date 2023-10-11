@@ -3,7 +3,6 @@ package com.daeseong.uidrawer
 import android.app.Application
 import android.content.Context
 
-
 class MyApplication : Application() {
 
     private val tag: String = MyApplication::class.java.simpleName
