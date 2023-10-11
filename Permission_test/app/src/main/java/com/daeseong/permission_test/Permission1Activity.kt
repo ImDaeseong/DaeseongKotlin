@@ -4,13 +4,9 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import com.daeseong.permission_test.Util.PermissionUtil
-import com.daeseong.permission_test.Util.PermissionUtil.checkSelfPermission
-import com.daeseong.permission_test.Util.PermissionUtil.checkgranted
-import com.daeseong.permission_test.Util.PermissionUtil.requestPermissions
-
+import com.im.daeseong.permission_test.Util.PermissionUtil
 
 class Permission1Activity : AppCompatActivity() {
 
@@ -20,47 +16,42 @@ class Permission1Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permission1)
 
-        if (checkSelfPermission(this, Manifest.permission.CAMERA) &&
-            checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) &&
-            checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
-            checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) ) {
+        if (PermissionUtil.checkSelfPermission(this, Manifest.permission.CAMERA) &&
+            PermissionUtil.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) &&
+            PermissionUtil.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
+            PermissionUtil.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) ) {
 
-            Log.e(tag, "권한이 있으면 메인으로")
-
-            Handler().postDelayed(Runnable {
-                val intent = Intent(this, MainActivity::class.java)
+            // 권한이 있으면 메인으로
+            Handler(Looper.getMainLooper()).postDelayed({
+                val intent = Intent(this@Permission1Activity, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }, 1000)
 
         } else {
 
-            Log.e(tag, "권한이 없으면 권한 요청")
-
-            requestPermissions(this)
+            // 권한이 없으면 권한 요청
+            PermissionUtil.requestPermissions(this)
         }
     }
 
     //권한 요청시 응답
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
 
-        Log.e(tag, "requestCode:$requestCode")
-
         if (requestCode == PermissionUtil.RESULT_CODE) {
 
-            if (checkgranted(grantResults)) {
+            if (PermissionUtil.checkGranted(grantResults)) {
 
-                //권한이 있으면 메인으로
-                Handler().postDelayed({
-
-                    val intent = Intent(this, MainActivity::class.java)
+                // 권한이 있으면 메인으로
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this@Permission1Activity, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }, 1000)
 
             } else {
 
-                //권한이 없으면 종료
+                // 권한이 없으면 종료
                 finish()
             }
 

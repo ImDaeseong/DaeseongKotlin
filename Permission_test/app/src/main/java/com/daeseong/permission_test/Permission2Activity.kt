@@ -4,11 +4,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.daeseong.permission_test.Util.PermissionUtilA
-
+import com.im.daeseong.permission_test.Util.PermissionUtilA
 
 class Permission2Activity : AppCompatActivity() {
 
@@ -24,18 +24,16 @@ class Permission2Activity : AppCompatActivity() {
 
         if (checkSelfPermission()) {
 
-            Log.e(tag, "권한이 있으면 메인으로")
-
-            Handler().postDelayed(Runnable {
-                val intent = Intent(this, MainActivity::class.java)
+            // 권한이 있으면 메인으로
+            Handler(Looper.getMainLooper()).postDelayed({
+                val intent = Intent(this@Permission2Activity, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }, 1000)
 
         } else {
 
-            Log.e(tag, "권한이 없으면 권한 요청")
-
+            // 권한이 없으면 권한 요청
             ActivityCompat.requestPermissions(this, PermissionUtilA.PERMISSIONS, PermissionUtilA.RESULT_CODE)
         }
     }
@@ -58,7 +56,7 @@ class Permission2Activity : AppCompatActivity() {
 
         for (result in grantResults) {
 
-            //거부된 권한이 있는 경우 다시
+            // 거부된 권한이 있는 경우 다시 요청
             if (result == PackageManager.PERMISSION_DENIED) {
                 ActivityCompat.requestPermissions(this, PermissionUtilA.PERMISSIONS, PermissionUtilA.RESULT_CODE)
                 return
