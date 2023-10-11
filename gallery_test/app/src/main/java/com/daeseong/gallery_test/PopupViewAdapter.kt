@@ -8,36 +8,30 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 
-
 class PopupViewAdapter(private val context: Context) : BaseAdapter() {
 
-    private val list : ArrayList<ImageItem> = ArrayList<ImageItem>()
+    private val list: ArrayList<ImageItem> = ArrayList()
 
-    override fun getView(i: Int, view: View?, viewGroup: ViewGroup?): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
-        var v: View? = view
+        val view: View = convertView ?: LayoutInflater.from(context).inflate(R.layout.grid_item1, parent, false)
 
-        if (v == null) {
-            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            v = inflater.inflate(R.layout.grid_item1, viewGroup, false)
-        }
+        val item = getItem(position)
+        val imageView: ImageView = view.findViewById(R.id.ivTitle)
+        val textView: TextView = view.findViewById(R.id.tvTitle)
 
-        val item = list[i]
-        val imageView: ImageView = v!!.findViewById<ImageView>(R.id.ivTitle)
-        val textView = v!!.findViewById<TextView>(R.id.tvTitle)
+        imageView.setImageBitmap(item.bitmap)
+        textView.text = item.title
 
-        imageView.setImageBitmap(item.getBitmap())
-        textView.text = item.getTitle()
-
-        return v!!
+        return view
     }
 
     override fun getCount(): Int {
         return list.size
     }
 
-    override fun getItem(i: Int): Any {
-        return list[i]
+    override fun getItem(position: Int): ImageItem {
+        return list[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -45,9 +39,7 @@ class PopupViewAdapter(private val context: Context) : BaseAdapter() {
     }
 
     fun addPhoto(item: ImageItem) {
-
         list.add(item)
-
         notifyDataSetChanged()
     }
 }

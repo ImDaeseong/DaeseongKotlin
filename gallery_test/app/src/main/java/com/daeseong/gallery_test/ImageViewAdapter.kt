@@ -1,9 +1,6 @@
 package com.daeseong.gallery_test
 
-
-
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,34 +8,27 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 
-
-class ImageViewAdapter(context: Context, ResourceID: Int,  arrayList: ArrayList<ImageItem>, bItem: Boolean) : ArrayAdapter<ImageItem>(context, ResourceID, arrayList) {
-
-    private val arrayList : ArrayList<ImageItem> = arrayList
-    private val bItem: Boolean = bItem
+class ImageViewAdapter(context: Context, resourceID: Int, private val itemList: ArrayList<ImageItem>, private val isGridItem: Boolean) : ArrayAdapter<ImageItem>(context, resourceID, itemList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
-        var v: View? = null
+        val v = convertView ?: LayoutInflater.from(context).inflate(
+            if (isGridItem) R.layout.grid_item else R.layout.grid_item1,
+            parent, false
+        )
 
-        if (bItem) {
-            v = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false)
-        } else {
-            v = LayoutInflater.from(context).inflate(R.layout.grid_item1, parent, false)
-        }
+        val imageView = v.findViewById<ImageView>(R.id.ivTitle)
+        val textView = v.findViewById<TextView>(R.id.tvTitle)
 
-        val imageView = v!!.findViewById<ImageView>(R.id.ivTitle)
-        val textView = v!!.findViewById<TextView>(R.id.tvTitle)
-
-        val item = arrayList[position]
-        imageView.setImageBitmap(item.getBitmap())
-        textView.text = item.getTitle()
+        val item = getItem(position)
+        imageView.setImageBitmap(item?.bitmap)
+        textView.text = item?.title
 
         return v
     }
 
     fun addPhoto(item: ImageItem) {
-        arrayList.add(item)
+        itemList.add(item)
         notifyDataSetChanged()
     }
 }

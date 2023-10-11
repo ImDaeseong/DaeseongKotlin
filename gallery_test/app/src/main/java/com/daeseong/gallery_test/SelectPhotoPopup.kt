@@ -1,8 +1,5 @@
 package com.daeseong.gallery_test
 
-
-import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.os.Bundle
@@ -11,12 +8,10 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.GridView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
 
 class SelectPhotoPopup : AppCompatActivity() {
 
@@ -24,10 +19,10 @@ class SelectPhotoPopup : AppCompatActivity() {
 
     private var screenwidth = 0
     private var screenLength = 0
-    private var clClose: View? = null
-    private var grView: GridView? = null
-    private var imageViewAdapter: PopupViewAdapter? = null
-    private var pProgressBar: ProgressBar? = null
+    private lateinit var clClose: View
+    private lateinit var grView: GridView
+    private lateinit var imageViewAdapter: PopupViewAdapter
+    private lateinit var pProgressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,13 +41,10 @@ class SelectPhotoPopup : AppCompatActivity() {
     }
 
     private fun loadData() {
-
-        Handler().postDelayed(Runnable {
+        Handler().postDelayed({
             runOnUiThread {
-
                 initImages()
-
-                pProgressBar!!.visibility = View.GONE
+                pProgressBar.visibility = View.GONE
             }
         }, 1000)
     }
@@ -68,26 +60,19 @@ class SelectPhotoPopup : AppCompatActivity() {
         }
         */
 
-        val bg1 = BitmapFactory.decodeResource(resources, R.drawable.bg1)
-        val bg2 = BitmapFactory.decodeResource(resources, R.drawable.bg2)
-        val bg3 = BitmapFactory.decodeResource(resources, R.drawable.bg3)
-        val bg4 = BitmapFactory.decodeResource(resources, R.drawable.bg4)
-        val bg5 = BitmapFactory.decodeResource(resources, R.drawable.bg5)
-        val bg6 = BitmapFactory.decodeResource(resources, R.drawable.bg6)
-        val bg7 = BitmapFactory.decodeResource(resources, R.drawable.bg7)
-        val bg8 = BitmapFactory.decodeResource(resources, R.drawable.bg8)
-        imageViewAdapter!!.addPhoto(ImageItem(bg1, "bg1"))
-        imageViewAdapter!!.addPhoto(ImageItem(bg2, "bg2"))
-        imageViewAdapter!!.addPhoto(ImageItem(bg3, "bg3"))
-        imageViewAdapter!!.addPhoto(ImageItem(bg4, "bg4"))
-        imageViewAdapter!!.addPhoto(ImageItem(bg5, "bg5"))
-        imageViewAdapter!!.addPhoto(ImageItem(bg6, "bg6"))
-        imageViewAdapter!!.addPhoto(ImageItem(bg7, "bg7"))
-        imageViewAdapter!!.addPhoto(ImageItem(bg8, "bg8"))
+        val imageResources = intArrayOf(
+            R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4,
+            R.drawable.bg5, R.drawable.bg6, R.drawable.bg7, R.drawable.bg8
+        )
+
+        for (resId in imageResources) {
+            val bitmap = BitmapFactory.decodeResource(resources, resId)
+            val title = resources.getResourceEntryName(resId)
+            imageViewAdapter.addPhoto(ImageItem(bitmap, title))
+        }
     }
 
     private fun changeDisplay() {
-
         try {
             val display = windowManager.defaultDisplay
             val size = Point()
@@ -96,13 +81,13 @@ class SelectPhotoPopup : AppCompatActivity() {
             screenwidth = size.x
 
             if (screenLength > 0 && screenwidth > 0) {
-                val ViewWidth = screenwidth - dip2px(this, 56F)
-                window.setLayout(ViewWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
-                val WMLP = window.attributes
-                WMLP.gravity = Gravity.CENTER
-                WMLP.x = 0
-                WMLP.y = 0
-                window.attributes = WMLP
+                val viewWidth = screenwidth - dip2px(56F)
+                window.setLayout(viewWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
+                val wmlp = window.attributes
+                wmlp.gravity = Gravity.CENTER
+                wmlp.x = 0
+                wmlp.y = 0
+                window.attributes = wmlp
             }
         } catch (e: Exception) {
         }
@@ -110,29 +95,26 @@ class SelectPhotoPopup : AppCompatActivity() {
 
     private fun init() {
 
-        grView = findViewById<GridView>(R.id.grView)
-
+        grView = findViewById(R.id.grView)
         imageViewAdapter = PopupViewAdapter(this)
+        grView.adapter = imageViewAdapter
 
-        grView!!.adapter = imageViewAdapter
-        grView!!.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-
-            try {
-                val item = parent.getItemAtPosition(position) as ImageItem
-                Toast.makeText(this@SelectPhotoPopup, item.getTitle(), Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-            }
+        grView.setOnItemClickListener { parent, view, position, id ->
+            val item = parent.getItemAtPosition(position) as ImageItem
+            Toast.makeText(this@SelectPhotoPopup, item.title, Toast.LENGTH_SHORT).show()
         }
 
-        //닫기
-        clClose = findViewById<View>(R.id.clClose)
-        clClose!!.setOnClickListener(View.OnClickListener { finish() })
+        // 닫기
+        clClose = findViewById(R.id.clClose)
+        clClose.setOnClickListener {
+            finish()
+        }
 
-        pProgressBar = findViewById<ProgressBar>(R.id.progressbar1)
+        pProgressBar = findViewById(R.id.progressbar1)
     }
 
-    private fun dip2px(context: Context, dpValue: Float): Int {
-        val scale: Float = context.resources.displayMetrics.density
+    private fun dip2px(dpValue: Float): Int {
+        val scale: Float = resources.displayMetrics.density
         return (dpValue * scale + 0.5f).toInt()
     }
 
@@ -144,4 +126,5 @@ class SelectPhotoPopup : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
     }
+
 }

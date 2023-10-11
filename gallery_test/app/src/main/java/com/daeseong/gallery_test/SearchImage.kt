@@ -3,92 +3,76 @@ package com.daeseong.gallery_test
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
-import androidx.annotation.Nullable
 import java.io.File
-
 
 object SearchImage {
 
-    var ROOT_DIR: String = Environment.getExternalStorageDirectory().path
-    var PICTURES = "$ROOT_DIR/Pictures"
-    var CAMERA = "$ROOT_DIR/DCIM/Camera"
-    private var allDir: ArrayList<String>? = null
-    private var allPicture: ArrayList<String>? = null
+    private val ROOT_DIR: String = Environment.getExternalStorageDirectory().path
+    private val PICTURES = "$ROOT_DIR/Pictures"
+    private val CAMERA = "$ROOT_DIR/DCIM/Camera"
 
-    fun getAllPicture(): ArrayList<String>? {
+    fun getAllPicture(): ArrayList<String> {
 
-        allPicture = ArrayList()
-        allDir = ArrayList()
+        val allPicture: ArrayList<String> = ArrayList()
+        val allDir: ArrayList<String> = ArrayList()
 
-        if (getDirList(PICTURES) != null) {
+        getDirList(PICTURES, allDir)
+        allDir.add(CAMERA)
 
-            allDir = getDirList(PICTURES)
-        }
-
-        allDir!!.add(CAMERA)
-        for (dir in allDir!!) {
-
-            getImageList(dir)
+        for (dir in allDir) {
+            getImageList(dir, allPicture)
         }
 
         return allPicture
     }
 
-    private fun getDirList(sPath: String): ArrayList<String>? {
-
+    private fun getDirList(sPath: String, allDir: ArrayList<String>) {
         val dir = File(sPath)
-        val fileList: Array<File> = dir.listFiles() ?: return null
-        for (current in fileList) {
+        dir.listFiles()?.forEach { current ->
             if (current.isDirectory) {
-                allDir!!.add(current.absolutePath)
+                allDir.add(current.absolutePath)
             }
         }
-        return allDir
     }
 
-    @Nullable
-    private fun getImageList(sPath: String) {
-
+    private fun getImageList(sPath: String, allPicture: ArrayList<String>) {
         val dir = File(sPath)
-        val fileList: Array<File> = dir.listFiles()
-        if (fileList != null) {
-            for (current in fileList) {
-                if (current.isFile) {
-                    val sImagePath: String = current.absolutePath
-                    val sSearch = getExtName(sImagePath)
-                    if (sSearch == "jpeg" || sSearch == "jpg" || sSearch == "png") {
-                        allPicture!!.add(sImagePath)
-                    }
+        dir.listFiles()?.forEach { current ->
+            if (current.isFile) {
+                val sImagePath: String = current.absolutePath
+                val sSearch = getExtName(sImagePath)
+                if (sSearch == "jpeg" || sSearch == "jpg" || sSearch == "png") {
+                    allPicture.add(sImagePath)
                 }
             }
         }
     }
 
     private fun getExtName(sPath: String): String {
-        var sPath = sPath
-        try {
-            if (sPath.contains("/")) {
-                sPath = sPath.substring(sPath.lastIndexOf("/") + 1)
+        return try {
+            var path = sPath
+            if (path.contains("/")) {
+                path = path.substring(path.lastIndexOf("/") + 1)
             }
-            return if (!sPath.contains(".")) {
+            if (!path.contains(".")) {
                 ""
-            } else sPath.substring(sPath.lastIndexOf(".") + 1)
+            } else path.substring(path.lastIndexOf(".") + 1)
         } catch (e: Exception) {
+            ""
         }
-        return ""
     }
 
     fun getFileName(sPath: String): String {
-        try {
-            return if (!sPath.contains("/")) {
+        return try {
+            if (!sPath.contains("/")) {
                 sPath
             } else sPath.substring(sPath.lastIndexOf("/") + 1)
         } catch (e: Exception) {
+            sPath
         }
-        return sPath
     }
 
-    fun loadBitmap(sPath: String?): Bitmap {
+    fun loadBitmap(sPath: String): Bitmap {
         val option = BitmapFactory.Options()
         option.inSampleSize = 10
         return BitmapFactory.decodeFile(sPath, option)
