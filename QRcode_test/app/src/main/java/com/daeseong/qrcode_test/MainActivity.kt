@@ -10,16 +10,15 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 
-
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val tag: String = MainActivity::class.java.simpleName
 
-    private var button1 : Button? = null
-    private var button2 : Button? = null
-    private var button3 : Button? = null
-    private var button4 : Button? = null
-    private var button5 : Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
+    private lateinit var button5: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,60 +26,34 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         checkPermission()
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener(this)
+        button1 = findViewById(R.id.button1)
+        button2 = findViewById(R.id.button2)
+        button3 = findViewById(R.id.button3)
+        button4 = findViewById(R.id.button4)
+        button5 = findViewById(R.id.button5)
 
-        button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener(this)
-
-        button3 = findViewById<Button>(R.id.button3)
-        button3!!.setOnClickListener(this)
-
-        button4 = findViewById<Button>(R.id.button4)
-        button4!!.setOnClickListener(this)
-
-        button5 = findViewById<Button>(R.id.button5)
-        button5!!.setOnClickListener(this)
+        button1.setOnClickListener(this)
+        button2.setOnClickListener(this)
+        button3.setOnClickListener(this)
+        button4.setOnClickListener(this)
+        button5.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
-
-        if (v != null) {
-
-            when (v.id) {
-
-                R.id.button1 -> {
-
-                    val intent = Intent(this, Main1Activity::class.java)
-                    startActivity(intent)
-                }
-
-                R.id.button2 -> {
-
-                    val intent = Intent(this, Main2Activity::class.java)
-                    startActivity(intent)
-                }
-
-                R.id.button3 -> {
-
-                    val intent = Intent(this, Main3Activity::class.java)
-                    startActivity(intent)
-                }
-
-                R.id.button4 -> {
-
-                    val intent = Intent(this, Main4Activity::class.java)
-                    startActivity(intent)
-                }
-
-                R.id.button5 -> {
-
-                    val intent = Intent(this, Main5Activity::class.java)
-                    startActivity(intent)
-                }
+        v?.let {
+            when (it.id) {
+                R.id.button1 -> callActivity<Main1Activity>()
+                R.id.button2 -> callActivity<Main2Activity>()
+                R.id.button3 -> callActivity<Main3Activity>()
+                R.id.button4 -> callActivity<Main4Activity>()
+                R.id.button5 -> callActivity<Main5Activity>()
             }
         }
+    }
 
+    private inline fun <reified T : AppCompatActivity> callActivity() {
+        val intent = Intent(this, T::class.java)
+        startActivity(intent)
     }
 
     private fun checkPermission(): Boolean {

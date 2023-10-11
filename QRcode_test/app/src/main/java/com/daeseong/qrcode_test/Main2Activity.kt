@@ -10,11 +10,10 @@ class Main2Activity : AppCompatActivity() {
 
     private val tag: String = Main2Activity::class.java.simpleName
 
-    private var zXingScannerView: ZXingScannerView? = null
+    private lateinit var zXingScannerView: ZXingScannerView
+    private lateinit var fL1: FrameLayout
 
-    private var fL1: FrameLayout? = null
-
-    private val handle: ZXingScannerView.ResultHandler =  ZXingScannerView.ResultHandler { result ->
+    private val handle: ZXingScannerView.ResultHandler = ZXingScannerView.ResultHandler { result ->
 
         val txt = result.text
         val sBarcodeFormatText = result.barcodeFormat.toString()
@@ -27,7 +26,7 @@ class Main2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-        fL1 = findViewById<FrameLayout>(R.id.fL1)
+        fL1 = findViewById(R.id.fL1)
 
         initScanner()
 
@@ -42,15 +41,15 @@ class Main2Activity : AppCompatActivity() {
 
     private fun initScanner() {
         zXingScannerView = ZXingScannerView(this)
-        zXingScannerView!!.setResultHandler(handle)
-        fL1!!.addView(zXingScannerView)
+        zXingScannerView.setResultHandler(handle)
+        fL1.addView(zXingScannerView)
     }
 
     private fun startScanner() {
-        zXingScannerView!!.startCamera()
+        zXingScannerView.startCamera()
     }
 
     private fun stopScanner() {
-        zXingScannerView!!.stopCamera()
+        zXingScannerView.stopCamera()
     }
 }
