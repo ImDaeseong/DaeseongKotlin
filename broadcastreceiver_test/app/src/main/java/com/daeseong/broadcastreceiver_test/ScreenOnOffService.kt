@@ -8,22 +8,20 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 
-
 class ScreenOnOffService : Service() {
 
     private val tag = ScreenOnOffService::class.java.simpleName
 
     private var broadcastReceiver: BroadcastReceiver? = null
-    private var intentFilter: IntentFilter? = null
 
     override fun onCreate() {
         super.onCreate()
-        initBroadcastReceiver()
+        registerBroadcastReceiver()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        DestoryBroadcastReceiver()
+        destroyBroadcastReceiver()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -34,42 +32,39 @@ class ScreenOnOffService : Service() {
         return null
     }
 
-    private fun initBroadcastReceiver() {
-
+    private fun registerBroadcastReceiver() {
         broadcastReceiver = object : BroadcastReceiver() {
-
             override fun onReceive(context: Context, intent: Intent) {
-
-                if (intent.action == Intent.ACTION_SCREEN_OFF) {
-
-                    //Log.e(tag, "폰화면 꺼짐")
-                    val item = Intent("com.daeseong.Screen")
-                    item.putExtra("type", 1)
-                    item.putExtra("screen", "off")
-                    context.sendBroadcast(item)
-
-                } else if (intent.action == Intent.ACTION_SCREEN_ON) {
-
-                    //Log.e(tag, "폰화면 켜짐")
-                    val item = Intent("com.daeseong.Screen")
-                    item.putExtra("type", 1)
-                    item.putExtra("screen", "on")
-                    context.sendBroadcast(item)
-
+                when (intent.action) {
+                    Intent.ACTION_SCREEN_OFF -> {
+                        Log.e(tag, "폰화면 꺼짐")
+                        sendScreenBroadcast(context, "off", 1)
+                    }
+                    Intent.ACTION_SCREEN_ON -> {
+                        Log.e(tag, "폰화면 켜짐")
+                        sendScreenBroadcast(context, "on", 1)
+                    }
                 }
             }
-
         }
-        intentFilter = IntentFilter()
-        intentFilter!!.addAction(Intent.ACTION_SCREEN_ON)
-        intentFilter!!.addAction(Intent.ACTION_SCREEN_OFF)
+        val intentFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_SCREEN_OFF)
+        }
         registerReceiver(broadcastReceiver, intentFilter)
     }
 
-    private fun DestoryBroadcastReceiver() {
-
-        if (broadcastReceiver != null) {
-            unregisterReceiver(broadcastReceiver)
+    private fun destroyBroadcastReceiver() {
+        broadcastReceiver?.let {
+            unregisterReceiver(it)
         }
+    }
+
+    private fun sendScreenBroadcast(context: Context, screenState: String, type: Int) {
+        val item = Intent("com.daeseong.Screen").apply {
+            putExtra("type", type)
+            putExtra("screen", screenState)
+        }
+        context.sendBroadcast(item)
     }
 }

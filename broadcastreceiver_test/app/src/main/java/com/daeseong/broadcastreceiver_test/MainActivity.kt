@@ -13,48 +13,36 @@ class MainActivity : AppCompatActivity() {
     private val tag: String = MainActivity::class.java.simpleName
 
     private var broadcastReceiver: BroadcastReceiver? = null
-    private var intentFilter: IntentFilter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initBroadcastReceiver()
-
         startService(Intent(this, ScreenOnOffService::class.java))
+
+        registerBroadcastReceiver()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        DestoryBroadcastReceiver()
+        unregisterReceiver(broadcastReceiver)
     }
 
-    private fun initBroadcastReceiver() {
-
+    private fun registerBroadcastReceiver() {
         broadcastReceiver = object : BroadcastReceiver() {
-
             override fun onReceive(context: Context, intent: Intent) {
                 val ntype = intent.extras!!.getInt("type")
                 val sOn = intent.extras!!.getString("screen")
                 Log.e(tag, "$ntype $sOn")
-                SendBroadcast()
+                sendCustomBroadcast()
             }
         }
-        intentFilter = IntentFilter()
-        intentFilter!!.addAction("com.daeseong.Screen")
+        val intentFilter = IntentFilter("com.daeseong.Screen")
         registerReceiver(broadcastReceiver, intentFilter)
     }
 
-    private fun DestoryBroadcastReceiver() {
-
-        if (broadcastReceiver != null) {
-            unregisterReceiver(broadcastReceiver)
-        }
-    }
-
-    private fun SendBroadcast() {
-
+    private fun sendCustomBroadcast() {
         val intent = Intent(this, MyBroadcastReceiver::class.java)
         intent.action = "android.intent.action.MyMessage"
         sendBroadcast(intent)
