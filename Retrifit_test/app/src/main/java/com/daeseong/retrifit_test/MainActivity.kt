@@ -12,17 +12,21 @@ class MainActivity : AppCompatActivity() {
 
     private val tag: String = MainActivity::class.java.simpleName
 
-    private var button1 : Button? = null
-    private var button2 : Button? = null
-    private var button3 : Button? = null
-    private var button4 : Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
+        button1 = findViewById(R.id.button1)
+        button2 = findViewById(R.id.button2)
+        button3 = findViewById(R.id.button3)
+        button4 = findViewById(R.id.button4)
+
+        button1.setOnClickListener {
 
             TickerApiClient.getTickerBTC(object : Callback<TickerBTC> {
                 override fun onResponse(call: Call<TickerBTC>, response: Response<TickerBTC>) {
@@ -88,18 +92,15 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-        button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
+        button2.setOnClickListener {
 
         }
 
-        button3 = findViewById<Button>(R.id.button3)
-        button3!!.setOnClickListener {
+        button3.setOnClickListener {
 
         }
 
-        button4 = findViewById<Button>(R.id.button4)
-        button4!!.setOnClickListener {
+        button4.setOnClickListener {
 
         }
     }
