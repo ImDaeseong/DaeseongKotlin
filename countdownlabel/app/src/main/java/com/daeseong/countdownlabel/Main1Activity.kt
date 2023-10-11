@@ -13,9 +13,9 @@ class Main1Activity : AppCompatActivity() {
 
     private val tag = Main1Activity::class.java.simpleName
 
-    private var tv1: TextView? = null
-    private var button1: Button? = null
-    private var button2: Button? = null
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
 
     private val nCount = 10000
     private var countDownTimer: CountDownTimer? = null
@@ -26,15 +26,15 @@ class Main1Activity : AppCompatActivity() {
         setContentView(R.layout.activity_main1)
 
         tv1 = findViewById(R.id.tv1)
-
         button1 = findViewById(R.id.button1)
-        button1!!.setOnClickListener {
+        button2 = findViewById(R.id.button2)
+
+        button1.setOnClickListener {
             stop()
             start()
         }
 
-        button2 = findViewById(R.id.button2)
-        button2!!.setOnClickListener {
+        button2.setOnClickListener {
             stop()
         }
     }
@@ -46,44 +46,29 @@ class Main1Activity : AppCompatActivity() {
 
     private fun start() {
 
-        countDownTimer = object : CountDownTimer(nCount.toLong(), 1000) {
+        countDownTimer?.cancel()
 
+        countDownTimer = object : CountDownTimer(nCount.toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                try {
-                    tv1!!.text = "현재 페이지 " + millisUntilFinished / 1000 + "초"
-                    viewblink(tv1!!)
-                } catch (ex: java.lang.Exception) {
-                    ex.message.toString()
-                }
+                tv1.text = "현재 페이지 ${millisUntilFinished / 1000}초"
+                viewblink(tv1)
             }
 
             override fun onFinish() {
-                try {
-                    tv1!!.alpha = 1f
-                } catch (ex: java.lang.Exception) {
-                    ex.message.toString()
-                }
+                tv1.alpha = 1f
             }
         }
-        countDownTimer!!.start()
+
+        countDownTimer?.start()
     }
 
     private fun stop() {
+        animatorSet.removeAllListeners()
+        animatorSet.end()
+        animatorSet.cancel()
 
-        try {
-
-            if (animatorSet != null) {
-                animatorSet.removeAllListeners()
-                animatorSet.end()
-                animatorSet.cancel()
-            }
-
-            if (countDownTimer != null) countDownTimer!!.cancel()
-            tv1!!.alpha = 1f
-
-        } catch (ex: Exception) {
-            ex.message.toString()
-        }
+        countDownTimer?.cancel()
+        tv1.alpha = 1f
     }
 
     private fun viewblink(view: View) {

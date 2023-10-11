@@ -8,18 +8,17 @@ import org.ksoap2.serialization.SoapObject
 import org.ksoap2.serialization.SoapSerializationEnvelope
 import org.ksoap2.transport.HttpTransportSE
 
-class SoapXml(textView: TextView) : AsyncTask<String?, Void?, String?>() {
+class SoapXml(private val textView: TextView) : AsyncTask<String?, Void?, String?>() {
 
-    private val TAG = SoapXml::class.java.simpleName
-
-    private val NAME_SPACE = "http://www.daeseong.com/"
-    private val METHOD_NAME = "findUserList"
-    private val SOAP_URL = "http://www.daeseong.com/MyWebService.asmx"
-    private val SOAP_ACTION = "http://www.daeseong.com/findUserList"
+    companion object {
+        private const val TAG = "SoapXml"
+        private const val NAME_SPACE = "http://www.daeseong.com/"
+        private const val METHOD_NAME = "findUserList"
+        private const val SOAP_URL = "http://www.daeseong.com/MyWebService.asmx"
+        private const val SOAP_ACTION = "http://www.daeseong.com/findUserList"
+    }
 
     private var sResult: String? = null
-
-    private val textView: TextView = textView
 
     override fun doInBackground(vararg params: String?): String? {
 
@@ -33,18 +32,13 @@ class SoapXml(textView: TextView) : AsyncTask<String?, Void?, String?>() {
         val httpTransportSE = HttpTransportSE(SOAP_URL)
 
         try {
-
             httpTransportSE.call(SOAP_ACTION, soapSerializationEnvelope)
-
-            //val oResult = soapSerializationEnvelope.response
-            //Log.e(TAG, "getResponse:$oResult")
 
             val soapbody = soapSerializationEnvelope.bodyIn as SoapObject
             sResult = soapbody.toString()
-            //Log.e(TAG, "bodyIn:$sResult")
 
         } catch (ex: Exception) {
-            Log.e(TAG, "Exception:" + ex.message.toString())
+            Log.e(TAG, "Exception: ${ex.message}")
         }
 
         return sResult
@@ -54,9 +48,8 @@ class SoapXml(textView: TextView) : AsyncTask<String?, Void?, String?>() {
         super.onPostExecute(sResult)
 
         try {
-
-            if (sResult != null) {
-                textView.text = sResult.toString()
+            sResult?.let {
+                textView.text = it
             }
         } catch (e: Exception) {
             e.printStackTrace()
