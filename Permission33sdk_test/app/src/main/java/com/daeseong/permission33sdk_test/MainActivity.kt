@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button3: Button
     private lateinit var button4: Button
     private lateinit var button5: Button
+    private lateinit var button6: Button
 
     private val PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
     private val PERMISSIONS33 = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.POST_NOTIFICATIONS)
@@ -56,6 +57,12 @@ class MainActivity : AppCompatActivity() {
         button5 = findViewById(R.id.button5)
         button5.setOnClickListener {
             val intent = Intent(this@MainActivity, Permission5Activity::class.java)
+            startActivity(intent)
+        }
+
+        button6 = findViewById(R.id.button6)
+        button6.setOnClickListener {
+            val intent = Intent(this@MainActivity, Permission6Activity::class.java)
             startActivity(intent)
         }
     }
