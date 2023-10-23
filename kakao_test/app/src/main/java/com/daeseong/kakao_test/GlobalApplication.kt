@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import com.kakao.auth.KakaoSDK
 
-
 class GlobalApplication : Application() {
 
     companion object {

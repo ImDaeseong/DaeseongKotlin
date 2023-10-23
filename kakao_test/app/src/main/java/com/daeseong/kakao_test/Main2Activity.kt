@@ -1,6 +1,5 @@
 package com.daeseong.kakao_test
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +14,6 @@ import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
-
 
 class Main2Activity : AppCompatActivity() {
 
@@ -116,7 +114,11 @@ class Main2Activity : AppCompatActivity() {
 
                         Log.e(tag, "user id : " + response.id)
                         Log.e(tag, "nickname : " + response.nickname)
-                        Log.e(tag, "email: " + response.kakaoAccount.email)
+
+                        if (response.kakaoAccount != null) {
+                            Log.e(tag, "email: " + response.kakaoAccount.email)
+                        }
+
                     } catch (ex: Exception) {
                         Log.e(tag, ex.message.toString())
                     }
