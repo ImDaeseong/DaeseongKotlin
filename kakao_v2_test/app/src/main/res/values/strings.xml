@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">kakao_v2_test</string>
     <string name="kakao_id">80db5c4277e04bc9997933774ea26e31</string>
+    <string name="kakao_link">kakao80db5c4277e04bc9997933774ea26e31</string>
 </resources>

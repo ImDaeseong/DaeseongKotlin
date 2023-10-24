@@ -8,9 +8,7 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.link.LinkClient
 import com.kakao.sdk.share.ShareClient
-import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.template.model.*
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.AccessTokenInfo
@@ -59,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         button5 = findViewById(R.id.button5)
         button5.setOnClickListener {
             kakaoLink()
+            //kakaolink_temp()
         }
     }
 
@@ -160,19 +159,18 @@ class MainActivity : AppCompatActivity() {
         if (!ShareClient.instance.isKakaoTalkSharingAvailable(this))
             return
 
-        val title = "제목"
         val imgUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
-        val desc = "설명"
-        val linkUrl = "https://www.google.com"
+        val title = "[나의앱]\n나의앱 제목!"
+        val desc = "나의앱에 대한 설명과 링크 정보:\nhttps://m.naver.com"
+        val linkUrl = ""
 
         val content = Content(title, imgUrl, Link(linkUrl, linkUrl), desc)
         val itemContent = ItemContent()
         val social = Social()
 
-        val button = com.kakao.sdk.template.model.Button("자세히 보기", Link(linkUrl, linkUrl))
+        val button = com.kakao.sdk.template.model.Button("앱에서 보기", Link(linkUrl, linkUrl))
         val buttons = arrayOf(button)
-
-        val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList(), "버튼제목")
+        val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList())
 
         ShareClient.instance.shareDefault(this, feedTemplate) { sharingResult, error ->
             if (error != null) {
@@ -185,36 +183,42 @@ class MainActivity : AppCompatActivity() {
             }
             null
         }
+    }
 
-        /*
-        LinkClient.instance.defaultTemplate(this, feedTemplate) { linkResult, error ->
+    private fun kakaolink_temp() {
 
+        //v1 에서  v2 변경된 내용
+        //KakaoLinkService  -> ShareClient
+        //KakaoTalkService  -> TalkApiClient
+
+        if (!ShareClient.instance.isKakaoTalkSharingAvailable(this))
+            return
+
+        val imgUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
+        val title = "[나의앱]\n나의앱 제목!"
+        val desc = "나의앱에 대한 설명과 링크 정보:\nhttps://m.naver.com"
+        val linkUrl = "https://developers.kakao.com"
+
+        val content = Content(title, imgUrl, Link(linkUrl, linkUrl), desc)
+        val itemContent = ItemContent()
+        val social = Social()
+
+        val Button1 = Button("앱에서 보기", Link(linkUrl, linkUrl))
+        val Button2 = Button("앱에서 보기1", Link("", ""))
+        val buttons = arrayOf(Button1, Button2)
+        val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList())
+
+        ShareClient.instance.shareDefault(this, feedTemplate) { sharingResult, error ->
             if (error != null) {
-                Log.e(tag, "카카오링크 공유 실패: $error")
-            } else if (linkResult != null) {
-                startActivity(linkResult.intent)
-                Log.e(tag, "${linkResult.warningMsg}")
-                Log.e(tag, "${linkResult.argumentMsg}")
-                Log.e(tag, "${linkResult.warningMsg.size}")
+                Log.e(tag, "KakaoTalk 공유 실패: $error")
+            } else if (sharingResult != null) {
+                startActivity(sharingResult.intent)
+                Log.e(tag, "${sharingResult.warningMsg}")
+                Log.e(tag, "${sharingResult.argumentMsg}")
+                Log.e(tag, "${sharingResult.warningMsg.size}")
             }
             null
         }
-        */
-
-        /*
-        TalkApiClient.instance.friends { friendFriends, error ->
-            if (error != null) {
-                Log.e(tag, "카카오톡 친구 목록 가져오기 실패:$error")
-            } else {
-                if (friendFriends!!.elements!!.isEmpty()) {
-                    Log.e(tag, "메시지를 보낼 수 있는 친구가 없습니다.")
-                } else {
-                    Log.e(tag, friendFriends.toString())
-                }
-            }
-            null
-        }
-        */
     }
 
     private inner class KakaoCallback : (OAuthToken?, Throwable?) -> Unit {
