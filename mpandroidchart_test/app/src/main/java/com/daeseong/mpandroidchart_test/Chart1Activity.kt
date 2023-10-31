@@ -4,67 +4,62 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 class Chart1Activity : AppCompatActivity() {
 
     private lateinit var barChart: BarChart
+    private val arrayList1 = ArrayList<BarEntry>()
+    private val xlabels = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chart1)
 
         barChart = findViewById(R.id.chart)
+        barChart.axisRight.isEnabled = false // 오른쪽 Y축 숨김
 
         init()
     }
 
     private fun init() {
 
-        // 데이터 포인트 생성
-        val entries = arrayListOf(
-            BarEntry(1f, 30f),
-            BarEntry(2f, 10f),
-            BarEntry(3f, 60f),
-            BarEntry(4f, 20f),
-            BarEntry(5f, 40f)
-        )
+        arrayList1.add(BarEntry(0f, 41f))
+        arrayList1.add(BarEntry(1f, 82f))
+        arrayList1.add(BarEntry(2f, 63f))
+        arrayList1.add(BarEntry(3f, 44f))
 
-        val dataSet = BarDataSet(entries, "barChart")
-        dataSet.color = Color.GRAY
+        val barDataSet = BarDataSet(arrayList1, "arrayList1")
+        barDataSet.color = Color.BLUE // 막대의 색상 설정
+        barDataSet.valueTextColor = Color.BLACK // 막대에 표시되는 값의 텍스트 색상 설정
 
-        val barData = BarData(dataSet)
+        val barData = BarData(barDataSet)
         barChart.data = barData
 
-        //하단 레이블
-        val labels = arrayOf("Label1", "Label2", "Label3", "Label4", "Label5")
-        barChart.xAxis.valueFormatter = MyXAxisValueFormatter(labels)
-        barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        barChart.axisLeft.axisMinimum = 0f
-        barChart.axisRight.axisMinimum = 0f
+        // 왼쪽 Y축 설정
+        val yAxis = barChart.axisLeft
+        yAxis.axisMaximum = 100f
+        yAxis.axisLineWidth = 2f
+        yAxis.axisLineColor = Color.BLACK
+        yAxis.labelCount = 10
 
-        //차트 내부에 설명 텍스트
-        val description = Description()
-        description.text = ""
-        barChart.description = description
-
-        //차트 업데이트
-        barChart.invalidate()
-    }
-}
-
-class MyXAxisValueFormatter(private val labels: Array<String>) : ValueFormatter() {
-    override fun getFormattedValue(value: Float): String {
-        val index = value.toInt()
-        return if (index >= 0 && index < labels.size) {
-            labels[index]
-        } else {
-            ""
+        // X축 설정
+        for (i in arrayList1.indices) {
+            xlabels.add("label" + (i + 1))
         }
+
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(xlabels)
+        barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        barChart.xAxis.granularity = 1f
+        barChart.xAxis.isGranularityEnabled = true
+
+        // 차트 업데이트
+        barChart.description.isEnabled = false // 설명 텍스트 숨김
+        barChart.invalidate()
+
     }
 }
