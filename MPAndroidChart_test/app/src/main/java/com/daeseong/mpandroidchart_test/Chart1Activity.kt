@@ -68,6 +68,5 @@ class Chart1Activity : AppCompatActivity() {
         // 차트 업데이트
         barChart.description.isEnabled = false // 설명 텍스트 숨김
         barChart.invalidate()
-
     }
 }
