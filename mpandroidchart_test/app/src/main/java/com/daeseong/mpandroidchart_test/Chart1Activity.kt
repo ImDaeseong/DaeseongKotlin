@@ -1,8 +1,8 @@
 package com.daeseong.mpandroidchart_test
 
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -14,6 +14,7 @@ class Chart1Activity : AppCompatActivity() {
 
     private lateinit var barChart: BarChart
     private val arrayList1 = ArrayList<BarEntry>()
+    private val barColors = ArrayList<Int>()
     private val xlabels = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +34,15 @@ class Chart1Activity : AppCompatActivity() {
         arrayList1.add(BarEntry(2f, 63f))
         arrayList1.add(BarEntry(3f, 44f))
 
+        //막대 색상
+        barColors.add(Color.BLUE)
+        barColors.add(Color.RED)
+        barColors.add(Color.GREEN)
+        barColors.add(Color.YELLOW)
+
         val barDataSet = BarDataSet(arrayList1, "arrayList1")
-        barDataSet.color = Color.BLUE // 막대의 색상 설정
+        barDataSet.colors = barColors //막대 개별 색상 설정
+        //barDataSet.color = Color.BLUE // 막대의 색상 설정 전부 동일하게
         barDataSet.valueTextColor = Color.BLACK // 막대에 표시되는 값의 텍스트 색상 설정
 
         val barData = BarData(barDataSet)
