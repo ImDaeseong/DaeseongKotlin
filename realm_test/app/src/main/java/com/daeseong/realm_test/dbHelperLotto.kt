@@ -19,34 +19,28 @@ class dbHelperLotto {
     }
 
     val lotto: RealmResults<Lotto>?
-        get() {
-            try {
-                return realm!!.where(Lotto::class.java) //.sort("_rIndex", Sort.ASCENDING)
-                    .sort("_rIndex", Sort.DESCENDING)
-                    .findAll().also { realmResults = it }
-            } catch (ex: Exception) {
-                Log.e(TAG, ex.message.toString())
-            }
-            return null
-        }
+        get() = realm?.where(Lotto::class.java)
+            ?.sort("_rIndex", Sort.DESCENDING)
+            ?.findAll()
+            ?.also { realmResults = it }
 
     fun getRealm(): Realm {
         return realm!!
     }
 
     fun closeRealm() {
-        try {
-            if (realm != null) {
+        if (realm != null) {
+            try {
                 realm!!.close()
                 realm = null
+            } catch (ex: Exception) {
+                Log.e(TAG, ex.message.toString())
             }
-        } catch (ex: Exception) {
-            Log.e(TAG, ex.message.toString())
         }
     }
 
     fun addLotto(rIndex: Int, Date: String?, Part1: Int, Part2: Int, Part3: Int, Part4: Int, Part5: Int, Part6: Int, Bonus: Int) {
-        realm!!.executeTransaction { realm ->
+        realm?.executeTransaction { realm ->
             try {
                 val lotto = realm.createObject(Lotto::class.java, rIndex)
                 lotto.date = Date
@@ -64,30 +58,27 @@ class dbHelperLotto {
     }
 
     fun isExistData(rIndex: Int): Boolean {
-        var bFindData = false
-        try {
-            val lotto = realm!!.where(Lotto::class.java).equalTo("_rIndex", rIndex).findFirst()
-            if (lotto != null) bFindData = true
+        return try {
+            realm?.where(Lotto::class.java)?.equalTo("_rIndex", rIndex)?.findFirst() != null
         } catch (ex: Exception) {
             Log.e(TAG, ex.message.toString())
+            false
         }
-        return bFindData
     }
 
     fun getData(rIndex: Int): Lotto? {
-        try {
-            return realm!!.where(Lotto::class.java).equalTo("_rIndex", rIndex).findFirst()
+        return try {
+            realm?.where(Lotto::class.java)?.equalTo("_rIndex", rIndex)?.findFirst()
         } catch (ex: Exception) {
             Log.e(TAG, ex.message.toString())
+            null
         }
-        return null
     }
 
     fun deleteLotto(rIndex: Int) {
-        realm!!.executeTransaction { realm ->
+        realm?.executeTransaction { realm ->
             try {
-                val lotto =
-                    realm.where(Lotto::class.java).equalTo("_rIndex", rIndex).findFirst()
+                val lotto = realm?.where(Lotto::class.java)?.equalTo("_rIndex", rIndex)?.findFirst()
                 lotto?.deleteFromRealm()
             } catch (ex: Exception) {
                 Log.e(TAG, ex.message.toString())
@@ -97,21 +88,19 @@ class dbHelperLotto {
 
     val lottoRowCount: Int
         get() {
-            var nTotalcount = 0
-            try {
-                val results = realm!!.where(Lotto::class.java).findAll()
-                nTotalcount = results.size
+            return try {
+                realm?.where(Lotto::class.java)?.findAll()?.size ?: 0
             } catch (ex: Exception) {
                 Log.e(TAG, ex.message.toString())
+                0
             }
-            return nTotalcount
         }
 
     fun deleteLottoAll() {
         try {
-            realm!!.beginTransaction()
-            realm!!.deleteAll()
-            realm!!.commitTransaction()
+            realm?.beginTransaction()
+            realm?.deleteAll()
+            realm?.commitTransaction()
         } catch (ex: Exception) {
             Log.e(TAG, ex.message.toString())
         }

@@ -7,8 +7,6 @@ import io.realm.RealmConfiguration
 
 class MyApplicaton : Application() {
 
-    private val TAG = MyApplicaton::class.java.simpleName
-
     companion object {
 
         private lateinit var mInstance: MyApplicaton
