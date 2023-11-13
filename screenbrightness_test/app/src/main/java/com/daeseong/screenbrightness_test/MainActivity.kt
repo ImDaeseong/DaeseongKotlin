@@ -2,69 +2,53 @@ package com.daeseong.screenbrightness_test
 
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager
 import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
+import android.view.WindowManager
 
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
 
-    private var layoutParams: WindowManager.LayoutParams? = null
-    private var seekBar1: SeekBar? = null
-    private var tv1: TextView? = null
+    private lateinit var layoutParams: WindowManager.LayoutParams
+    private lateinit var seekBar: SeekBar
+    private lateinit var brightnessTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        seekBar1 = findViewById<SeekBar>(R.id.seekBar1)
-        tv1 = findViewById<TextView>(R.id.tv1)
+        seekBar = findViewById(R.id.seekBar1)
+        brightnessTextView = findViewById(R.id.tv1)
 
         layoutParams = window.attributes
 
-        layoutParams!!.screenBrightness = 1f
-        seekBar1!!.progress = 100
-        //layoutParams!!.screenBrightness = 0 / 100.0f
-        //seekBar1!!.progress = 0
+        seekBar.progress = 100
+        updateBrightness(1f)
 
-        setPercentText();
-
-        seekBar1!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-
-            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-
-                layoutParams!!.screenBrightness = i / 100.0f
-                window.attributes = layoutParams
-                setPercentText()
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val brightness = progress / 100.0f
+                updateBrightness(brightness)
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            }
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-                Log.e(tag, "onStopTrackingTouch : $seekBar!!.progress")
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                Log.e(tag, "onStopTrackingTouch : ${seekBar?.progress}")
             }
         })
     }
 
-    private fun setPercentText() {
-
-        val sPercent : String = "밝기:" + layoutParams!!.screenBrightness.toString() + "%"
-        tv1!!.text = sPercent
+    private fun updateBrightness(brightness: Float) {
+        layoutParams.screenBrightness = brightness
+        window.attributes = layoutParams
+        setPercentText(brightness)
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-
+    private fun setPercentText(brightness: Float) {
+        val percentText = "밝기: ${brightness * 100}%"
+        brightnessTextView.text = percentText
     }
 }
