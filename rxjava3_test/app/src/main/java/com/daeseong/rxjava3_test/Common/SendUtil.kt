@@ -4,25 +4,24 @@ import io.reactivex.rxjava3.core.Observable
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
-import java.util.concurrent.Callable
 
 class SendUtil {
 
-    fun SendMessage(serverIP: String?, port: Int, sMsg: String): Observable<Boolean?>? {
-        return Observable.fromCallable(Callable {
+    fun sendMessage(serverIP: String?, port: Int, sMsg: String): Observable<Boolean?>? {
+        return Observable.fromCallable {
             try {
-                val datagramSocket = DatagramSocket()
-                datagramSocket.broadcast = true
-                val address = InetAddress.getByName(serverIP)
-                val bytesend: ByteArray = sMsg.toByteArray()
-                val sendPacket = DatagramPacket(bytesend, bytesend.size, address, port)
-                datagramSocket.send(sendPacket)
-                datagramSocket.close()
-                return@Callable true
+                DatagramSocket().use { datagramSocket ->
+                    datagramSocket.broadcast = true
+                    val address = InetAddress.getByName(serverIP)
+                    val bytesend: ByteArray = sMsg.toByteArray()
+                    val sendPacket = DatagramPacket(bytesend, bytesend.size, address, port)
+                    datagramSocket.send(sendPacket)
+                    return@fromCallable true
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
+                false
             }
-            false
-        })
+        }
     }
 }

@@ -2,7 +2,6 @@ package com.daeseong.rxjava3_test
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -26,14 +25,9 @@ class Main3Activity : AppCompatActivity() {
         setContentView(R.layout.activity_main3)
 
         try {
-            val bFile: Boolean = isFile()
-            if (!bFile) {
-
-                //Log.e(tag, "isFile Not Found")
+            val isFileExist: Boolean = isFile()
+            if (!isFileExist) {
                 CopyDBfile(this)
-            } else {
-
-                //Log.e(tag, "isFile Found")
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -44,16 +38,11 @@ class Main3Activity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    fun CopyDBfile(context: Context) {
-
-        val PATH_DATABASE = "/data/data/" + context.applicationContext.packageName + "/databases/"
+    private fun CopyDBfile(context: Context) {
+        val PATH_DATABASE = "/data/data/${context.applicationContext.packageName}/databases/"
 
         disposable = Observable.fromCallable {
-
-            //Log.e(tag, "doInBackground")
-
             try {
-
                 val myinput = context.assets.open(DATABASE_NAME)
                 val file = File(PATH_DATABASE + DATABASE_NAME)
 
@@ -72,20 +61,15 @@ class Main3Activity : AppCompatActivity() {
                     myoutput.close()
                     myinput.close()
                 }
-
+                true
             } catch (e: IOException) {
                 e.printStackTrace()
+                false
             }
-
-            false
         }
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { result: Boolean? ->
-
-            //Log.e(tag, "onPostExecute")
-            disposable!!.dispose()
-        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { disposable?.dispose() }
     }
 
     private fun isFile(): Boolean {

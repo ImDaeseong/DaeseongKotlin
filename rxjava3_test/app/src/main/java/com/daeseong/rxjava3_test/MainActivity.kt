@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,82 +13,70 @@ class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
 
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var button3: Button? = null
-    private var button4: Button? = null
-    private var button5: Button? = null
-    private var button6: Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
+    private lateinit var button5: Button
+    private lateinit var button6: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         button1 = findViewById(R.id.button1)
-        button1!!.setOnClickListener(View.OnClickListener {
-
-            val intent = Intent(this, Main1Activity::class.java)
-            startActivity(intent)
-        })
-
         button2 = findViewById(R.id.button2)
-        button2!!.setOnClickListener(View.OnClickListener {
-
-            val intent = Intent(this, Main2Activity::class.java)
-            startActivity(intent)
-        })
-
         button3 = findViewById(R.id.button3)
-        button3!!.setOnClickListener(View.OnClickListener {
-
-            val intent = Intent(this, Main3Activity::class.java)
-            startActivity(intent)
-        })
-
         button4 = findViewById(R.id.button4)
-        button4!!.setOnClickListener(View.OnClickListener {
-
-            val intent = Intent(this, Main4Activity::class.java)
-            startActivity(intent)
-        })
-
         button5 = findViewById(R.id.button5)
-        button5!!.setOnClickListener(View.OnClickListener {
-
-            val intent = Intent(this, Main5Activity::class.java)
-            startActivity(intent)
-        })
-
         button6 = findViewById(R.id.button6)
-        button6!!.setOnClickListener(View.OnClickListener {
 
-            val intent = Intent(this, Main6Activity::class.java)
-            startActivity(intent)
-        })
+        setButtonClickListeners()
 
         checkPermissions()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+    private fun setButtonClickListeners() {
+        button1.setOnClickListener {
+            startActivity(Intent(this, Main1Activity::class.java))
+        }
+
+        button2.setOnClickListener {
+            startActivity(Intent(this, Main2Activity::class.java))
+        }
+
+        button3.setOnClickListener {
+            startActivity(Intent(this, Main3Activity::class.java))
+        }
+
+        button4.setOnClickListener {
+            startActivity(Intent(this, Main4Activity::class.java))
+        }
+
+        button5.setOnClickListener {
+            startActivity(Intent(this, Main5Activity::class.java))
+        }
+
+        button6.setOnClickListener {
+            startActivity(Intent(this, Main6Activity::class.java))
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == 1) {
-
-            // 네트워크 권한
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
                 //Log.e(tag, "WRITE_EXTERNAL_STORAGE 권한 없음")
             } else {
-
                 //Log.e(tag, "WRITE_EXTERNAL_STORAGE 권한 있음")
             }
         }
     }
 
     private fun checkPermissions() {
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
         }
     }
 }

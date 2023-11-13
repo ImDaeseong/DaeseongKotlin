@@ -7,14 +7,11 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.io.BufferedReader
-import java.io.IOException
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -23,11 +20,11 @@ class Main1Activity : AppCompatActivity() {
 
     private val tag = Main1Activity::class.java.simpleName
 
-    private var imageView1: ImageView? = null
-    private var imageView2: ImageView? = null
-    private var imageView3: ImageView? = null
+    private lateinit var imageView1: ImageView
+    private lateinit var imageView2: ImageView
+    private lateinit var imageView3: ImageView
 
-    private val sUrl = "https://.png"
+    private val imageUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,178 +35,125 @@ class Main1Activity : AppCompatActivity() {
         imageView3 = findViewById(R.id.imageView3)
 
         findViewById<View>(R.id.button1).setOnClickListener {
-
-            DownLoadfromCallable(sUrl)
+            downloadFromCallable(imageUrl)
         }
 
         findViewById<View>(R.id.button2).setOnClickListener {
-
-            DownLoadcreate(sUrl)
+            downloadCreate(imageUrl)
         }
 
         findViewById<View>(R.id.button3).setOnClickListener {
-
-            Downloadjust(sUrl)
+            downloadJust(imageUrl)
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    private fun DownLoadfromCallable(sUrl: String) {
-
+    private fun downloadFromCallable(url: String) {
         Observable.fromCallable {
-            val bm = getBitmapUrl(sUrl)
-            bm!!
+            getBitmapFromUrl(url)
         }
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(object : Observer<Bitmap?> {
-            override fun onSubscribe(d: @NonNull Disposable?) {
-
-                //Log.e(tag, "DownLoadfromCallable onSubscribe")
-            }
-
-            override fun onNext(bitmap: @NonNull Bitmap?) {
-
-                //Log.e(tag, "DownLoadfromCallable onNext")
-
-                if (bitmap != null)
-                    imageView1!!.setImageBitmap(bitmap)
-            }
-
-            override fun onError(e: @NonNull Throwable?) {
-
-                if (e != null) {
-                    Log.e(tag, "DownLoadfromCallable onError:" + e.message )
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Bitmap?> {
+                override fun onSubscribe(d: Disposable?) {
+                    //Log.e(tag, "downloadFromCallable onSubscribe")
                 }
-            }
 
-            override fun onComplete() {
+                override fun onNext(bitmap: Bitmap?) {
+                    imageView1.setImageBitmap(bitmap)
+                }
 
-                //Log.e(tag, "DownLoadfromCallable onComplete")
-            }
-        })
+                override fun onError(e: Throwable?) {
+                    e?.let {
+                        Log.e(tag, "downloadFromCallable onError: ${it.message}")
+                    }
+                }
+
+                override fun onComplete() {
+                    //Log.e(tag, "downloadFromCallable onComplete")
+                }
+            })
     }
 
-    private fun DownLoadcreate(sUrl: String) {
-
+    private fun downloadCreate(url: String) {
         Observable.create<Bitmap> { emitter ->
-            val bm = getBitmapUrl(sUrl)
-            emitter!!.onNext(bm)
+            val bitmap = getBitmapFromUrl(url)
+            emitter.onNext(bitmap)
         }
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(object : Observer<Bitmap?> {
-            override fun onSubscribe(d: @NonNull Disposable?) {
-
-                //Log.e(tag, "DownLoadcreate onSubscribe")
-            }
-
-            override fun onNext(bitmap: @NonNull Bitmap?) {
-
-                //Log.e(tag, "DownLoadcreate onNext")
-
-                if (bitmap != null)
-                    imageView2!!.setImageBitmap(bitmap)
-            }
-
-            override fun onError(e: @NonNull Throwable?) {
-
-                if (e != null) {
-                    Log.e(tag, "DownLoadcreate onError:" + e.message)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<Bitmap?> {
+                override fun onSubscribe(d: Disposable?) {
+                    //Log.e(tag, "downloadCreate onSubscribe")
                 }
-            }
 
-            override fun onComplete() {
+                override fun onNext(bitmap: Bitmap?) {
+                    imageView2.setImageBitmap(bitmap)
+                }
 
-                //Log.e(tag, "DownLoadcreate onComplete")
-            }
-        })
+                override fun onError(e: Throwable?) {
+                    e?.let {
+                        Log.e(tag, "downloadCreate onError: ${it.message}")
+                    }
+                }
+
+                override fun onComplete() {
+                    //Log.e(tag, "downloadCreate onComplete")
+                }
+            })
     }
 
-    private fun Downloadjust(sUrl: String) {
-
-        Observable.just(sUrl)
-        .map { getBitmapUrl(sUrl) }
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(object : Observer<Bitmap?> {
-            override fun onSubscribe(d: @NonNull Disposable?) {
-
-                //Log.e(tag, "Downloadjust onSubscribe")
-            }
-
-            override fun onNext(bitmap: @NonNull Bitmap?) {
-
-                //Log.e(tag, "Downloadjust onNext")
-
-                if (bitmap != null)
-                    imageView3!!.setImageBitmap(bitmap)
-            }
-
-            override fun onError(e: @NonNull Throwable?) {
-
-                if (e != null) {
-                    Log.e(tag, "Downloadjust onError:" + e.message)
+    private fun downloadJust(url: String) {
+        Observable.just(url)
+            .map { getBitmapFromUrl(url) }
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Bitmap?> {
+                override fun onSubscribe(d: Disposable?) {
+                    //Log.e(tag, "downloadJust onSubscribe")
                 }
-            }
 
-            override fun onComplete() {
+                override fun onNext(bitmap: Bitmap?) {
+                    imageView3.setImageBitmap(bitmap)
+                }
 
-                //Log.e(tag, "Downloadjust onComplete")
-            }
-        })
+                override fun onError(e: Throwable?) {
+                    e?.let {
+                        Log.e(tag, "downloadJust onError: ${it.message}")
+                    }
+                }
+
+                override fun onComplete() {
+                    //Log.e(tag, "downloadJust onComplete")
+                }
+            })
     }
 
-    private fun getBitmapUrl(urlImage: String): Bitmap? {
-
-        var httpURLConnection: HttpURLConnection? = null
+    private fun getBitmapFromUrl(url: String): Bitmap? {
+        var connection: HttpURLConnection? = null
         var inputStream: InputStream? = null
-        val bufferedReader: BufferedReader? = null
         var bitmap: Bitmap? = null
 
         try {
-            val url = URL(urlImage)
-            httpURLConnection = url.openConnection() as HttpURLConnection
-            httpURLConnection.allowUserInteraction = false
-            httpURLConnection!!.instanceFollowRedirects = true
-            httpURLConnection.requestMethod = "GET"
-            httpURLConnection.connectTimeout = 60//타임아웃 시간 설정(default:무한대기)
-            httpURLConnection.connect()
-            val resCode = httpURLConnection.responseCode
-            if (resCode != HttpURLConnection.HTTP_OK) {
-                return null
+            val urlObject = URL(url)
+            connection = urlObject.openConnection() as HttpURLConnection
+            connection.allowUserInteraction = false
+            connection.instanceFollowRedirects = true
+            connection.requestMethod = "GET"
+            connection.connectTimeout = 60
+            connection.connect()
+
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                inputStream = connection.inputStream
+                bitmap = BitmapFactory.decodeStream(inputStream)
             }
-            inputStream = httpURLConnection.inputStream
-            bitmap = BitmapFactory.decodeStream(inputStream)
-            httpURLConnection.disconnect()
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            if (httpURLConnection != null) {
-                try {
-                    httpURLConnection.disconnect()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
+            connection?.disconnect()
+            inputStream?.close()
         }
+
         return bitmap
     }
 }

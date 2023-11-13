@@ -3,16 +3,13 @@ package com.daeseong.rxjava3_test
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.functions.Consumer
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.io.BufferedReader
 import java.io.IOException
@@ -27,132 +24,91 @@ class Main4Activity : AppCompatActivity() {
     private val tag = Main4Activity::class.java.simpleName
 
     private val sUrl = "https://api.bithumb.com/public/ticker/BTC"
-    private val sImgUrl = "https://.png"
+    private val sImgUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
 
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var button3: Button? = null
-    private var button4: Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
 
-    private var textView1: TextView? = null
-    private var textView2: TextView? = null
-    private var imageView1: ImageView? = null
-    private var imageView2: ImageView? = null
+    private lateinit var textView1: TextView
+    private lateinit var textView2: TextView
+    private lateinit var imageView1: ImageView
+    private lateinit var imageView2: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main4)
 
-        textView1 = findViewById<View>(R.id.textView1) as TextView
-        textView2 = findViewById<View>(R.id.textView2) as TextView
+        textView1 = findViewById(R.id.textView1)
+        textView2 = findViewById(R.id.textView2)
         imageView1 = findViewById(R.id.imageView1)
         imageView2 = findViewById(R.id.imageView2)
 
         button1 = findViewById(R.id.button1)
-        button1!!.setOnClickListener(View.OnClickListener {
-
-            try {
-
-                getJson1(sUrl)!!.subscribe(Consumer { result: String? ->
-                    //Log.e(tag, "result:$result")
-                    textView1!!.text = result
-                })
-            } catch (ex: java.lang.Exception) {
-                ex.printStackTrace()
+        button1.setOnClickListener {
+            getJson1(sUrl)?.subscribeBy { result ->
+                //println("result:$result")
+                textView1.text = result
             }
-        })
+        }
 
         button2 = findViewById(R.id.button2)
-        button2!!.setOnClickListener(View.OnClickListener {
-
-            try {
-
-                getJson2(sUrl)!!.subscribe(Consumer { result: String? ->
-                    //Log.e(tag, "result:$result")
-                    textView2!!.text = result
-                })
-            } catch (ex: java.lang.Exception) {
-                ex.printStackTrace()
+        button2.setOnClickListener {
+            getJson2(sUrl)?.subscribeBy { result ->
+                //println("result:$result")
+                textView2.text = result
             }
-        })
+        }
 
         button3 = findViewById(R.id.button3)
-        button3!!.setOnClickListener(View.OnClickListener {
-
-            try {
-
-                getBitmap1(sImgUrl)!!.onErrorComplete().subscribe(Consumer { result: Bitmap? ->
-                    if (result != null)
-                        imageView1!!.setImageBitmap(result)
-                })
-            } catch (ex: Exception) {
-                ex.printStackTrace()
+        button3.setOnClickListener {
+            getBitmap1(sImgUrl)?.onErrorComplete()?.subscribeBy { result ->
+                result?.let { imageView1.setImageBitmap(it) }
             }
-        })
+        }
 
         button4 = findViewById(R.id.button4)
-        button4!!.setOnClickListener(View.OnClickListener {
-
-            try {
-
-                getBitmap2(sImgUrl)!!.onErrorComplete().subscribe(Consumer { result: Bitmap? ->
-                    if (result != null)
-                        imageView2!!.setImageBitmap(result)
-                })
-            } catch (ex: java.lang.Exception) {
-                ex.printStackTrace()
+        button4.setOnClickListener {
+            getBitmap2(sImgUrl)?.onErrorComplete()?.subscribeBy { result ->
+                result?.let { imageView2.setImageBitmap(it) }
             }
-        })
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
     }
 
-    private fun getJson1(sUrl: String): @NonNull Observable<String>? {
-
+    private fun getJson1(sUrl: String): Observable<String>? {
         return Observable.fromCallable {
-            val sResult = getJsonUrl(sUrl)
-            sResult!!
+            getJsonUrl(sUrl) ?: ""
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
 
-    private fun getJson2(sUrl: String): @NonNull Observable<String>? {
-
+    private fun getJson2(sUrl: String): Observable<String>? {
         val callable: Callable<String> = Callable {
-            val sResult = getJsonUrl(sUrl)
-            sResult!!
+            getJsonUrl(sUrl) ?: ""
         }
         return Observable.fromCallable(callable).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    private fun getBitmap1(sUrl: String): @NonNull Observable<Bitmap>? {
-
+    private fun getBitmap1(sUrl: String): Observable<Bitmap>? {
         return Observable.fromCallable {
-            val bm = getBitmapUrl(sUrl)
-            if (bm == null) {
-                Log.e(tag, "Bitmap null")
-            }
-            bm!!
+            getBitmapUrl(sUrl) ?: throw IOException("Bitmap null")
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
 
-    private fun getBitmap2(sUrl: String): @NonNull Observable<Bitmap>? {
-
+    private fun getBitmap2(sUrl: String): Observable<Bitmap>? {
         val callable: Callable<Bitmap> = Callable {
-            val bm = getBitmapUrl(sUrl)
-            if (bm == null) {
-                Log.e(tag, "Bitmap null")
-            }
-            bm!!
+            getBitmapUrl(sUrl) ?: throw IOException("Bitmap null")
         }
         return Observable.fromCallable(callable).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
     private fun getJsonUrl(sUrl: String): String? {
-
         var httpURLConnection: HttpURLConnection? = null
         var inputStream: InputStream? = null
         var bufferedReader: BufferedReader? = null
@@ -163,8 +119,6 @@ class Main4Activity : AppCompatActivity() {
             httpURLConnection.allowUserInteraction = false
             httpURLConnection!!.instanceFollowRedirects = true
             httpURLConnection.requestMethod = "GET"
-            //httpURLConnection.connectTimeout = 60//타임아웃 시간 설정(default:무한대기)
-            //httpURLConnection.setRequestProperty("Content-Type", "application/json")
             httpURLConnection.connect()
             val resCode = httpURLConnection.responseCode
             if (resCode == HttpURLConnection.HTTP_OK) {
@@ -175,40 +129,19 @@ class Main4Activity : AppCompatActivity() {
                     stringBuilder.append(line)
                 }
             }
-            httpURLConnection.disconnect()
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            if (httpURLConnection != null) {
-                try {
-                    httpURLConnection.disconnect()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
+            inputStream?.close()
+            bufferedReader?.close()
+            httpURLConnection?.disconnect()
         }
         return stringBuilder.toString()
     }
 
     private fun getBitmapUrl(urlImage: String): Bitmap? {
-
         var httpURLConnection: HttpURLConnection? = null
         var inputStream: InputStream? = null
-        val bufferedReader: BufferedReader? = null
         var bitmap: Bitmap? = null
         try {
             val url = URL(urlImage)
@@ -216,39 +149,17 @@ class Main4Activity : AppCompatActivity() {
             httpURLConnection.allowUserInteraction = false
             httpURLConnection!!.instanceFollowRedirects = true
             httpURLConnection.requestMethod = "GET"
-            //httpURLConnection.connectTimeout = 60//타임아웃 시간 설정(default:무한대기)
             httpURLConnection.connect()
             val resCode = httpURLConnection.responseCode
-            if (resCode != HttpURLConnection.HTTP_OK) {
-                return null
+            if (resCode == HttpURLConnection.HTTP_OK) {
+                inputStream = httpURLConnection.inputStream
+                bitmap = BitmapFactory.decodeStream(inputStream)
             }
-            inputStream = httpURLConnection.inputStream
-            bitmap = BitmapFactory.decodeStream(inputStream)
-            httpURLConnection.disconnect()
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            if (httpURLConnection != null) {
-                try {
-                    httpURLConnection.disconnect()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
+            inputStream?.close()
+            httpURLConnection?.disconnect()
         }
         return bitmap
     }
