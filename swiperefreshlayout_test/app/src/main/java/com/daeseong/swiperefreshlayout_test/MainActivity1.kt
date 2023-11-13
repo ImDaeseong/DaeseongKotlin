@@ -2,6 +2,7 @@ package com.daeseong.swiperefreshlayout_test
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -12,64 +13,54 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class MainActivity1 : AppCompatActivity() {
 
-    private val TAG = MainActivity1::class.java.simpleName
+    private val tag = MainActivity1::class.java.simpleName
 
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
-
-    private var wait: View? = null
-    private var iv1: ImageView? = null
-    private var slide_down: Animation? = null
-    private var loading:Animation? = null
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var wait: View
+    private lateinit var iv1: ImageView
+    private lateinit var slideDown: Animation
+    private lateinit var loading: Animation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main1)
 
         wait = findViewById(R.id.wait)
-        iv1 = wait!!.findViewById<ImageView>(R.id.iv1)
+        iv1 = wait.findViewById(R.id.iv1)
 
-
-        slide_down = AnimationUtils.loadAnimation(this, R.anim.slide_down)
+        slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down)
         loading = AnimationUtils.loadAnimation(this, R.anim.loading)
 
+        swipeRefreshLayout = findViewById(R.id.swLayout)
+        swipeRefreshLayout.setColorSchemeResources(R.color.purple_500)
+        swipeRefreshLayout.setProgressViewOffset(true, -10000, -10000)
 
-        swipeRefreshLayout = findViewById<View>(R.id.swLayout) as SwipeRefreshLayout
-        swipeRefreshLayout!!.setColorSchemeResources(R.color.purple_500)
+        swipeRefreshLayout.setOnRefreshListener {
 
-        //스와이프 민감도 설정(기본:120)
-        //swipeRefreshLayout!!.setDistanceToTriggerSync(20)
+            with(swipeRefreshLayout) {
+                isRefreshing = true
+                wait.startAnimation(slideDown)
+                wait.visibility = View.VISIBLE
+                iv1.startAnimation(loading)
 
-        //swipeRefreshLayout!!.setSize(SwipeRefreshLayout.DEFAULT)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (isRefreshing) {
+                        isRefreshing = false
+                    }
 
-        //스와이프 프로그래스바 위치 - 숨김
-        swipeRefreshLayout!!.setProgressViewOffset(true, -10000, -10000)
+                    requestData()
 
-        swipeRefreshLayout!!.setOnRefreshListener {
+                    wait.visibility = View.GONE
+                    wait.clearAnimation()
 
-            swipeRefreshLayout!!.isRefreshing = true
-
-            wait!!.startAnimation(slide_down)
-            wait!!.visibility = View.VISIBLE
-
-            iv1!!.startAnimation(loading)
-
-            Handler().postDelayed({
-
-                if (swipeRefreshLayout!!.isRefreshing) {
-                    swipeRefreshLayout!!.isRefreshing = false
-                }
-
-                requestData()
-
-                wait!!.visibility = View.GONE
-                wait!!.clearAnimation()
-
-                iv1!!.clearAnimation()
-            }, 1000)
+                    iv1.clearAnimation()
+                }, 1000)
+            }
         }
+
     }
 
-    fun requestData() {
-        Log.e(TAG, "업데이트 완료")
+    private fun requestData() {
+        Log.e(tag, "업데이트 완료")
     }
 }

@@ -9,38 +9,25 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 
-class ConstraintLayoutEx : ConstraintLayout {
-    private var iv1: ImageView? = null
-    private var loading: Animation? = null
+class ConstraintLayoutEx @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    constructor(context: Context) : super(context) {
-        init(context)
-    }
+    private val iv1: ImageView
+    private val loading: Animation
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context)
-    }
-
-    private fun init(context: Context) {
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.wait, this)
-        iv1 = view.findViewById<View>(R.id.iv1) as ImageView
+    init {
+        val view = LayoutInflater.from(context).inflate(R.layout.wait, this)
+        iv1 = view.findViewById(R.id.iv1)
         loading = AnimationUtils.loadAnimation(context, R.anim.loading)
-        //iv1!!.startAnimation(loading)
     }
 
     fun show() {
-        visibility = VISIBLE
-        iv1!!.startAnimation(loading)
+        visibility = View.VISIBLE
+        iv1.startAnimation(loading)
     }
 
     fun hide() {
-        visibility = GONE
+        visibility = View.GONE
         clearAnimation()
-        iv1!!.clearAnimation()
+        iv1.clearAnimation()
     }
 }

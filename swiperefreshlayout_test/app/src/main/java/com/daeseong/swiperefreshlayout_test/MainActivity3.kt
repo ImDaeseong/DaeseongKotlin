@@ -2,6 +2,7 @@ package com.daeseong.swiperefreshlayout_test
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -11,53 +12,52 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity3 : AppCompatActivity() {
 
-    private val TAG = MainActivity3::class.java.simpleName
+    private val tag = MainActivity3::class.java.simpleName
 
-    private var swipeRefreshLayoutEx: SwipeRefreshLayoutEx? = null
-
-    private var wait: View? = null
-    private var iv1: ImageView? = null
-    private var slide_down: Animation? = null
-    private var loading:Animation? = null
+    private lateinit var swipeRefreshLayoutEx: SwipeRefreshLayoutEx
+    private lateinit var wait: View
+    private lateinit var iv1: ImageView
+    private lateinit var slideDown: Animation
+    private lateinit var loading: Animation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
 
         wait = findViewById(R.id.wait)
-        iv1 = wait!!.findViewById<View>(R.id.iv1) as ImageView
+        iv1 = wait.findViewById(R.id.iv1)
 
-        slide_down = AnimationUtils.loadAnimation(this, R.anim.slide_down)
+        slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down)
         loading = AnimationUtils.loadAnimation(this, R.anim.loading)
 
-        swipeRefreshLayoutEx = findViewById<View>(R.id.swLayout) as SwipeRefreshLayoutEx
-        swipeRefreshLayoutEx!!.hideProgressBar(true)
-        swipeRefreshLayoutEx!!.setOnRefreshListener {
+        swipeRefreshLayoutEx = findViewById(R.id.swLayout)
+        swipeRefreshLayoutEx.hideProgressBar(true)
+        swipeRefreshLayoutEx.setOnRefreshListener {
 
-            swipeRefreshLayoutEx!!.isRefreshing = true
+            swipeRefreshLayoutEx.isRefreshing = true
 
-            wait!!.startAnimation(slide_down)
-            wait!!.visibility = View.VISIBLE
+            wait.startAnimation(slideDown)
+            wait.visibility = View.VISIBLE
 
-            iv1!!.startAnimation(loading)
+            iv1.startAnimation(loading)
 
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
 
-                if (swipeRefreshLayoutEx!!.isRefreshing) {
-                    swipeRefreshLayoutEx!!.isRefreshing = false
+                if (swipeRefreshLayoutEx.isRefreshing) {
+                    swipeRefreshLayoutEx.isRefreshing = false
                 }
 
                 requestData()
 
-                wait!!.visibility = View.GONE
-                wait!!.clearAnimation()
+                wait.visibility = View.GONE
+                wait.clearAnimation()
 
-                iv1!!.clearAnimation()
+                iv1.clearAnimation()
             }, 1000)
         }
     }
 
-    fun requestData() {
-        Log.e(TAG, "업데이트 완료")
+    private fun requestData() {
+        Log.e(tag, "업데이트 완료")
     }
 }

@@ -2,47 +2,46 @@ package com.daeseong.swiperefreshlayout_test
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity4 : AppCompatActivity() {
 
-    private val TAG = MainActivity4::class.java.simpleName
+    private val tag = MainActivity4::class.java.simpleName
 
-    private var swipeRefreshLayoutEx: SwipeRefreshLayoutEx? = null
-
-    private var waitConstraintLayout: ConstraintLayoutEx? = null
+    private lateinit var swipeRefreshLayoutEx: SwipeRefreshLayoutEx
+    private lateinit var waitConstraintLayout: ConstraintLayoutEx
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main4)
 
-        waitConstraintLayout = findViewById<View>(R.id.wait) as ConstraintLayoutEx
+        waitConstraintLayout = findViewById(R.id.wait)
+        swipeRefreshLayoutEx = findViewById(R.id.swLayout)
 
-        swipeRefreshLayoutEx = findViewById<View>(R.id.swLayout) as SwipeRefreshLayoutEx
-        swipeRefreshLayoutEx!!.hideProgressBar(true)
-        swipeRefreshLayoutEx!!.setOnRefreshListener {
+        swipeRefreshLayoutEx.hideProgressBar(true)
+        swipeRefreshLayoutEx.setOnRefreshListener {
 
-            swipeRefreshLayoutEx!!.isRefreshing = true
+            swipeRefreshLayoutEx.isRefreshing = true
 
-            waitConstraintLayout!!.show()
+            waitConstraintLayout.show()
 
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
 
-                if (swipeRefreshLayoutEx!!.isRefreshing) {
-                    swipeRefreshLayoutEx!!.isRefreshing = false
+                if (swipeRefreshLayoutEx.isRefreshing) {
+                    swipeRefreshLayoutEx.isRefreshing = false
                 }
 
                 requestData()
 
-                waitConstraintLayout!!.hide()
+                waitConstraintLayout.hide()
 
             }, 1000)
         }
     }
 
-    fun requestData() {
-        Log.e(TAG, "업데이트 완료")
+    private fun requestData() {
+        Log.e(tag, "업데이트 완료")
     }
 }
