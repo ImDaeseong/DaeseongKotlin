@@ -1,17 +1,16 @@
 package com.daeseong.okhttpclient_test
 
+import HttpUtilOK
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.daeseong.okhttpclient_test.common.HttpUtilOK
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getlogin(this, "https://nid.naver.com/nidlogin.login", "", "")
+        getLogin(this, "https://nid.naver.com/nidlogin.login", "", "")
         getBTC(this, "https://api.bithumb.com/public/ticker/BTC")
     }
 
@@ -40,41 +39,41 @@ class MainActivity : AppCompatActivity() {
 
                 try {
 
-                    val res = response.body().string()
-                    //Log.e(tag, res)
+                    val res = response.body!!.string()
+                    Log.e(tag, res)
 
                     val resultObj = JSONObject(res)
-                    var status = resultObj["status"].toString()
+                    var status = resultObj.getString("status")
                     if (TextUtils.isEmpty(status)) {
                         status = ""
                     }
 
-                    var data = resultObj["data"].toString()
+                    var data = resultObj.getString("data")
                     if (TextUtils.isEmpty(data)) {
                         data = ""
                     }
 
                     if (status == "0000") {
                         val resultData = JSONObject(data)
-                        var opening_price = resultData["opening_price"].toString()
+                        var opening_price = resultData.getString("opening_price")
                         if (TextUtils.isEmpty(opening_price)) {
                             opening_price = ""
                         }
                         //Log.e(tag, opening_price);
 
-                        var closing_price = resultData["closing_price"].toString()
+                        var closing_price = resultData.getString("closing_price")
                         if (TextUtils.isEmpty(closing_price)) {
                             closing_price = ""
                         }
                         //Log.e(tag, closing_price);
 
-                        var min_price = resultData["min_price"].toString()
+                        var min_price = resultData.getString("min_price")
                         if (TextUtils.isEmpty(min_price)) {
                             min_price = ""
                         }
                         //Log.e(tag, min_price);
 
-                        var max_price = resultData["max_price"].toString()
+                        var max_price = resultData.getString("max_price")
                         if (TextUtils.isEmpty(max_price)) {
                             max_price = ""
                         }
@@ -89,9 +88,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun getlogin(context: Context, address: String, ID: String, PWD: String) {
+    private fun getLogin(context: Context, address: String, ID: String, PWD: String) {
 
-        HttpUtilOK().getlogin(address, ID, PWD, object : Callback {
+        HttpUtilOK().getLogin(address, ID, PWD, object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
@@ -102,8 +101,8 @@ class MainActivity : AppCompatActivity() {
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
                 try {
-                    val body = response.body().string()
-                    //Log.e(tag, body)
+                    val body = response.body!!.string()
+                    Log.e(tag, body)
                 } catch (ex: java.lang.Exception) {
                 }
             }
