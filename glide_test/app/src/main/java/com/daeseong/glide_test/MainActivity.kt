@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         iv1 = findViewById<ImageView>(R.id.iv1)
 
-        GlideUtil.getInstance().load(this, iv1!!, "http://goo.gl/gEgYUd")
+        GlideUtil.load(this, iv1!!, "http://goo.gl/gEgYUd")
 
         //getImg()
     }
