@@ -11,13 +11,13 @@ class MainActivity : AppCompatActivity() {
 
     private var timer: Timer? = null
 
-    private var btn1 : Button? = null;
-    private var btn2 : Button? = null;
-    private var btn3 : Button? = null;
+    private lateinit var btn1: Button
+    private lateinit var btn2: Button
+    private lateinit var btn3: Button
 
-    private var loadingDialog: LoadingDialog? = null
-    private var loadingDialog1: LoadingDialog1? = null
-    private var loadingOverlay: LoadingOverlay? = null
+    private lateinit var loadingDialog: LoadingDialog
+    private lateinit var loadingDialog1: LoadingDialog1
+    private lateinit var loadingOverlay: LoadingOverlay
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,73 +26,72 @@ class MainActivity : AppCompatActivity() {
         loadingDialog = LoadingDialog(this)
         loadingDialog1 = LoadingDialog1(this)
 
-        btn1 = findViewById<Button>(R.id.btn1)
-        btn1!!.setOnClickListener {
-
+        btn1 = findViewById(R.id.btn1)
+        btn1.setOnClickListener {
             startTimer()
             showLoading()
         }
 
-        btn2 = findViewById<Button>(R.id.btn2)
-        btn2!!.setOnClickListener {
-
-            if(!loadingDialog!!.isShowing){
+        btn2 = findViewById(R.id.btn2)
+        btn2.setOnClickListener {
+            if (!loadingDialog.isShowing) {
                 showLoading1()
             } else {
                 hideLoading1()
             }
         }
 
-        btn3 = findViewById<Button>(R.id.btn3)
-        btn3!!.setOnClickListener {
-
+        btn3 = findViewById(R.id.btn3)
+        btn3.setOnClickListener {
             showLoading2()
         }
     }
 
-    fun showLoading1() {
-        loadingDialog!!.show()
+    override fun onDestroy() {
+        super.onDestroy()
+
+        closeTimer()
     }
 
-    fun hideLoading1() {
+    private fun showLoading1() {
+        loadingDialog.show()
+    }
+
+    private fun hideLoading1() {
         try {
-            loadingDialog!!.dismiss()
-        } catch (e: java.lang.Exception) {
+            loadingDialog.dismiss()
+        } catch (e: Exception) {
         }
     }
 
-    fun showLoading2() {
-        loadingDialog1!!.show()
+    private fun showLoading2() {
+        loadingDialog1.show()
     }
 
-    fun hideLoading2() {
+    private fun hideLoading2() {
         try {
-            loadingDialog1!!.dismiss()
-        } catch (e: java.lang.Exception) {
+            loadingDialog1.dismiss()
+        } catch (e: Exception) {
         }
     }
 
-    fun showLoading() {
-
-        if (loadingOverlay == null) {
+    private fun showLoading() {
+        if (!::loadingOverlay.isInitialized) {
             loadingOverlay = LoadingOverlay(this)
         }
-        loadingOverlay!!.show()
+        loadingOverlay.show()
     }
 
-    fun hideLoading() {
-
-        if (loadingOverlay != null && loadingOverlay!!.isShowing) {
-            loadingOverlay!!.dismiss()
+    private fun hideLoading() {
+        if (::loadingOverlay.isInitialized && loadingOverlay.isShowing) {
+            loadingOverlay.dismiss()
         }
     }
 
     private fun closeTimer() {
         try {
-            if (timer != null) {
-                timer!!.cancel()
-                timer = null
-            }
+            timer?.cancel()
+            timer = null
         } catch (e: Exception) {
         }
     }
@@ -108,11 +107,10 @@ class MainActivity : AppCompatActivity() {
                     if (nTimeCount > 5) {
                         closeTimer()
                         runOnUiThread {
-
                             hideLoading()
                         }
                     }
-                } catch (e: java.lang.Exception) {
+                } catch (e: Exception) {
                 }
             }
         }, 0, 1000)
