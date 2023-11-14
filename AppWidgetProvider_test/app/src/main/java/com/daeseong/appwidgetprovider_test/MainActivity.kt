@@ -13,11 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = MainActivity::class.java.simpleName
+    private val tag = MainActivity::class.java.simpleName
 
-    private var button1 : Button? = null
-    private var button2 : Button? = null
-    private var button3 : Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
 
     private var mainActivity: MainActivity? = null
     fun getMainActivity(): MainActivity? {
@@ -34,29 +34,19 @@ class MainActivity : AppCompatActivity() {
 
         setMainActivity(this)
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
-
-            //바로가기 생성
-            //setWidgetShortcut1(this)
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
             setWidgetShortcut2(this)
         }
 
-        button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
-
-            val intent = Intent(this, NewAppWidget::class.java)
-            intent.action = NewAppWidget.CRT_ITEM
-            intent.putExtra(NewAppWidget.CRT_ITEM, "0123456789")
-            this.sendBroadcast(intent)
+        button2 = findViewById(R.id.button2)
+        button2.setOnClickListener {
+            sendWidgetBroadcast(NewAppWidget.CRT_ITEM, "0123456789")
         }
 
-        button3 = findViewById<Button>(R.id.button3)
-        button3!!.setOnClickListener {
-
-            val intent = Intent(this, NewAppWidget::class.java)
-            intent.action = NewAppWidget.NOR_ITEM
-            this.sendBroadcast(intent)
+        button3 = findViewById(R.id.button3)
+        button3.setOnClickListener {
+            sendWidgetBroadcast(NewAppWidget.NOR_ITEM, null)
         }
     }
 
@@ -67,21 +57,19 @@ class MainActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
                 val appWidgetManager: AppWidgetManager = context.getSystemService(AppWidgetManager::class.java)
-
                 if (appWidgetManager.isRequestPinAppWidgetSupported) {
 
-                    //위젯 없을 경우에만 추가
-                    if (appWidgetManager.getAppWidgetIds(ComponentName(context, NewAppWidget::class.java)).isEmpty()) {
+                    if (appWidgetManager.getAppWidgetIds(ComponentName(context, NewAppWidget::class.java)).isEmpty() ) {
                         val widgetProvider = ComponentName(context, NewAppWidget::class.java)
-                        val pinnedWidgetCallbackIntent = Intent(this, MainActivity::class.java)
-                        val successCallback = PendingIntent.getBroadcast(this,0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                        appWidgetManager.requestPinAppWidget(widgetProvider, null, successCallback)
+                        val pinnedWidgetCallbackIntent = Intent(context, MainActivity::class.java)
+                        val successCallback = PendingIntent.getBroadcast(context,0, pinnedWidgetCallbackIntent,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                        appWidgetManager.requestPinAppWidget(widgetProvider,null, successCallback)
                     }
                 }
             }
 
         } catch (ex: Exception) {
-            Log.e(TAG, ex.message.toString())
+            Log.e(tag, ex.message.toString())
         }
     }
 
@@ -95,19 +83,29 @@ class MainActivity : AppCompatActivity() {
 
                 if (appWidgetManager.isRequestPinAppWidgetSupported) {
 
-                    //위젯 없을 경우에만 추가
                     if (appWidgetManager.getAppWidgetIds(ComponentName(context, NewAppWidget2::class.java)).isEmpty()) {
+
                         val widgetProvider = ComponentName(context, NewAppWidget2::class.java)
-                        val pinnedWidgetCallbackIntent = Intent(this, MainActivity::class.java)
-                        val successCallback = PendingIntent.getBroadcast(this,0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                        appWidgetManager.requestPinAppWidget(widgetProvider, null, successCallback)
+                        val pinnedWidgetCallbackIntent = Intent(context, MainActivity::class.java)
+                        val successCallback = PendingIntent.getBroadcast(context,0, pinnedWidgetCallbackIntent,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                        appWidgetManager.requestPinAppWidget(widgetProvider,null, successCallback)
                     }
                 }
             }
 
         } catch (ex: Exception) {
-            Log.e(TAG, ex.message.toString())
+            Log.e(tag, ex.message.toString())
         }
+    }
+
+    private fun sendWidgetBroadcast(action: String, extra: String?) {
+
+        val intent = Intent(this, NewAppWidget::class.java)
+        intent.action = action
+        extra?.let {
+            intent.putExtra(action, it)
+        }
+        sendBroadcast(intent)
     }
 
     fun func_Main() {
@@ -115,12 +113,5 @@ class MainActivity : AppCompatActivity() {
         val activity = Intent(this, MainActivity::class.java)
         activity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(activity)
-
-        /*
-        //현재 상태 유지
-        val activity = Intent(this, MainActivity::class.java)
-        activity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        startActivity(activity);
-        */
     }
 }

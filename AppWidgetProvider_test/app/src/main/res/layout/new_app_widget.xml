@@ -13,4 +13,5 @@
         android:layout_centerVertical="true"
         android:layout_margin="8dp"
         app:srcCompat="@drawable/qr" />
+
 </RelativeLayout>
