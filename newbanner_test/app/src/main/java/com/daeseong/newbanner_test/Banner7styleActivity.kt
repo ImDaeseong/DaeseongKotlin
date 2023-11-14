@@ -20,7 +20,7 @@ class Banner7styleActivity : AppCompatActivity() {
     private var indicator2: ViewPagerIndicatorView? = null
 
     private val nTotalCount = 4
-    private var CurrentPosition = 0
+    private var currentPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +33,14 @@ class Banner7styleActivity : AppCompatActivity() {
         indicator2 = findViewById<View>(R.id.indicator2) as ViewPagerIndicatorView
 
         indicator1!!.init(nTotalCount, R.drawable.dot_off, R.drawable.select_on, 15)
-        indicator1!!.setSelection(CurrentPosition)
+        indicator1!!.setSelection(currentPosition)
 
         indicator2!!.init(nTotalCount, R.drawable.dot_off, R.drawable.select_on, 15)
-        indicator2!!.setSelection(CurrentPosition)
+        indicator2!!.setSelection(currentPosition)
 
         imagePagerAdapter = ImagePagerAdapter(this, nTotalCount).setInfiniteLoop(true)
 
-        //이미지 라운드 처리를 위한 설정
+        // 이미지 라운드 처리를 위한 설정
         banner1!!.clipToOutline = true
         banner1!!.adapter = imagePagerAdapter
         banner1!!.addOnPageChangeListener(MyOnPageChangeListener())
@@ -50,9 +50,7 @@ class Banner7styleActivity : AppCompatActivity() {
 
         imagePagerAdapter!!.setOnItemClickListener(object : ImagePagerAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-
                 try {
-
                     val nItem = position % nTotalCount
                     Log.e(tag, "nItem:$nItem")
                 } catch (ex: java.lang.Exception) {
@@ -64,9 +62,7 @@ class Banner7styleActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         try {
-
             if (nTotalCount > 0) {
                 banner1!!.startAutoScroll()
             }
@@ -77,9 +73,7 @@ class Banner7styleActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-
         try {
-
             banner1!!.stopAutoScroll()
         } catch (ex: Exception) {
             ex.message.toString()
@@ -88,12 +82,10 @@ class Banner7styleActivity : AppCompatActivity() {
 
     inner class MyOnPageChangeListener : OnPageChangeListener {
         override fun onPageSelected(position: Int) {
-
             try {
-
-                CurrentPosition = position % nTotalCount
-                indicator1!!.setSelection(CurrentPosition)
-                indicator2!!.setSelection(CurrentPosition)
+                currentPosition = position % nTotalCount
+                indicator1!!.setSelection(currentPosition)
+                indicator2!!.setSelection(currentPosition)
             } catch (ex: Exception) {
                 ex.message.toString()
             }
@@ -107,5 +99,4 @@ class Banner7styleActivity : AppCompatActivity() {
 
         }
     }
-
 }

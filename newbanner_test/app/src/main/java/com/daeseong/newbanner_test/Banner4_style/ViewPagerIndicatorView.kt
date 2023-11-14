@@ -9,34 +9,33 @@ import android.widget.LinearLayout
 
 class ViewPagerIndicatorView : LinearLayout {
 
-    private var mContext: Context
     private lateinit var dotImages: Array<ImageView?>
     private var mDefaultDot = 0
     private var mSelectedDot = 0
 
     constructor(context: Context) : super(context) {
-        mContext = context
+        init(context)
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        mContext = context
+        init(context)
+    }
+
+    private fun init(context: Context) {
+        orientation = HORIZONTAL
+        gravity = Gravity.CENTER
     }
 
     fun init(count: Int, defaultDot: Int, selectedDot: Int, margin: Int) {
-
         removeAllViews()
 
-        dotImages = arrayOfNulls<ImageView>(count)
+        dotImages = arrayOfNulls(count)
         mDefaultDot = defaultDot
         mSelectedDot = selectedDot
 
         for (i in 0 until count) {
-
-            dotImages[i] = ImageView(mContext)
-            val params = LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+            dotImages[i] = ImageView(context)
+            val params = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             params.topMargin = 0
             params.bottomMargin = 0
             params.leftMargin = 0
@@ -46,7 +45,7 @@ class ViewPagerIndicatorView : LinearLayout {
             params.gravity = Gravity.CENTER
             dotImages[i]!!.layoutParams = params
             dotImages[i]!!.setImageResource(defaultDot)
-            dotImages[i]!!.setTag(dotImages[i]!!.id, false)
+            dotImages[i]!!.tag = dotImages[i]!!.id
             this.addView(dotImages[i])
         }
 
@@ -54,13 +53,8 @@ class ViewPagerIndicatorView : LinearLayout {
     }
 
     fun setSelection(position: Int) {
-
         for (i in dotImages.indices) {
-            if (i == position) {
-                dotImages[i]!!.setImageResource(mSelectedDot)
-            } else {
-                dotImages[i]!!.setImageResource(mDefaultDot)
-            }
+            dotImages[i]!!.setImageResource(if (i == position) mSelectedDot else mDefaultDot)
         }
     }
 }

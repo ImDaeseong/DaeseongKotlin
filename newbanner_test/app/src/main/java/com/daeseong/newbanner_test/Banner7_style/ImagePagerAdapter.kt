@@ -55,21 +55,20 @@ class ImagePagerAdapter(private val context: Context, private val size: Int) : R
         try {
 
             val nPos = getPosition(position)
-            //holder.imageView!!.setImageResource(imgs[nPos])
 
             var sUrl = ""
             when (nPos) {
                 0 -> {
-                    sUrl = "https://.png"
+                    sUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
                 }
                 1 -> {
-                    sUrl = "https://.png"
+                    sUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
                 }
                 2 -> {
-                    sUrl = "https://.jpg"
+                    sUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
                 }
                 3 -> {
-                    sUrl = "https://.png"
+                    sUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
                 }
             }
 

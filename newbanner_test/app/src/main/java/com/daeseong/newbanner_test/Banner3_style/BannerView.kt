@@ -33,23 +33,22 @@ open class BannerView : RelativeLayout {
     }
 
     private fun initView(context: Context) {
-
         LayoutInflater.from(getContext()).inflate(R.layout.banner3_style_view, this)
+
         mViewPager = findViewById<View>(R.id.banner3style_widget) as ViewPager
         BannerDotView = findViewById<View>(R.id.indicator) as ViewPagerIndicatorView
 
         initViewPager()
 
-        mViewPager = findViewById<View>(R.id.banner3style_widget) as ViewPager
-        mViewPager!!.addOnPageChangeListener(onPageChangeListener)
+        mViewPager?.apply {
+            addOnPageChangeListener(onPageChangeListener)
+        }
     }
 
     private fun initViewPager() {
-
         mAdapter = BannerAdapter(context, intArrayOf())
-        mViewPager!!.adapter = mAdapter
-        mAdapter!!.setOnItemClickListener(object : BannerAdapter.OnItemClickListener {
-
+        mViewPager?.adapter = mAdapter
+        mAdapter?.setOnItemClickListener(object : BannerAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 Log.e(tag, "onItemClick:$position")
             }
@@ -57,28 +56,27 @@ open class BannerView : RelativeLayout {
     }
 
     fun setBannerData(bannerData: IntArray?) {
+        if (bannerData != null) {
+            mAdapter?.setData(bannerData)
+        }
 
-        mAdapter!!.setData(bannerData!!)
-
-        if (mAdapter!!.count > 1) {
-            mViewPager!!.setCurrentItem(0, false)
-            BannerDotView!!.init(mAdapter!!.count, R.drawable.dot_off, R.drawable.dot_on, 15)
-            BannerDotView!!.setSelection(0)
+        if (mAdapter?.count ?: 0 > 1) {
+            mViewPager?.setCurrentItem(0, false)
+            BannerDotView?.init(mAdapter!!.count, R.drawable.dot_off, R.drawable.dot_on, 15)
+            BannerDotView?.setSelection(0)
         }
     }
 
     private val onPageChangeListener: OnPageChangeListener = object : OnPageChangeListener {
-
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         }
 
         override fun onPageSelected(position: Int) {
-            CurrentPosition = position % mAdapter!!.count
-            BannerDotView!!.setSelection(CurrentPosition)
+            CurrentPosition = position % (mAdapter?.count ?: 1)
+            BannerDotView?.setSelection(CurrentPosition)
         }
 
         override fun onPageScrollStateChanged(state: Int) {
         }
     }
-
 }

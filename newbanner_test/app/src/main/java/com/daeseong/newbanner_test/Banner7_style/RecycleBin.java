@@ -1,6 +1,5 @@
 package com.daeseong.newbanner_test.Banner7_style;
 
-
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.util.SparseArray;

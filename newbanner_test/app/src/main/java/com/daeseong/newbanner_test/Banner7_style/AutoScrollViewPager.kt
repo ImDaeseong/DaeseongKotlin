@@ -10,7 +10,7 @@ import androidx.core.view.MotionEventCompat
 import androidx.viewpager.widget.ViewPager
 import java.lang.ref.WeakReference
 
-class AutoScrollViewPager : ViewPager {
+class AutoScrollViewPager @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ViewPager(context, attrs) {
 
     companion object {
         const val DEFAULT_INTERVAL = 1500
@@ -23,7 +23,6 @@ class AutoScrollViewPager : ViewPager {
     }
 
     private var interval = DEFAULT_INTERVAL.toLong()
-
     private var direction = RIGHT
 
     var isCycle = true
@@ -40,40 +39,26 @@ class AutoScrollViewPager : ViewPager {
     private var isStopByTouch = false
     private var touchX = 0f
     private var downX = 0f
-    private val touchY = 0f
 
+    private val touchY = 0f
     private var scroller: CustomDurationScroller? = null
 
-    constructor(paramContext: Context?) : super(paramContext!!) {
-
-        init()
-    }
-
-    constructor(paramContext: Context?, paramAttributeSet: AttributeSet?) : super(paramContext!!, paramAttributeSet) {
-
-        init()
-    }
-
-    private fun init() {
-
+    init {
         handler = MyHandler(this)
         setViewPagerScroller()
     }
 
     fun startAutoScroll() {
-
         isAutoScroll = true
         sendScrollMessage((interval + scroller!!.duration / autoScrollFactor * swipeScrollFactor).toLong())
     }
 
     fun startAutoScroll(delayTimeInMills: Int) {
-
         isAutoScroll = true
         sendScrollMessage(delayTimeInMills.toLong())
     }
 
     fun stopAutoScroll() {
-
         isAutoScroll = false
         handler!!.removeMessages(SCROLL_WHAT)
     }
@@ -92,25 +77,21 @@ class AutoScrollViewPager : ViewPager {
     }
 
     private fun setViewPagerScroller() {
-
         try {
-
             val scrollerField = ViewPager::class.java.getDeclaredField("mScroller")
             scrollerField.isAccessible = true
             val interpolatorField = ViewPager::class.java.getDeclaredField("sInterpolator")
             interpolatorField.isAccessible = true
             scroller = CustomDurationScroller(context, interpolatorField[null] as Interpolator)
             scrollerField[this] = scroller
-
         } catch (e: Exception) {
         }
     }
 
     fun scrollOnce() {
-
         val adapter = adapter
         var currentItem = currentItem
-        var totalCount: Int = 0
+        var totalCount = 0
 
         if (adapter == null || adapter.count.also { totalCount = it } <= 1) {
             return
@@ -118,26 +99,22 @@ class AutoScrollViewPager : ViewPager {
 
         val nextItem = if (direction == LEFT) --currentItem else ++currentItem
         if (nextItem < 0) {
-
             if (isCycle) {
                 setCurrentItem(totalCount - 1, isBorderAnimation)
             }
         } else if (nextItem == totalCount) {
-
             if (isCycle) {
                 setCurrentItem(0, isBorderAnimation)
             }
         } else {
-
             setCurrentItem(nextItem, true)
         }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-
         val action = MotionEventCompat.getActionMasked(ev)
-        if (isStopScrollWhenTouch) {
 
+        if (isStopScrollWhenTouch) {
             if (action == MotionEvent.ACTION_DOWN && isAutoScroll) {
                 isStopByTouch = true
                 stopAutoScroll()
@@ -147,7 +124,6 @@ class AutoScrollViewPager : ViewPager {
         }
 
         if (slideBorderMode == SLIDE_BORDER_MODE_TO_PARENT || slideBorderMode == SLIDE_BORDER_MODE_CYCLE) {
-
             touchX = ev.x
 
             if (ev.action == MotionEvent.ACTION_DOWN) {
@@ -158,13 +134,10 @@ class AutoScrollViewPager : ViewPager {
             val adapter = adapter
             val pageCount = adapter?.count ?: 0
 
-            if (currentItem == 0 && downX <= touchX || currentItem == pageCount - 1 && downX >= touchX) {
-
+            if ((currentItem == 0 && downX <= touchX) || (currentItem == pageCount - 1 && downX >= touchX)) {
                 if (slideBorderMode == SLIDE_BORDER_MODE_TO_PARENT) {
-
                     parent.requestDisallowInterceptTouchEvent(false)
                 } else {
-
                     if (pageCount > 1) {
                         setCurrentItem(pageCount - currentItem - 1, isBorderAnimation)
                     }
@@ -198,7 +171,6 @@ class AutoScrollViewPager : ViewPager {
                         pager.sendScrollMessage(pager.interval + pager.scroller!!.duration)
                     }
                 }
-                else -> {}
             }
         }
     }

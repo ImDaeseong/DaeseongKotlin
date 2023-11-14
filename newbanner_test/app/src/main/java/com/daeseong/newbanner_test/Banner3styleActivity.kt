@@ -8,7 +8,7 @@ class Banner3styleActivity : AppCompatActivity() {
 
     private val tag = Banner3styleActivity::class.java.simpleName
 
-    private var BannerView3: BannerView? = null
+    private var bannerView3: BannerView? = null
 
     private val imgs = intArrayOf(R.drawable.number1, R.drawable.number2, R.drawable.number3, R.drawable.number4)
 
@@ -16,7 +16,7 @@ class Banner3styleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_banner3style)
 
-        BannerView3 = findViewById<com.daeseong.newbanner_test.Banner3_style.BannerView>(R.id.mBannerView)
-        BannerView3!!.setBannerData(imgs);
+        bannerView3 = findViewById(R.id.mBannerView)
+        bannerView3?.setBannerData(imgs)
     }
 }

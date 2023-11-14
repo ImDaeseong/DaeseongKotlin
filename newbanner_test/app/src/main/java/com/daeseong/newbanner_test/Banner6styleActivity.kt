@@ -21,21 +21,12 @@ class Banner6styleActivity : AppCompatActivity() {
 
     private var mCurrentPosition = 0
 
-    private val imgs = intArrayOf(
-        R.drawable.number1,
-        R.drawable.number2,
-        R.drawable.number3,
-        R.drawable.number4
-    )
+    private val imgs = intArrayOf(R.drawable.number1, R.drawable.number2, R.drawable.number3, R.drawable.number4)
 
     private val handler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
-
-            //viewPager!!.setCurrentItem(nCurrent%TotalCount, true)
-            //nCurrent++;
-
-            mCurrentPosition = viewPager!!.currentItem + 1
-            viewPager!!.currentItem = mCurrentPosition
+            mCurrentPosition = viewPager?.currentItem ?: (0 + 1)
+            viewPager?.currentItem = mCurrentPosition
             this.sendEmptyMessageDelayed(0, 2000)
         }
     }
@@ -44,8 +35,8 @@ class Banner6styleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_banner6style)
 
-        viewPager = findViewById<ViewPager>(R.id.viewPager)
-        viewPager!!.addOnPageChangeListener(object : OnPageChangeListener {
+        viewPager = findViewById(R.id.viewPager)
+        viewPager?.addOnPageChangeListener(object : OnPageChangeListener {
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
@@ -54,7 +45,6 @@ class Banner6styleActivity : AppCompatActivity() {
             }
 
             override fun onPageSelected(position: Int) {
-
                 Log.e(tag, "position:$position")
                 handler.removeMessages(0)
                 handler.sendEmptyMessageDelayed(0, 2000)
@@ -62,15 +52,19 @@ class Banner6styleActivity : AppCompatActivity() {
         })
 
         val adapter = BannerAdapter(this, imgs)
+        adapter.setOnItemClickListener(object : BannerAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                Log.e(tag, "Item Clicked: $position")
+            }
+        })
 
-        //롤링 개수
-        var half = Short.MAX_VALUE / 2
-        half %= imgs.size
+        // 롤링 개수
+        val half = Short.MAX_VALUE / 2 % imgs.size
 
         Log.e(tag, "half:$half")
 
-        viewPager!!.currentItem = half
-        viewPager!!.adapter = adapter
+        viewPager?.currentItem = half
+        viewPager?.adapter = adapter
         adapter.notifyDataSetChanged()
         handler.sendEmptyMessageDelayed(0, 2000)
     }

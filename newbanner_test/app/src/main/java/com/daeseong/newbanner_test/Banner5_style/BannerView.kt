@@ -7,7 +7,6 @@ import android.os.Message
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.RelativeLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
@@ -23,7 +22,7 @@ class BannerView : RelativeLayout {
     private var BannerDotView: ViewPagerIndicatorView? = null
     private var nSize = 0
 
-    private val handler  = object : Handler(Looper.getMainLooper()) {
+    private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             var item = mViewPager!!.currentItem
             item = if (nSize != 0) {
@@ -32,17 +31,7 @@ class BannerView : RelativeLayout {
                 0
             }
             mViewPager!!.setCurrentItem(item, false)
-
-            /*
-            if(CurrentPosition > mViewPager!!.currentItem) {
-                CurrentPosition = 0;
-                mViewPager!!.setCurrentItem(CurrentPosition, false);
-            }else {
-                CurrentPosition = mViewPager!!.getCurrentItem() + 1;
-                mViewPager!!.setCurrentItem(CurrentPosition, false);
-                handler!!.sendEmptyMessageDelayed(0, 5000);
-            }
-            */
+            sendEmptyMessageDelayed(0, 5000)
         }
     }
 
@@ -59,22 +48,19 @@ class BannerView : RelativeLayout {
     }
 
     private fun initView(context: Context) {
-        LayoutInflater.from(getContext()).inflate(R.layout.banner5_style_view, this)
-        mViewPager = findViewById<View>(R.id.banner5style_widget) as ViewPager
-        BannerDotView = findViewById<View>(R.id.indicator) as ViewPagerIndicatorView
+        LayoutInflater.from(context).inflate(R.layout.banner5_style_view, this)
+        mViewPager = findViewById(R.id.banner5style_widget)
+        BannerDotView = findViewById(R.id.indicator)
 
         initViewPager()
 
-        mViewPager = findViewById<View>(R.id.banner5style_widget) as ViewPager
-        mViewPager!!.addOnPageChangeListener(onPageChangeListener)
+        mViewPager?.addOnPageChangeListener(onPageChangeListener)
     }
 
     private fun initViewPager() {
-
         mAdapter = BannerAdapter(context, intArrayOf())
-        mViewPager!!.adapter = mAdapter
-        mAdapter!!.setOnItemClickListener(object : BannerAdapter.OnItemClickListener {
-
+        mViewPager?.adapter = mAdapter
+        mAdapter?.setOnItemClickListener(object : BannerAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 Log.e(tag, "onItemClick:$position")
             }
@@ -82,32 +68,27 @@ class BannerView : RelativeLayout {
     }
 
     fun setBannerData(bannerData: IntArray) {
-
-        mAdapter!!.setData(bannerData)
+        mAdapter?.setData(bannerData)
         nSize = bannerData.size
 
-        if (mAdapter!!.count > 1) {
-            mViewPager!!.setCurrentItem(0, true)
-            BannerDotView!!.init(mAdapter!!.count, R.drawable.dot_off, R.drawable.dot_on, 15)
-            BannerDotView!!.setSelection(CurrentPosition)
+        if (mAdapter?.count ?: 0 > 1) {
+            mViewPager?.setCurrentItem(0, true)
+            BannerDotView?.init(mAdapter?.count ?: 0, R.drawable.dot_off, R.drawable.dot_on, 15)
+            BannerDotView?.setSelection(CurrentPosition)
             handler.sendEmptyMessageDelayed(0, 5000)
         }
     }
 
     private val onPageChangeListener: OnPageChangeListener = object : OnPageChangeListener {
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        }
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
         override fun onPageSelected(position: Int) {
             handler.removeMessages(0)
-
-            CurrentPosition = position % mAdapter!!.count
-            BannerDotView!!.setSelection(CurrentPosition)
+            CurrentPosition = position % (mAdapter?.count ?: 1)
+            BannerDotView?.setSelection(CurrentPosition)
             handler.sendEmptyMessageDelayed(0, 5000)
         }
 
-        override fun onPageScrollStateChanged(state: Int) {
-        }
+        override fun onPageScrollStateChanged(state: Int) {}
     }
-
 }

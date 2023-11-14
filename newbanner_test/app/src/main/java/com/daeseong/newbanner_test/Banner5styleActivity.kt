@@ -16,7 +16,7 @@ class Banner5styleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_banner5style)
 
-        bannerView5 = findViewById<BannerView>(R.id.mBannerView)
-        bannerView5!!.setBannerData(imgs);
+        bannerView5 = findViewById(R.id.mBannerView)
+        bannerView5?.setBannerData(imgs)
     }
 }

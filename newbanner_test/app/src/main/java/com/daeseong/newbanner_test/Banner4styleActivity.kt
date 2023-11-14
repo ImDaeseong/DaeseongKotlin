@@ -10,14 +10,13 @@ class Banner4styleActivity : AppCompatActivity() {
 
     private var bannerView4: BannerView? = null
 
-    private val imgs =
-        intArrayOf(R.drawable.number1, R.drawable.number2, R.drawable.number3, R.drawable.number4)
+    private val imgs = intArrayOf(R.drawable.number1, R.drawable.number2, R.drawable.number3, R.drawable.number4)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_banner4style)
 
-        bannerView4 = findViewById<com.daeseong.newbanner_test.Banner4_style.BannerView>(R.id.mBannerView)
-        bannerView4!!.setBannerData(imgs);
+        bannerView4 = findViewById(R.id.mBannerView)
+        bannerView4?.setBannerData(imgs)
     }
 }

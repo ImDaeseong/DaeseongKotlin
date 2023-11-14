@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33//31
     buildToolsVersion "29.0.2"
 
     defaultConfig {
         applicationId "com.daeseong.newbanner_test"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33//31
         versionCode 1
         versionName "1.0"
 
@@ -38,4 +38,6 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
+
 }

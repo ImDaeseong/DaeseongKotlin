@@ -8,22 +8,24 @@ import androidx.viewpager.widget.PagerAdapter
 
 class BannerAdapter(private val mContext: Context, private var mBannerResIds: IntArray) : PagerAdapter() {
 
-    private val tag = javaClass.simpleName
     private var mBannerImgs: MutableList<ImageView>? = null
     private var listener: OnItemClickListener? = null
 
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
 
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
         initImageView(mContext)
 
         if (mBannerImgs != null && mBannerImgs!!.isNotEmpty()) {
             val iv = mBannerImgs!![position]
             iv.setImageResource(mBannerResIds[position])
-            iv.setOnClickListener { if (listener != null) listener!!.onItemClick(position) }
+            iv.setOnClickListener { listener?.onItemClick(position) }
             container.addView(iv)
             return iv
         }
-        return null!!
+        return View(mContext)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
@@ -56,9 +58,5 @@ class BannerAdapter(private val mContext: Context, private var mBannerResIds: In
 
     fun setOnItemClickListener(listener: OnItemClickListener?) {
         this.listener = listener
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
     }
 }

@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.core.graphics.drawable.toBitmap
 import com.daeseong.newbanner_test.Banner1styleActivity
 import com.daeseong.newbanner_test.MainActivity
 import com.daeseong.newbanner_test.R
@@ -36,18 +37,13 @@ class BannerView : RelativeLayout, View.OnTouchListener {
 
         mContext = context
 
-        val view: View = LayoutInflater.from(context).inflate(R.layout.banner1_style_view, this)
-        banner1style = view.findViewById<ImageView>(R.id.banner1style_widget)
-        banner1style!!.setOnTouchListener(this)
+        LayoutInflater.from(context).inflate(R.layout.banner1_style_view, this, true)
+        banner1style = findViewById(R.id.banner1style_widget)
+        banner1style?.setOnTouchListener(this)
     }
 
     fun setImage(bitmap: Bitmap?, nResourceID: Int) {
-
-        if (bitmap == null) {
-            banner1style!!.setImageResource(nResourceID)
-        } else {
-            banner1style!!.setImageBitmap(bitmap)
-        }
+        banner1style?.setImageBitmap(bitmap ?: context.resources.getDrawable(nResourceID, null).toBitmap())
     }
 
     override fun onTouch(v: View?, event: MotionEvent): Boolean {
@@ -56,8 +52,10 @@ class BannerView : RelativeLayout, View.OnTouchListener {
 
             MotionEvent.ACTION_UP -> {
                 try {
-                    (context as Banner1styleActivity).startActivity(Intent(context as Banner1styleActivity, MainActivity::class.java))
-                    (context as Banner1styleActivity).finish()
+                    (context as? Banner1styleActivity)?.let {
+                        it.startActivity(Intent(it, MainActivity::class.java))
+                        it.finish()
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -67,6 +65,4 @@ class BannerView : RelativeLayout, View.OnTouchListener {
         }
         return true
     }
-
-
 }

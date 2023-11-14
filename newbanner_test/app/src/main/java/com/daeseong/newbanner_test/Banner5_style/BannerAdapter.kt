@@ -6,34 +6,27 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 
-class BannerAdapter(context: Context, imgRes: IntArray) : PagerAdapter() {
+class BannerAdapter(private val context: Context, private var imgRes: IntArray) : PagerAdapter() {
 
     private val tag = javaClass.simpleName
 
-    private var mBannerImgs: MutableList<ImageView>? = null
-    private var mBannerResIds: IntArray
-    private val mContext: Context = context
+    private var mBannerImgs: MutableList<ImageView> = mutableListOf()
     private var listener: OnItemClickListener? = null
 
     init {
-        mBannerResIds = imgRes
-        initImageView(mContext)
+        initImageView()
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-
-        if (mBannerImgs != null && mBannerImgs!!.isNotEmpty()) {
-            val iv: ImageView = mBannerImgs!![position]
-            iv.setImageResource(mBannerResIds[position])
-            iv.setOnClickListener { if (listener != null) listener!!.onItemClick(position) }
-            container.addView(iv)
-            return iv
-        }
-        return null!!
+        val iv: ImageView = mBannerImgs[position]
+        iv.setImageResource(imgRes[position])
+        iv.setOnClickListener { listener?.onItemClick(position) }
+        container.addView(iv)
+        return iv
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
-        container.removeView(obj as View?)
+        container.removeView(obj as View)
     }
 
     override fun isViewFromObject(view: View, obj: Any): Boolean {
@@ -41,22 +34,22 @@ class BannerAdapter(context: Context, imgRes: IntArray) : PagerAdapter() {
     }
 
     override fun getCount(): Int {
-        return mBannerResIds.size
+        return imgRes.size
     }
 
-    private fun initImageView(context: Context) {
-        mBannerImgs = ArrayList()
-        for (i in mBannerResIds) {
+    private fun initImageView() {
+        mBannerImgs.clear()
+        for (i in imgRes) {
             val iv = ImageView(context)
             iv.scaleType = ImageView.ScaleType.CENTER_CROP
             iv.setImageResource(i)
-            mBannerImgs!!.add(iv)
+            mBannerImgs.add(iv)
         }
     }
 
     fun setData(resIds: IntArray) {
-        mBannerResIds = resIds
-        initImageView(mContext)
+        imgRes = resIds
+        initImageView()
         notifyDataSetChanged()
     }
 
