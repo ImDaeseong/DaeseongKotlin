@@ -1,6 +1,5 @@
 package com.daeseong.naver_test
 
-
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
@@ -12,7 +11,6 @@ import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.nhn.android.naverlogin.ui.view.OAuthLoginButton
 import org.json.JSONObject
-
 
 class MainActivity : AppCompatActivity() {
 
