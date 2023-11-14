@@ -10,89 +10,69 @@ import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class Main1Activity : AppCompatActivity() {
 
-    private val TAG = Main1Activity::class.java.simpleName
+    private val tag = Main1Activity::class.java.simpleName
 
-    private var button1: Button? = null
-    private var button2:Button? = null
+    private lateinit var button1: Button
+    private lateinit var button2: Button
 
     private var alarmManager: AlarmManager? = null
-    private var alarmpendingIntent: PendingIntent? = null
+    private var alarmPendingIntent: PendingIntent? = null
     private var alarmIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main1)
 
-        button1 = findViewById<Button>(R.id.button1)
-        button1!!.setOnClickListener {
-
-            setAlaram(false)
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
+            setAlarm(true)
         }
 
-        button2 = findViewById<Button>(R.id.button2)
-        button2!!.setOnClickListener {
-
-            setAlaram(true)
+        button2 = findViewById(R.id.button2)
+        button2.setOnClickListener {
+            setAlarm(false)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        DestroyAlarm()
+        destroyAlarm()
     }
 
-    private fun setAlaram(bRepeat: Boolean) {
+    private fun setAlarm(isRepeat: Boolean) {
 
-        if (bRepeat) {
+        destroyAlarm()
 
-            DestroyAlarm()
+        alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        alarmIntent = Intent(this, AlarmReceiver::class.java)
+        val requestCode = Random().nextInt()
+        alarmPendingIntent = PendingIntent.getBroadcast(this, requestCode, alarmIntent!!, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-            // 반복
-            alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-            alarmIntent = Intent(this, AlarmReceiver::class.java)
-            alarmpendingIntent = PendingIntent.getBroadcast(this,0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        calendar.add(Calendar.SECOND, 5)
 
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = System.currentTimeMillis()
-            calendar.add(Calendar.SECOND, 5)
-            alarmManager!!.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis,5000, alarmpendingIntent)
-
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            val sTime = simpleDateFormat.format(calendar.time)
-            Log.e(TAG, "설정된 알람 시간 : $sTime")
-
+        if (isRepeat) {
+            // 반복 설정
+            alarmManager?.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 5000, alarmPendingIntent)
         } else {
-
-            DestroyAlarm()
-
-            // 1회용
-            alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-            alarmIntent = Intent(this, AlarmReceiver::class.java)
-            alarmpendingIntent = PendingIntent.getBroadcast(this,0,alarmIntent,PendingIntent.FLAG_UPDATE_CURRENT)
-
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = System.currentTimeMillis()
-            calendar.add(Calendar.SECOND, 5)
-            alarmManager!![AlarmManager.RTC_WAKEUP, calendar.timeInMillis] = alarmpendingIntent
-
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            val sTime = simpleDateFormat.format(calendar.time)
-            Log.e(TAG, "설정된 알람 시간 : $sTime")
+            // 한번만 설정
+            alarmManager?.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmPendingIntent)
         }
+
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val formattedTime = simpleDateFormat.format(calendar.time)
+        Log.e(tag, "설정된 알람 시간: $formattedTime")
     }
 
-    private fun DestroyAlarm() {
-
-        if (alarmpendingIntent != null) {
-
-            alarmpendingIntent = PendingIntent.getBroadcast(this,0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-            alarmManager!!.cancel(alarmpendingIntent)
-            alarmpendingIntent!!.cancel()
+    private fun destroyAlarm() {
+        if (alarmPendingIntent != null) {
+            alarmManager?.cancel(alarmPendingIntent)
+            alarmPendingIntent?.cancel()
             alarmManager = null
-            alarmpendingIntent = null
+            alarmPendingIntent = null
         }
     }
 }

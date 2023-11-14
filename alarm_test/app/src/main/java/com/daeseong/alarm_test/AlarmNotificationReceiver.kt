@@ -8,9 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class AlarmNotificationReceiver : BroadcastReceiver() {
 
@@ -18,22 +18,26 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
-        //호출후 삭제시 필요
-        val nID = intent.extras!!.getInt("alarmID")
-        Log.e(tag, "호출 시간 : " + getTimeDate() + " ID:" + nID);
+        // 호출 후 삭제시 필요
+        val nID = intent.extras?.getInt("alarmID") ?: 0
+        Log.e(tag, "호출 시간 : ${getTimeDate()} ID:$nID")
 
-        //activity에 전달
+        // activity에 전달
         val iID = Intent("com.daeseong.alarm_test.ID")
         iID.putExtra("alarmID", nID)
         context.sendBroadcast(iID)
 
         val notifyID = 1
-        val schannelID = "daeseong_01"
-        val builder: Notification.Builder
-        builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Notification.Builder(context, schannelID) //For > API26 (OREO)
+        val channelID = "daeseong_01"
+        val builder: NotificationCompat.Builder
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelID,"알림", NotificationManager.IMPORTANCE_DEFAULT)
+            val notifyManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notifyManager.createNotificationChannel(channel)
+            builder = NotificationCompat.Builder(context, channelID)
         } else {
-            Notification.Builder(context)
+            builder = NotificationCompat.Builder(context)
         }
 
         builder.setAutoCancel(true)
@@ -44,21 +48,12 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
             .setContentText("내용")
             .setDefaults(Notification.DEFAULT_LIGHTS or Notification.DEFAULT_SOUND)
 
-        val notify = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                schannelID,
-                "알림",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notify.createNotificationChannel(channel)
-        }
-        notify.notify(notifyID, builder.build())
+        val notifyManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notifyManager.notify(notifyID, builder.build())
     }
 
     private fun getTimeDate(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return dateFormat.format(Date())
     }
 }

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.daeseong.alarm_test">
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -15,13 +16,13 @@
         <receiver android:name=".AlarmNotificationReceiver" />
         <receiver android:name=".AlarmReceiver" />
 
-        <activity android:name=".Main6Activity"></activity>
+        <activity android:name=".Main6Activity" />
         <activity android:name=".Main5Activity" />
         <activity android:name=".Main4Activity" />
         <activity android:name=".Main3Activity" />
         <activity android:name=".Main2Activity" />
         <activity android:name=".Main1Activity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
