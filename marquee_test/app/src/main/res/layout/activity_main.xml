@@ -13,7 +13,7 @@
         android:textAlignment="center"
         android:text="marquee"
         android:singleLine="true"
-        android:textSize="12dp"
+        android:textSize="16dp"
         android:textColor="#ff9900"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
