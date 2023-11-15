@@ -1,27 +1,31 @@
 package com.daeseong.audiorecorder_test
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.daeseong.audiorecorder_test.AudioPlayer.OnMediaPlayerListener
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag = MainActivity::class.java.simpleName
+    private companion object {
+        private val tag = MainActivity::class.java.name
+    }
 
-    private val permissions = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private lateinit var requestPermissions: ActivityResultLauncher<Array<String>>
 
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var button3: Button? = null
-    private var button4: Button? = null
+    private val PERMISSIONS = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private val PERMISSIONS33 = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_MEDIA_AUDIO)
+
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
 
     private var audioRecorder: AudioRecorder? = null
     private var audioPlayer: AudioPlayer? = null
@@ -32,53 +36,47 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         audioRecorder = AudioRecorder.getInstance(this)
-        audioPlayer = AudioPlayer.getInstance(this)
+        audioPlayer = AudioPlayer.instance
 
-        checkPermissions()
+        initPermissionsLauncher()
 
-        button1 = findViewById<View>(R.id.button1) as Button
-        button1!!.setOnClickListener {
+        button1 = findViewById(R.id.button1)
+        button1.setOnClickListener {
 
             if (audioRecorder!!.isRecording()) {
-
                 length = audioRecorder!!.stopRecord()
                 audioRecorder!!.release()
                 Log.e(tag, "녹음이 완료되었습니다. length:$length")
             } else {
-
                 audioRecorder!!.startRecord("katakata")
                 Log.e(tag, "녹음을 시작합니다.")
             }
         }
 
-        button2 = findViewById<View>(R.id.button2) as Button
-        button2!!.setOnClickListener {
+        button2 = findViewById(R.id.button2)
+        button2.setOnClickListener {
 
             if (length > 0) {
-
-                val sFilename = audioRecorder!!.getSaveFolder()!!.absoluteFile.toString()
+                val sFilename = audioRecorder!!.getSaveFolder()?.absolutePath
                 Log.e(tag, "sFilename:$sFilename length:$length")
-
-                if (audioRecorder!!.getSaveFolder() != null) {
-
-                    val file = audioRecorder!!.getSaveFolder()!!.absoluteFile
-                    if (file.delete()) {
+                audioRecorder!!.getSaveFolder()?.let {
+                    if (it.delete()) {
                         Log.e(tag, "파일이 삭제 되었습니다.")
                     }
                 }
             }
         }
 
-        button3 = findViewById<View>(R.id.button3) as Button
-        button3!!.setOnClickListener(View.OnClickListener {
+        button3 = findViewById(R.id.button3)
+        button3.setOnClickListener {
 
-            val sRedordPath = audioRecorder!!.getSaveFolder()!!.absoluteFile.path
-            if (sRedordPath!!.isEmpty()) {
+            val sRecordPath = audioRecorder!!.getSaveFolder()?.absolutePath
+            if (sRecordPath.isNullOrEmpty()) {
                 Log.e(tag, "녹음된 파일을 찾을 수 없습니다.")
-                return@OnClickListener
+                return@setOnClickListener
             }
 
-            audioPlayer!!.play(sRedordPath, object : OnMediaPlayerListener {
+            audioPlayer!!.play(sRecordPath, object : OnMediaPlayerListener {
                 override fun onCompletion(bComplete: Boolean) {
                     Log.e(tag, "녹음된 내용을 전부 들었습니다.")
                 }
@@ -87,61 +85,102 @@ class MainActivity : AppCompatActivity() {
                     Log.e(tag, "녹음된 파일이 준비가 되었습니다.")
                 }
             })
-        })
+        }
 
-        button4 = findViewById<View>(R.id.button4) as Button
-        button4!!.setOnClickListener {
+        button4 = findViewById(R.id.button4)
+        button4.setOnClickListener {
+
             if (audioPlayer!!.isPlaying()) {
-
                 Log.e(tag, "녹음된 내용 플레이 중지")
                 audioPlayer!!.pause()
             } else {
-
                 Log.e(tag, "녹음된 내용 플레이 시작")
                 audioPlayer!!.start()
             }
         }
+
+        checkPermissions()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        if (audioRecorder!!.isRecording()) {
-            audioRecorder!!.stopRecord()
-        }
-
-        audioPlayer!!.release()
-    }
-
-    private fun hasPermissions(context: Context?, vararg permissions: String): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
-            for (permission in permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    return false
+        audioRecorder?.let {
+            if (it.isRecording()) {
+                try {
+                    it.stopRecord()
+                } catch (ex: Exception) {
+                    Log.e(tag, ex.message.toString())
                 }
             }
         }
-        return true
+        audioPlayer?.release()
+    }
+
+    private fun initPermissionsLauncher() {
+
+        requestPermissions =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+                    val bRecord = result[Manifest.permission.RECORD_AUDIO] == true
+                    val bAudio = result[Manifest.permission.READ_MEDIA_AUDIO] == true
+
+                    if (bRecord && bAudio) {
+                        Log.e(tag, "PERMISSIONS 권한 소유")
+                    } else {
+                        Log.e(tag, "PERMISSIONS 권한 미소유")
+                    }
+
+                } else {
+
+                    val bRecord = result[Manifest.permission.RECORD_AUDIO] == true
+                    val bAudio = result[Manifest.permission.WRITE_EXTERNAL_STORAGE] == true
+
+                    if (bRecord && bAudio) {
+                        Log.e(tag, "PERMISSIONS 권한 소유")
+                    } else {
+                        Log.e(tag, "PERMISSIONS 권한 미소유")
+                    }
+                }
+            }
     }
 
     private fun checkPermissions() {
-        if (!hasPermissions(this, *permissions)) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(this, permissions, 1)
-            } else {
-                ActivityCompat.requestPermissions(this, permissions, 1)
-            }
-        }
-    }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (requestCode == 1) {
-            for (i in permissions.indices) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e(tag, "권한이 승인됨 상태:" + permissions[i])
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            var bPermissResult = false
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+                for (permission in PERMISSIONS33) {
+                    bPermissResult = checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+                    if (!bPermissResult) {
+                        break
+                    }
+                }
+
+                if (!bPermissResult) {
+                    requestPermissions.launch(PERMISSIONS33)
                 } else {
-                    Log.e(tag, "권한이 승인되지 않음 상태:" + permissions[i])
+                    Log.e(tag, "PERMISSIONS33 권한 소유")
+                }
+
+            } else {
+
+                for (permission in PERMISSIONS) {
+                    bPermissResult = checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+                    if (!bPermissResult) {
+                        break
+                    }
+                }
+
+                if (!bPermissResult) {
+                    requestPermissions.launch(PERMISSIONS)
+                } else {
+                    Log.e(tag, "PERMISSIONS 권한 소유")
                 }
             }
         }

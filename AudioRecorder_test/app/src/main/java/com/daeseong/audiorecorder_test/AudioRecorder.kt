@@ -3,79 +3,76 @@ package com.daeseong.audiorecorder_test
 import android.content.Context
 import android.media.MediaRecorder
 import android.os.Environment
-import android.util.Log
 import java.io.File
 import java.io.IOException
 
-class AudioRecorder {
-
-    private val tag = AudioRecorder::class.java.name
+class AudioRecorder private constructor(private val context: Context) {
 
     companion object {
 
-        private var recorder: MediaRecorder? = null
-        private var saveFolder: File? = null
-        private var mContext: Context? = null
-        private var isRecording = false
-        private var recordingStart: Long = 0
+        private val tag = AudioRecorder::class.java.name
 
         private var instance: AudioRecorder? = null
+
+        @JvmStatic
         fun getInstance(context: Context): AudioRecorder {
             if (instance == null) {
-                instance = AudioRecorder()
+                instance = AudioRecorder(context)
             }
-            return instance as AudioRecorder
+            return instance!!
         }
     }
 
-    fun AudioRecorder(context: Context) {
-        recorder = MediaRecorder()
-        mContext = context
-    }
+    private var recorder: MediaRecorder? = null
+    private var saveFolder: File? = null
+    private var isRecording = false
+    private var recordingStart: Long = 0
 
     fun startRecord(sfilename: String): Boolean {
-        return if (!isRecording) {
-
+        if (!isRecording) {
             val sFile = "$sfilename.aac"
-            saveFolder = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), sFile)
+            saveFolder = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC),
+                sFile
+            )
 
-            if (recorder == null) {
-                recorder = MediaRecorder()
-            }
+            recorder = MediaRecorder()
 
             try {
-                recorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
-                recorder!!.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS)
-                recorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                recorder!!.setOutputFile(saveFolder!!.absolutePath)
-                recorder!!.prepare()
-                recorder!!.start()
-                recordingStart = System.currentTimeMillis()
-                isRecording = true
-                true
+                recorder?.apply {
+                    setAudioSource(MediaRecorder.AudioSource.MIC)
+                    setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS)
+                    setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                    setOutputFile(saveFolder?.absolutePath)
+                    prepare()
+                    start()
+
+                    recordingStart = System.currentTimeMillis()
+                    isRecording = true
+                }
+                return true
             } catch (iex: IOException) {
                 iex.printStackTrace()
-                false
+                return false
             }
         } else {
-            true
+            return true
         }
     }
 
     fun stopRecord(): Int {
         var nDuration = 0
 
-        if (recorder != null) {
-
+        recorder?.let {
             nDuration = ((System.currentTimeMillis() - recordingStart) / 1000).toInt()
             isRecording = false
 
             if (isRecording) {
-                recorder!!.stop()
+                it.stop()
             }
 
-            recorder!!.reset()
-            recorder!!.release()
+            it.reset()
+            it.release()
             recorder = null
         }
         return nDuration
@@ -83,11 +80,11 @@ class AudioRecorder {
 
     fun release() {
         try {
-            recorder!!.stop()
-            recorder!!.release()
+            recorder?.stop()
+            recorder?.release()
             recorder = null
         } catch (ex: Exception) {
-            ex.message.toString()
+            ex.message?.toString()
         }
     }
 
