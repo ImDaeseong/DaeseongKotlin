@@ -1,29 +1,39 @@
 package com.daeseong.webview_test
 
 import android.annotation.TargetApi
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import android.webkit.*
+import android.webkit.JsResult
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class WebView1Activity : AppCompatActivity() {
 
-    private val tag: String = WebView1Activity::class.java.simpleName
+    private val tag = WebView1Activity::class.java.simpleName
 
-    private lateinit var sTitle: String
-    private lateinit var context: Context
-    private lateinit var webView: WebView
+    lateinit var sTitle: String
+    lateinit var context: Context
+    lateinit var webView: WebView
 
-    private fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return connectivityManager.isDefaultNetworkActive
+    companion object {
+        fun isNetworkAvailable(context: Context): Boolean {
+            val connectivityManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            return networkInfo != null && networkInfo.isConnected
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,18 +41,18 @@ class WebView1Activity : AppCompatActivity() {
         setContentView(R.layout.activity_web_view1)
 
         context = applicationContext
-        sTitle = ""
 
         webView = findViewById(R.id.webview1)
         webView.settings.javaScriptEnabled = true
 
         webView.webViewClient = CustomWebViewClient()
+
         webView.webChromeClient = object : WebChromeClient() {
             override fun onJsAlert(view: WebView, url: String, message: String, result: JsResult): Boolean {
                 AlertDialog.Builder(view.context)
                     .setTitle("알림")
                     .setMessage(message)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                    .setPositiveButton(android.R.string.ok) { dialog, which ->
                         result.confirm()
                     }
                     .setCancelable(false)
@@ -55,10 +65,10 @@ class WebView1Activity : AppCompatActivity() {
                 AlertDialog.Builder(view.context)
                     .setTitle("알림")
                     .setMessage(message)
-                    .setPositiveButton("네") { _, _ ->
+                    .setPositiveButton("네") { dialog, which ->
                         result.confirm()
                     }
-                    .setNegativeButton("아니오") { _, _ ->
+                    .setNegativeButton("아니오") { dialog, which ->
                         result.cancel()
                     }
                     .setCancelable(false)
@@ -67,13 +77,13 @@ class WebView1Activity : AppCompatActivity() {
                 return true
             }
 
-            override fun onReceivedTitle(view: WebView?, title: String) {
+            override fun onReceivedTitle(view: WebView, title: String) {
                 super.onReceivedTitle(view, title)
                 Log.e(tag, "title:$title")
             }
         }
 
-        if (isNetworkAvailable(context)) {
+        if (isNetworkAvailable(this)) {
             webView.loadUrl("file:///android_asset/test1.html")
         } else {
             webView.loadUrl("about:blank")
@@ -81,17 +91,19 @@ class WebView1Activity : AppCompatActivity() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
             webView.goBack()
             return true
         }
         return super.onKeyDown(keyCode, event)
     }
 
-    inner class CustomWebViewClient : WebViewClient() {
+    private inner class CustomWebViewClient : WebViewClient() {
+
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            Log.d("test1.html 에서 링크 클릭시:", url)
+
             try {
-                Log.d("test1.html 에서 링크 클릭시:", url)
                 if (url.startsWith("app://")) {
                     val intent = Intent(context, MainActivity::class.java)
                     startActivity(intent)
@@ -106,6 +118,8 @@ class WebView1Activity : AppCompatActivity() {
 
         @TargetApi(Build.VERSION_CODES.N)
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+            Log.d("test1.html 에서 링크 클릭시:", request.url.toString())
+
             try {
                 val url = request.url.toString()
                 if (url.startsWith("app://")) {
@@ -132,10 +146,10 @@ class WebView1Activity : AppCompatActivity() {
             super.onPageStarted(view, url, favicon)
         }
 
-        override fun onPageFinished(view: WebView, url: String?) {
+        override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
-            sTitle = view.title ?: ""
-            Log.e(tag, "onPageFinished: $sTitle")
+            sTitle = view?.title ?: ""
+            Log.d("onPageFinished", sTitle)
         }
     }
 }

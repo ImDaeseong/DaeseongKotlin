@@ -2,34 +2,43 @@ package com.daeseong.webview_test
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.webkit.*
+import android.webkit.JavascriptInterface
+import android.webkit.JsResult
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-
 
 class WebView2Activity : AppCompatActivity() {
 
-    private val tag: String = WebView2Activity::class.java.simpleName
+    private val tag = WebView2Activity::class.java.simpleName
 
-    private var sTitle: String? = null
-    private var context: Context? = null
-    private var webView: WebView? = null
-    private var progressBar: ProgressBar? = null
+    lateinit var sTitle: String
+    lateinit var context: Context
+    lateinit var webView: WebView
+    lateinit var progressBar: ProgressBar
 
-    private fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return connectivityManager.isDefaultNetworkActive
+    companion object {
+        fun isNetworkAvailable(context: Context): Boolean {
+            val connectivityManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            return networkInfo != null && networkInfo.isConnected
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,230 +47,152 @@ class WebView2Activity : AppCompatActivity() {
 
         context = applicationContext
 
-        progressBar = findViewById<ProgressBar>(R.id.progressBar1)
+        progressBar = findViewById(R.id.progressBar1)
 
-        webView = findViewById<WebView>(R.id.webview1)
-        webView!!.settings.javaScriptEnabled = true//웹뷰에서 자바스크립트 실행 가능
+        webView = findViewById(R.id.webview1)
+        webView.settings.javaScriptEnabled = true
 
+        webView.addJavascriptInterface(WebJavaScriptInterface(this), "Android")
 
-        //webView!!.setBackgroundColor(0)
-        //webView!!.isHorizontalScrollBarEnabled = false
-        //webView!!.isVerticalScrollBarEnabled = false
+        webView.webViewClient = CustomWebViewClient()
 
-        //inner class
-        webView!!.addJavascriptInterface(webJavaScriptInterfaceIn(), "Android")
-
-        //외부 class
-        //webView!!.addJavascriptInterface(webJavaScriptInterfaceOut(this, webView), "Android")
-
-        webView!!.webViewClient = CustomWebViewClient()
-
-        //웹뷰에서 자바스크립트 alert과 confirm 이 동작하게 처리
-        webView!!.webChromeClient = object : WebChromeClient() {
-
-            override fun onProgressChanged(view: WebView, newProgress: Int) {
-
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 if (newProgress == 100) {
-
-                    progressBar!!.visibility = View.GONE
-
+                    progressBar.visibility = View.GONE
                 } else {
-
-                    if (progressBar!!.visibility == View.GONE)
-                        progressBar!!.visibility = View.VISIBLE
-
-                    progressBar!!.progress = newProgress
+                    if (progressBar.visibility == View.GONE)
+                        progressBar.visibility = View.VISIBLE
+                    progressBar.progress = newProgress
                 }
                 super.onProgressChanged(view, newProgress)
             }
 
-            //alert 처리
-            override fun onJsAlert(view: WebView, url: String, message: String, result: JsResult): Boolean {
-
-                AlertDialog.Builder(view.context)
+            override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                AlertDialog.Builder(view?.context!!)
                     .setTitle("알림1")
                     .setMessage(message)
-                    .setPositiveButton(
-                        "네"
-                    ) { _, _ ->
-                        result.confirm()
+                    .setPositiveButton("네") { _, _ ->
+                        result?.confirm()
                     }
                     .setCancelable(false)
                     .create()
                     .show()
                 return true
-                //return super.onJsAlert(view, url, message, result);
             }
 
-            //confirm 처리
-            override fun onJsConfirm(view: WebView, url: String, message: String, result: JsResult): Boolean {
-
-                AlertDialog.Builder(view.context)
+            override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                AlertDialog.Builder(view?.context!!)
                     .setTitle("알림1")
                     .setMessage(message)
-                    .setPositiveButton(
-                        "네"
-                    ) { _, _ ->
-                        result.confirm()
+                    .setPositiveButton("네") { _, _ ->
+                        result?.confirm()
                     }
-                    .setNegativeButton(
-                        "아니오"
-                    ) { _, _ ->
-                        result.cancel()
+                    .setNegativeButton("아니오") { _, _ ->
+                        result?.cancel()
                     }
                     .setCancelable(false)
                     .create()
                     .show()
                 return true
-                //return super.onJsConfirm(view, url, message, result);
             }
 
-            override fun onReceivedTitle(view: WebView?, title: String) {
+            override fun onReceivedTitle(view: WebView?, title: String?) {
                 super.onReceivedTitle(view, title)
-
                 Log.e(tag, "title:$title")
             }
         }
 
-
-        //네트워크 연결 여부
-        if(isNetworkAvailable(this)){
-            webView!!.loadUrl("file:///android_asset/test2.html")
-        }else {
-            webView!!.loadUrl("about:blank")
+        if (isNetworkAvailable(this)) {
+            webView.loadUrl("file:///android_asset/test2.html")
+        } else {
+            webView.loadUrl("about:blank")
         }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-
-        //웹뷰에서 백버튼 클릭시
-        if (keyCode == KeyEvent.KEYCODE_BACK && webView!!.canGoBack()) {
-            webView!!.goBack()
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+            webView.goBack()
             return true
         }
         return super.onKeyDown(keyCode, event)
     }
 
-    inner class CustomWebViewClient : WebViewClient() {
+    private inner class CustomWebViewClient : WebViewClient() {
 
-        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+        override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
             try {
 
-                Log.d(tag, "shouldOverrideUrlLoading:$url")
+                if (url != null) {
 
-                if (url.startsWith("app://")) {
+                    Log.e(tag,"UrlLoading1:$url")
 
-                    val intent = Intent(context!!.applicationContext, MainActivity::class.java)
-                    startActivity(intent)
-                } else {
-
-                    view.loadUrl(url)
+                    if (url!!.startsWith("app://")) {
+                        val intent = Intent(context.applicationContext, MainActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        view?.loadUrl(url)
+                    }
                 }
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
             return true
-            //return super.shouldOverrideUrlLoading(view, url);
         }
 
         @TargetApi(Build.VERSION_CODES.N)
-        override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
             try {
 
-                val url = request.url.toString()
-                Log.d("UrlLoading2", url)
+                val url = request?.url.toString()
+
+                Log.e(tag,"UrlLoading2:$url")
 
                 if (url.startsWith("app://")) {
-
-                    val intent = Intent(context!!.applicationContext, MainActivity::class.java)
+                    val intent = Intent(context.applicationContext, MainActivity::class.java)
                     startActivity(intent)
                 } else {
-
-                    view.loadUrl(url)
+                    view?.loadUrl(url)
                 }
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
             return true
-            //return super.shouldOverrideUrlLoading(view, request);
         }
 
-        override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
+        override fun onReceivedError(
+            view: WebView?,
+            errorCode: Int,
+            description: String?,
+            failingUrl: String?
+        ) {
             super.onReceivedError(view, errorCode, description, failingUrl)
-
-        }
-
-        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-            super.onReceivedError(view, request, error)
-
-            progressBar!!.visibility = View.GONE
+            progressBar.visibility = View.GONE
         }
 
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-
-            progressBar!!.visibility = View.VISIBLE
+            progressBar.visibility = View.VISIBLE
         }
 
-        override fun onPageFinished(view: WebView, url: String?) {
+        override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
-
-            progressBar!!.visibility = View.GONE
-            sTitle = view.title ?: ""
-            Log.e(tag, "onPageFinished: $sTitle")
+            progressBar.visibility = View.GONE
+            sTitle = view?.title ?: ""
+            Log.e(tag,"onPageFinished:$sTitle")
         }
     }
 
-
-    //inner class
-    inner class webJavaScriptInterfaceIn  {
+    private inner class WebJavaScriptInterface(private val activity: Activity) {
 
         @JavascriptInterface
         fun Javascript_makeText(message: String) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
         }
 
         @JavascriptInterface
         fun Javascript_finish() {
-
-            try {
-
-                finish()
-
-            }catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-}
-
-//외부 class
-class webJavaScriptInterfaceOut  {
-
-    private var context: Context? = null
-    private var webView: WebView? = null
-
-    constructor(context: Context?, webView: WebView?) {
-        this.context = context
-        this.webView = webView
-    }
-
-    @JavascriptInterface
-    fun Javascript_makeText(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-
-    @JavascriptInterface
-    fun Javascript_finish() {
-
-        try {
-
-            val activity = context as Activity
             activity.finish()
-
-        }catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 }
