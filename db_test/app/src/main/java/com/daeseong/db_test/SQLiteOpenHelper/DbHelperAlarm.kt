@@ -8,13 +8,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
 
-
-class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, version: Int) :  SQLiteOpenHelper(
-    context,
-    DATABASE_NAME,
-    factory,
-    DATABASE_VERSION
-) {
+class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, version: Int) :
+    SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_VERSION = 2
@@ -28,15 +23,16 @@ class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, v
 
     override fun onCreate(db: SQLiteDatabase) {
         try {
-
             db.execSQL("DROP TABLE IF EXISTS $TABLE_ALARM")
 
-            val createTable = ("CREATE TABLE " +
-                    TABLE_ALARM + "("
-                    + COLUMN_ID + " INTEGER PRIMARY KEY,"
-                    + COLUMN_TITLE + " TEXT NOT NULL, "
-                    + COLUMN_CONTENT + " TEXT NOT NULL, "
-                    + COLUMN_WRITEDATE + " DATETIME DEFAULT CURRENT_DATE);")
+            val createTable = (
+                    "CREATE TABLE " +
+                            "$TABLE_ALARM(" +
+                            "$COLUMN_ID INTEGER PRIMARY KEY," +
+                            "$COLUMN_TITLE TEXT NOT NULL, " +
+                            "$COLUMN_CONTENT TEXT NOT NULL, " +
+                            "$COLUMN_WRITEDATE DATETIME DEFAULT CURRENT_DATE);"
+                    )
             db.execSQL(createTable)
 
         } catch (e: Exception) {
@@ -46,20 +42,21 @@ class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, v
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         try {
-
             if (oldVersion == 1 && newVersion == 2) {
-
                 db.execSQL("DROP TABLE IF EXISTS $TABLE_ALARM")
 
-                val createTable = ("CREATE TABLE " +
-                        TABLE_ALARM + "("
-                        + COLUMN_ID + " INTEGER PRIMARY KEY,"
-                        + COLUMN_TITLE + " TEXT NOT NULL, "
-                        + COLUMN_CONTENT + " TEXT NOT NULL, "
-                        + COLUMN_WRITEDATE + " DATETIME DEFAULT CURRENT_DATE);")
+                val createTable = (
+                        "CREATE TABLE " +
+                                "$TABLE_ALARM(" +
+                                "$COLUMN_ID INTEGER PRIMARY KEY," +
+                                "$COLUMN_TITLE TEXT NOT NULL, " +
+                                "$COLUMN_CONTENT TEXT NOT NULL, " +
+                                "$COLUMN_WRITEDATE DATETIME DEFAULT CURRENT_DATE);"
+                        )
                 db.execSQL(createTable)
 
             } else if (oldVersion == 2 && newVersion == 3) {
+                // Add upgrade logic if needed in the future
             }
 
         } catch (e: Exception) {
@@ -68,13 +65,12 @@ class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, v
     }
 
     fun addAlarm(alarm: Alarm) {
-
         try {
-
-            val db = this.writableDatabase
-            val values = ContentValues()
-            values.put(COLUMN_TITLE, alarm.getTitle())
-            values.put(COLUMN_CONTENT, alarm.getContent())
+            val db = writableDatabase
+            val values = ContentValues().apply {
+                put(COLUMN_TITLE, alarm.title)
+                put(COLUMN_CONTENT, alarm.content)
+            }
 
             db.insert(TABLE_ALARM, null, values)
             db.close()
@@ -85,14 +81,13 @@ class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, v
     }
 
     fun updateAlarm(alarm: Alarm) {
-
         try {
+            val db = writableDatabase
+            val values = ContentValues().apply {
+                put(COLUMN_CONTENT, alarm.content)
+            }
 
-            val db = this.writableDatabase
-            val values = ContentValues()
-            values.put(COLUMN_CONTENT, alarm.getContent())
-
-            val filter = COLUMN_TITLE + " = \"" + alarm.getTitle() + "\""
+            val filter = "$COLUMN_TITLE = \"${alarm.title}\""
             db.update(TABLE_ALARM, values, filter, null)
             db.close()
 
@@ -102,11 +97,8 @@ class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, v
     }
 
     fun deleteAlarm(title: String) {
-
         try {
-
-            val db = this.writableDatabase
-
+            val db = writableDatabase
             val filter = "$COLUMN_TITLE = \"$title\""
             db.delete(TABLE_ALARM, filter, null)
             db.close()
@@ -117,12 +109,9 @@ class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, v
     }
 
     fun deleteMaxData() {
-
         try {
-
-            val db = this.writableDatabase
-
-            val query = "DELETE from alarms where _id = (select min(_id) from alarms);"
+            val db = writableDatabase
+            val query = "DELETE from $TABLE_ALARM where $COLUMN_ID = (select min($COLUMN_ID) from $TABLE_ALARM);"
             val cursor = db.rawQuery(query, null)
             cursor.moveToFirst()
             db.close()
@@ -133,57 +122,46 @@ class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, v
     }
 
     fun getMaxData(): Alarm {
-
         var alarm = Alarm()
-
         try {
-
-            val db = this.readableDatabase
-            val query = "select * from alarms where _id = (select min(_id) from alarms)"
+            val db = readableDatabase
+            val query = "select * from $TABLE_ALARM where $COLUMN_ID = (select min($COLUMN_ID) from $TABLE_ALARM)"
             val cursor: Cursor = db.rawQuery(query, null)
 
             if (cursor != null && cursor.moveToFirst() && cursor.count > 0) {
                 cursor.moveToFirst()
                 alarm = Alarm(
-                    cursor.getString(0).toInt(),
+                    cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2),
-                    cursor.getString(
-                        3
-                    )
+                    cursor.getString(3)
                 )
                 cursor.close()
             }
             db.close()
 
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return alarm
     }
 
     fun clearAlarm() {
-
         try {
-            val db = this.writableDatabase
-
+            val db = writableDatabase
             db.delete(TABLE_ALARM, "", null)
             db.close()
 
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     fun getAlarmList(): List<Alarm> {
-
         val alarmList: MutableList<Alarm> = ArrayList()
-
         try {
-
-            val db = this.readableDatabase
-            val cursor = db.rawQuery("Select _id, title, content, writeDate from $TABLE_ALARM",null)
+            val db = readableDatabase
+            val cursor = db.rawQuery("Select $COLUMN_ID, $COLUMN_TITLE, $COLUMN_CONTENT, $COLUMN_WRITEDATE from $TABLE_ALARM", null)
 
             while (cursor.moveToNext()) {
                 val id = cursor.getInt(0)
@@ -196,35 +174,29 @@ class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, v
             cursor.close()
             db.close()
 
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return alarmList
     }
 
     fun getRowCount(): Int {
-
         var count: Long = 0
-
         try {
-
-            val db = this.readableDatabase
+            val db = readableDatabase
             count = DatabaseUtils.queryNumEntries(db, TABLE_ALARM)
             db.close()
 
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return count.toInt()
     }
 
     fun findAlarm(title: String): Boolean {
-
         var bFind = false
-
         try {
-
-            val db = this.readableDatabase
+            val db = readableDatabase
             val query = "SELECT * FROM $TABLE_ALARM WHERE $COLUMN_TITLE = \"$title\""
             val cursor = db.rawQuery(query, null)
             var idValue = 0
@@ -237,36 +209,32 @@ class DbHelperAlarm(context: Context?, name: String?, factory: CursorFactory?, v
             }
             db.close()
 
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return bFind
     }
 
     fun getAlarm(title: String): Alarm {
-
         var alarm = Alarm()
-
         try {
-
-            val db = this.readableDatabase
+            val db = readableDatabase
             val query = "SELECT * FROM $TABLE_ALARM WHERE $COLUMN_TITLE = \"$title\""
             val cursor = db.rawQuery(query, null)
 
             if (cursor.moveToFirst()) {
                 cursor.moveToFirst()
-                alarm!!.setId(cursor.getString(0).toInt())
-                alarm.setTitle(cursor.getString(1))
-                alarm.setContent(cursor.getString(2))
-                alarm.setWriteDate(cursor.getString(3))
+                alarm.id = cursor.getInt(0)
+                alarm.title = cursor.getString(1)
+                alarm.content = cursor.getString(2)
+                alarm.writeDate = cursor.getString(3)
                 cursor.close()
             }
             db.close()
 
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return alarm
     }
-
 }
