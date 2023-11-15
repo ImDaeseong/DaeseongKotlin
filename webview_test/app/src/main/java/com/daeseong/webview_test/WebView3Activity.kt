@@ -38,7 +38,8 @@ class WebView3Activity : AppCompatActivity() {
         webView = findViewById<WebView>(R.id.webview1)
         webView!!.settings.defaultTextEncodingName = "UTF-8"
         webView!!.settings.javaScriptEnabled = true
-        webView!!.settings.setAppCacheEnabled(true)
+        webView!!.settings.cacheMode = WebSettings.LOAD_NO_CACHE //캐시모드를 사용하지 않고 네트워크를 통해서만 호출
+        //webView!!.settings.setAppCacheEnabled(true)
         webView!!.webViewClient = CustomWebViewClient()
 
 

@@ -2,6 +2,7 @@ package com.daeseong.fcm_test
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -46,16 +47,20 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == 1) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                //Log.e(tag, "WRITE_EXTERNAL_STORAGE 권한 없음")
+                Log.e(tag, "POST_NOTIFICATIONS 권한 없음")
             } else {
-                //Log.e(tag, "WRITE_EXTERNAL_STORAGE 권한 있음")
+                Log.e(tag, "POST_NOTIFICATIONS 권한 있음")
             }
         }
     }
 
     private fun checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS),1)
+            }
         }
     }
 }

@@ -207,9 +207,8 @@ class WebView2Activity : AppCompatActivity() {
             super.onPageFinished(view, url)
 
             progressBar!!.visibility = View.GONE
-            sTitle = view.title
-
-            Log.d("onPageFinished", sTitle)
+            sTitle = view.title ?: ""
+            Log.e(tag, "onPageFinished: $sTitle")
         }
     }
 
