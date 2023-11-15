@@ -1,4 +1,0 @@
-include ':nativetemplatesA'
-include ':app'
-project(':nativetemplatesA').projectDir = new File(rootDir, 'nativetemplates/')
-rootProject.name = "admobNative_test"
