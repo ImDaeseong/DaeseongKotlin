@@ -1,7 +1,10 @@
 package com.daeseong.kakao_v2_test
 
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -36,26 +39,56 @@ class MainActivity : AppCompatActivity() {
 
         button1 = findViewById(R.id.button1)
         button1.setOnClickListener {
+
+            if (!ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
+                Kakaoinstall(this)
+                return@setOnClickListener
+            }
+
             kakaoLogin()
         }
 
         button2 = findViewById(R.id.button2)
         button2.setOnClickListener {
+
+            if (!ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
+                Kakaoinstall(this)
+                return@setOnClickListener
+            }
+
             kakaoLogout()
         }
 
         button3 = findViewById(R.id.button3)
         button3.setOnClickListener {
+
+            if (!ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
+                Kakaoinstall(this)
+                return@setOnClickListener
+            }
+
             kakaoTokenInfo()
         }
 
         button4 = findViewById(R.id.button4)
         button4.setOnClickListener {
+
+            if (!ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
+                Kakaoinstall(this)
+                return@setOnClickListener
+            }
+
             kakaoUnregister()
         }
 
         button5 = findViewById(R.id.button5)
         button5.setOnClickListener {
+
+            if (!ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
+                Kakaoinstall(this)
+                return@setOnClickListener
+            }
+
             kakaoLink()
             //kakaolink_temp()
         }
@@ -234,4 +267,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun Kakaoinstall(activity: Activity) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("market://details?id=" + "com.kakao.talk")
+        activity.startActivity(intent)
+    }
 }
