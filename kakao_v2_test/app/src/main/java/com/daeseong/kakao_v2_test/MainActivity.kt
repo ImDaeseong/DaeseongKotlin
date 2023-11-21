@@ -18,6 +18,7 @@ import com.kakao.sdk.user.model.AccessTokenInfo
 import com.kakao.sdk.user.model.User
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,11 +41,7 @@ class MainActivity : AppCompatActivity() {
         button1 = findViewById(R.id.button1)
         button1.setOnClickListener {
 
-            if (!ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
-                Kakaoinstall(this)
-                return@setOnClickListener
-            }
-
+            //카카오 미설치시 웹으로 로그인
             kakaoLogin()
         }
 
@@ -90,7 +87,25 @@ class MainActivity : AppCompatActivity() {
             }
 
             kakaoLink()
-            //kakaolink_temp()
+            //kakaolink1()
+            //kakaolink2()
+        }
+
+        if (intent != null && intent.data != null) {
+            val uri = intent.data
+            if (uri != null) {
+                val sURi = uri.toString().lowercase(Locale.getDefault())
+                if (sURi.contains("kakaolink")) {
+                    val sType1 = uri.getQueryParameter("key1")
+                    if (sType1 != null) {
+                        Log.e(tag, "key1:$sType1")
+                    }
+                    val sType2 = uri.getQueryParameter("key2")
+                    if (sType2 != null) {
+                        Log.e(tag, "key2:$sType2")
+                    }
+                }
+            }
         }
     }
 
@@ -195,13 +210,26 @@ class MainActivity : AppCompatActivity() {
         val imgUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
         val title = "[나의앱]\n나의앱 제목!"
         val desc = "나의앱에 대한 설명과 링크 정보:\nhttps://m.naver.com"
-        val linkUrl = ""
 
-        val content = Content(title, imgUrl, Link(linkUrl, linkUrl), desc)
+        //링크에 파라미터 전달 여부
+        val blinkparam = true
+
+        val param1 = mapOf("key1" to "value1", "key2" to "value2")
+
         val itemContent = ItemContent()
         val social = Social()
 
-        val button = com.kakao.sdk.template.model.Button("앱에서 보기", Link(linkUrl, linkUrl))
+        var content: Content
+        var button: com.kakao.sdk.template.model.Button
+
+        if (blinkparam) {
+            content = Content(title, imgUrl, Link(null, null, param1, null), desc)
+            button = Button("앱에서 보기", Link(null, null, param1, null))
+        } else {
+            content = Content(title, imgUrl, Link(), desc)
+            button = Button("앱에서 보기", Link())
+        }
+
         val buttons = arrayOf(button)
         val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList())
 
@@ -218,7 +246,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun kakaolink_temp() {
+    private fun kakaolink1() {
 
         //v1 에서  v2 변경된 내용
         //KakaoLinkService  -> ShareClient
@@ -230,16 +258,75 @@ class MainActivity : AppCompatActivity() {
         val imgUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
         val title = "[나의앱]\n나의앱 제목!"
         val desc = "나의앱에 대한 설명과 링크 정보:\nhttps://m.naver.com"
-        val linkUrl = "https://developers.kakao.com"
 
-        val content = Content(title, imgUrl, Link(linkUrl, linkUrl), desc)
+        //링크에 파라미터 전달 여부
+        val blinkparam = true
+
+        val param1 = mapOf("key1" to "value1", "key2" to "value2")
+
+        val itemContent = ItemContent()
+        val social = Social(0,0)
+
+        var content: Content
+        var Button1: com.kakao.sdk.template.model.Button
+        var Button2: com.kakao.sdk.template.model.Button
+
+        if (blinkparam) {
+            content = Content(title, imgUrl, Link(null, null, param1, null), desc)
+            Button1 = Button("앱에서 보기", Link(null, null, param1, null))
+            Button2 = Button("앱에서 보기1", Link(null, null, param1, null))
+        } else {
+            content = Content(title, imgUrl, Link(), desc)
+            Button1 = Button("앱에서 보기", Link())
+            Button2 = Button("앱에서 보기1", Link())
+        }
+
+        val buttons = arrayOf(Button1, Button2)
+        val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList())
+
+        ShareClient.instance.shareDefault(this, feedTemplate) { sharingResult, error ->
+            if (error != null) {
+                Log.e(tag, "KakaoTalk 공유 실패: $error")
+            } else if (sharingResult != null) {
+                startActivity(sharingResult.intent)
+                Log.e(tag, "${sharingResult.warningMsg}")
+                Log.e(tag, "${sharingResult.argumentMsg}")
+                Log.e(tag, "${sharingResult.warningMsg.size}")
+            }
+            null
+        }
+    }
+
+    private fun kakaolink2() {
+
+        //v1 에서  v2 변경된 내용
+        //KakaoLinkService  -> ShareClient
+        //KakaoTalkService  -> TalkApiClient
+
+        if (!ShareClient.instance.isKakaoTalkSharingAvailable(this))
+            return
+
+        val imgUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
+        val title = "[나의앱]\n나의앱 제목!"
+        val desc = "나의앱에 대한 설명과 링크 정보:\nhttps://m.naver.com"
+
+        //링크에 파라미터 전달 여부
+        val blinkparam = true
+
+        val param1 = mapOf("key1" to "https://m.naver.com", "key2" to "http://m.naver.com")
+
         val itemContent = ItemContent()
         val social = Social()
 
-        val Button1 = Button("앱에서 보기", Link(linkUrl, linkUrl))
-        val Button2 = Button("앱에서 보기1", Link("", ""))
-        val buttons = arrayOf(Button1, Button2)
-        val feedTemplate = FeedTemplate(content, itemContent, social, buttons.toList())
+        var content: Content
+
+        if (blinkparam) {
+            content = Content(title, imgUrl, Link(null, null, param1, null), desc)
+        } else {
+            content = Content(title, imgUrl, Link(), desc)
+        }
+
+        val feedTemplate = FeedTemplate(content, itemContent, social)
 
         ShareClient.instance.shareDefault(this, feedTemplate) { sharingResult, error ->
             if (error != null) {
