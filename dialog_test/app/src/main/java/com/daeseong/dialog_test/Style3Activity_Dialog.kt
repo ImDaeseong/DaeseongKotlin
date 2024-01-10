@@ -2,7 +2,6 @@ package com.daeseong.dialog_test
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowInsets
@@ -24,8 +23,6 @@ class Style3Activity_Dialog : AppCompatActivity() {
     }
 
     fun btnOK_Click(v: View) {
-
-        Log.e(tag, "btnOK")
         finish()
     }
 

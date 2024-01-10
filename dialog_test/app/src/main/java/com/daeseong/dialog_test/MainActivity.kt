@@ -16,6 +16,11 @@ class MainActivity : AppCompatActivity() {
         //startActivity(Intent(this, Style2Activity_Dialog::class.java))
         //startActivity(Intent(this, Style3Activity_Dialog::class.java))
         //startActivity(Intent(this, Style4Activity_Dialog::class.java))
+        //startActivity(Intent(this, Style5Activity_Dialog::class.java))
+        //startActivity(Intent(this, Style6Activity_Dialog::class.java))
+        //startActivity(Intent(this, Style7Activity_Dialog::class.java))
+        //startActivity(Intent(this, Style8Activity_Dialog::class.java))
+        startActivity(Intent(this, Style9Activity_Dialog::class.java))
     }
 
     override fun onBackPressed() {

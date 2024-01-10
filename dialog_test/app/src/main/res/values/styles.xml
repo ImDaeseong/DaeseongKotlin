@@ -17,9 +17,45 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- 슬라이딩 스타일  -->
+    <style name="BottomPopupSlideTheme">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+
     <style name="daeseong1DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="CenterPopupTheme1" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/border3_popup</item>
+    </style>
+
+    <style name="CenterPopupTheme2" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/border4_popup</item>
+    </style>
+
+    <style name="BottomPopupTheme1" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/border2_popup</item>
+    </style>
+
+    <style name="BottomPopupTheme2" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/border5_popup</item>
+    </style>
+
+    <style name="TransparentPopupTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/border6_popup</item>
     </style>
 
 </resources>
