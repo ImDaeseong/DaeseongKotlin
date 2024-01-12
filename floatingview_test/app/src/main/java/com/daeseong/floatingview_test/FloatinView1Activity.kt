@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.daeseong.floatingview_test.Utils.dip2px
+import com.daeseong.floatingview_test.Utils.slideingView
 
 class FloatinView1Activity : AppCompatActivity() {
 
@@ -75,9 +76,11 @@ class FloatinView1Activity : AppCompatActivity() {
         floatingView.getFloatingView().layoutParams = layoutParams
         rootView.addView(floatingView.getFloatingView())
 
+        //슬라이딩 효과
+        slideingView(floatingView.getFloatingView())
+
         floatingView.setText1("테스트 메시지1", Color.parseColor("#ff9900"))
         floatingView.setText2("테스트 메시지2", Color.parseColor("#ff9900"))
-
     }
 
     private fun showFloatingView2() {
@@ -103,9 +106,11 @@ class FloatinView1Activity : AppCompatActivity() {
         floatingView.getFloatingView().layoutParams = layoutParams
         rootView.addView(floatingView.getFloatingView())
 
+        //슬라이딩 효과
+        slideingView(floatingView.getFloatingView())
+
         floatingView.setText1("테스트 메시지1", Color.parseColor("#ff9900"))
         floatingView.setText2("테스트 메시지2", Color.parseColor("#ff9900"))
-
     }
 
     private fun showFloatingView3() {
@@ -130,6 +135,9 @@ class FloatinView1Activity : AppCompatActivity() {
 
         floatingView.getFloatingView().layoutParams = layoutParams
         rootView.addView(floatingView.getFloatingView())
+
+        //슬라이딩 효과
+        slideingView(floatingView.getFloatingView())
 
         floatingView.setText1("테스트 메시지1", Color.parseColor("#ff9900"))
         floatingView.setText2("테스트 메시지2", Color.parseColor("#ff9900"))

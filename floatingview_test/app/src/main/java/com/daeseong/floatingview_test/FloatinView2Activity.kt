@@ -74,9 +74,11 @@ class FloatinView2Activity : AppCompatActivity() {
         floatingView.getFloatingView().layoutParams = layoutParams
         rootView.addView(floatingView.getFloatingView())
 
+        //슬라이딩 효과
+        Utils.slideingView(floatingView.getFloatingView())
+
         floatingView.setText1("테스트 메시지1", Color.parseColor("#ff9900"))
         floatingView.setText2("테스트 메시지2", Color.parseColor("#ff9900"))
-
     }
 
     private fun showFloatingView2() {
@@ -102,9 +104,11 @@ class FloatinView2Activity : AppCompatActivity() {
         floatingView.getFloatingView().layoutParams = layoutParams
         rootView.addView(floatingView.getFloatingView())
 
+        //슬라이딩 효과
+        Utils.slideingView(floatingView.getFloatingView())
+
         floatingView.setText1("테스트 메시지1", Color.parseColor("#ff9900"))
         floatingView.setText2("테스트 메시지2", Color.parseColor("#ff9900"))
-
     }
 
     private fun showFloatingView3() {
@@ -129,6 +133,9 @@ class FloatinView2Activity : AppCompatActivity() {
 
         floatingView.getFloatingView().layoutParams = layoutParams
         rootView.addView(floatingView.getFloatingView())
+
+        //슬라이딩 효과
+        Utils.slideingView(floatingView.getFloatingView())
 
         floatingView.setText1("테스트 메시지1", Color.parseColor("#ff9900"))
         floatingView.setText2("테스트 메시지2", Color.parseColor("#ff9900"))
