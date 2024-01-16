@@ -13,6 +13,13 @@
         android:theme="@style/Theme.Floatingview_test"
         tools:targetApi="31">
         <activity
+            android:name=".FloatinView4Activity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".FloatinView3Activity"
             android:exported="false">
             <meta-data
