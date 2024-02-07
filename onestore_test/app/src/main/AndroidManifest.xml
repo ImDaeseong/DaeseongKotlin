@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Onestore_test"
+        android:theme="@style/AppTheme2"
         android:usesCleartextTraffic="true"><!-- usesCleartextTraffic false 이며 http 접근 불가(구글 정책 변경으로 true 쓸수 없음 ) -->
         <activity android:name=".MainActivity"
             android:exported="true">

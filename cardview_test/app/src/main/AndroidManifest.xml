@@ -10,11 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".CardView7Activity" />
+        <activity android:name=".CardView6Activity" />
+        <activity android:name=".CardView5Activity" />
         <activity android:name=".CardView4Activity" />
         <activity android:name=".CardView3Activity" />
         <activity android:name=".CardView2Activity" />
         <activity android:name=".CardView1Activity" />
-        <activity android:name=".MainActivity"
+
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

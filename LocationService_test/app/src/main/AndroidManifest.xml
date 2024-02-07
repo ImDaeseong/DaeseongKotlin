@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LocationService_test">
+        android:theme="@style/AppTheme2">
 
         <service
             android:name=".LocationService"
