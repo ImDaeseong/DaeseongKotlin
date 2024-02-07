@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,4 +29,5 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@android:color/background_light" />
     </FrameLayout>
+
 </androidx.cardview.widget.CardView>
