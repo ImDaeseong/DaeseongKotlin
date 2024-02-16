@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var button4 : Button
     private lateinit var button5 : Button
     private lateinit var button6 : Button
+    private lateinit var button7 : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button4 = findViewById(R.id.button4)
         button5 = findViewById(R.id.button5)
         button6 = findViewById(R.id.button6)
+        button7 = findViewById(R.id.button7)
 
         button1.setOnClickListener(this)
         button2.setOnClickListener(this)
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button4.setOnClickListener(this)
         button5.setOnClickListener(this)
         button6.setOnClickListener(this)
+        button7.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -41,8 +44,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 R.id.button2 -> Intent(this, Api2Activity::class.java)
                 R.id.button3 -> Intent(this, Api3Activity::class.java)
                 R.id.button4 -> Intent(this, Api4Activity::class.java)
-                R.id.button5 -> Intent(this, Api1Activity::class.java)
-                R.id.button6 -> Intent(this, Api1Activity::class.java)
+                R.id.button5 -> Intent(this, Api5Activity::class.java)
+                R.id.button6 -> Intent(this, Api6Activity::class.java)
+                R.id.button7 -> Intent(this, Api7Activity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }

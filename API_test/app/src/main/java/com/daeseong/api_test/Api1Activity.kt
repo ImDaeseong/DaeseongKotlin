@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class Api1Activity : AppCompatActivity() {
 
@@ -25,6 +26,10 @@ class Api1Activity : AppCompatActivity() {
 
         iv1 = findViewById(R.id.iv1)
 
+        //파일 이름
+        val fFile = File(OkHttpUtil.getFileNameUrl(sUrl))
+        Log.e(tag, "fFile:$fFile")
+
         //Glide 이용
         //func1()
 
@@ -39,9 +44,6 @@ class Api1Activity : AppCompatActivity() {
 
     //OkHttpUtil
     private fun func3() {
-
-        //val fFile = File(OkHttpUtil.getFileNameUrl(sUrl))
-        //Log.e(tag, "fFile:$fFile")
 
         OkHttpUtil.getDownloadImage(sUrl, object : OkHttpUtil.DownloadImageCallback {
             override fun onSuccess(bitmap: Bitmap) {

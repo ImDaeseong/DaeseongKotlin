@@ -8,6 +8,9 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
+import retrofit2.Call as RetrofitCall         //import retrofit2.Call
+import retrofit2.Callback as RetrofitCallback //import retrofit2.Callback
+import retrofit2.Response as RetrofitResponse //import retrofit2.Response
 
 class Api3Activity : AppCompatActivity() {
 
@@ -15,7 +18,7 @@ class Api3Activity : AppCompatActivity() {
 
     private lateinit var tv1: TextView
 
-    private val sUrl : String = "https://a.json"
+    private val sUrl : String = "https://api.bithumb.com/public/ticker/BTC"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +26,7 @@ class Api3Activity : AppCompatActivity() {
 
         tv1 = findViewById(R.id.tv1)
 
+        //okhttp3
         func1()
     }
 
@@ -39,6 +43,8 @@ class Api3Activity : AppCompatActivity() {
                     try {
 
                         val sResult = response.body?.string()
+                        Log.e(tag, "sResult:$sResult")
+
                         runOnUiThread {
                             tv1.text = sResult
                         }

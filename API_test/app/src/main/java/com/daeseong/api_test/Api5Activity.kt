@@ -9,9 +9,9 @@ import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
 
-class Api4Activity : AppCompatActivity() {
+class Api5Activity : AppCompatActivity() {
 
-    private val tag: String = Api4Activity::class.java.simpleName
+    private val tag: String = Api5Activity::class.java.simpleName
 
     private lateinit var tv1: TextView
 
@@ -20,7 +20,7 @@ class Api4Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_api4)
+        setContentView(R.layout.activity_api5)
 
         tv1 = findViewById(R.id.tv1)
 
@@ -33,7 +33,7 @@ class Api4Activity : AppCompatActivity() {
     //okhttp3 이용
     private fun func1() {
 
-        OkHttpUtil.sendDataResult(sUrl, sParam, object : Callback {
+        OkHttpUtil.sendDataResultheader(sUrl, sParam, object : Callback {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {

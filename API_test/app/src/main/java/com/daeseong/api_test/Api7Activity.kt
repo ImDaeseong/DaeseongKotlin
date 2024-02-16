@@ -1,39 +1,31 @@
 package com.daeseong.api_test
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
 
-class Api4Activity : AppCompatActivity() {
+class Api7Activity : AppCompatActivity() {
 
-    private val tag: String = Api4Activity::class.java.simpleName
+    private val tag: String = Api7Activity::class.java.simpleName
 
-    private lateinit var tv1: TextView
-
-    private val sUrl : String = "https://mypage.com/a.do"
-    private val sParam : String = "{\"id\":\"test\",\"password\":\"test\",\"value\":\"mytestdata\"}"
+    private val sUrl : String = "https://api.bithumb.com/public/orderbook/BTC"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_api4)
-
-        tv1 = findViewById(R.id.tv1)
+        setContentView(R.layout.activity_api7)
 
         //okhttp3
         func1()
     }
 
-
-
     //okhttp3 이용
     private fun func1() {
 
-        OkHttpUtil.sendDataResult(sUrl, sParam, object : Callback {
+        OkHttpUtil.getDataResult(sUrl, object : Callback {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
@@ -42,10 +34,6 @@ class Api4Activity : AppCompatActivity() {
 
                         val sResult = response.body?.string()
                         Log.e(tag, "sResult:$sResult")
-
-                        runOnUiThread {
-                            tv1.text = sResult
-                        }
 
                     } catch (ex: Exception) {
                         Log.e(tag, ex.message.toString())
@@ -59,12 +47,8 @@ class Api4Activity : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 Log.e(tag, "onFailure:" + e.message)
             }
-
         })
 
     }
     //okhttp3 이용
-
-
-
 }

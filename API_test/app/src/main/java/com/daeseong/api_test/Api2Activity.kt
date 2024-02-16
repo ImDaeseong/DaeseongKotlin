@@ -29,6 +29,7 @@ class Api2Activity : AppCompatActivity() {
         iv2 = findViewById(R.id.iv2)
         ivlist = listOf(iv1, iv2)
 
+
         //Glide 이용
         //func1()
 
@@ -43,9 +44,6 @@ class Api2Activity : AppCompatActivity() {
 
     //OkHttpUtil
     private fun func3() {
-
-        //val fFile = File(OkHttpUtil.getFileNameUrl(sUrl))
-        //Log.e(tag, "fFile:$fFile")
 
         for (i in urls.indices) {
             val sUrl = urls[i]
