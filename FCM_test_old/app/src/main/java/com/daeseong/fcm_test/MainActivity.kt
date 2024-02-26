@@ -3,19 +3,16 @@ package com.daeseong.fcm_test
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
-
-    private lateinit var permissResultLauncher: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,27 +20,12 @@ class MainActivity : AppCompatActivity() {
 
         init()
 
-        initPermission()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                permissResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            } else {
-                Log.e(tag, "POST_NOTIFICATIONS 권한 소유")
-            }
-
-        } else {
-            Log.e(tag, "sdk 33 이하")
-        }
+        checkPermissions()
     }
 
     private fun init() {
 
         try {
-
-            // Firebase 초기화
-            //Firebase.initialize(this)
 
             //FCM 푸시 구독 방식
             FirebaseMessaging.getInstance().subscribeToTopic("all")
@@ -60,14 +42,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initPermission() {
-        permissResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
-            if (result) {
-                Log.e(tag, "POST_NOTIFICATIONS 권한 소유")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                Log.e(tag, "POST_NOTIFICATIONS 권한 없음")
             } else {
-                Log.e(tag, "POST_NOTIFICATIONS 권한 미소유")
+                Log.e(tag, "POST_NOTIFICATIONS 권한 있음")
             }
         }
     }
 
+    private fun checkPermissions() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS),1)
+            }
+        }
+    }
 }
