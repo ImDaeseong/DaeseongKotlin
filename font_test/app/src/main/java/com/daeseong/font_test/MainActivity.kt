@@ -1,10 +1,12 @@
 package com.daeseong.font_test
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.core.view.WindowInsetsControllerCompat
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -14,6 +16,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initTitleBar()
+
         setContentView(R.layout.activity_main)
 
         button1 = findViewById(R.id.button1)
@@ -34,6 +39,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 else -> null
             }
             intent?.let { startActivity(it) }
+        }
+    }
+
+    private fun initTitleBar() {
+
+        //상태바 색상 회색으로
+        window.apply {
+            statusBarColor = Color.GRAY
+            WindowInsetsControllerCompat(this, this.decorView).isAppearanceLightStatusBars = true
         }
     }
 }
