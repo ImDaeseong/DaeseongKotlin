@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- notosanskr_black -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/notosanskr_black"/>
+
+    <!-- notosanskr_bold -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/notosanskr_bold"/>
+
+    <!-- notosanskr_extrabold -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/notosanskr_extrabold"/>
+
+    <!-- notosanskr_extralight -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/notosanskr_extralight"/>
+
+    <!-- notosanskr_light -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/notosanskr_light"/>
+
+    <!-- notosanskr_medium -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/notosanskr_medium"/>
+
+    <!-- notosanskr_regular -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/notosanskr_regular"/>
+
+    <!-- notosanskr_semibold -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/notosanskr_semibold"/>
+
+    <!-- notosanskr_thin -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/notosanskr_thin"/>
+
+    <!-- one_mobile_pop -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/one_mobile_pop"/>
+
+    <!-- one_mobile_pop_otf -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/one_mobile_pop_otf"/>
+
+    <!-- roboto_black -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_black"/>
+
+    <!-- roboto_blackitalic -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_blackitalic"/>
+
+    <!-- roboto_bold -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_bold"/>
+
+    <!-- roboto_bolditalic -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_bolditalic"/>
+
+    <!-- roboto_italic -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_italic"/>
+
+    <!-- roboto_light -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_light"/>
+
+    <!-- roboto_lightitalic -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_lightitalic"/>
+
+    <!-- roboto_medium -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_medium"/>
+
+    <!-- roboto_mediumitalic -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_mediumitalic"/>
+
+    <!-- roboto_regular -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_regular"/>
+
+    <!-- roboto_thin -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_thin"/>
+
+    <!-- roboto_thinitalic -->
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto_thinitalic"/>
+
+</font-family>
