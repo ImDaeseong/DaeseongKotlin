@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">spinner_test</string>
+
+    <string-array name="spinnerItems">
+        <item>항목 1</item>
+        <item>항목 2</item>
+        <item>항목 3</item>
+    </string-array>
+
+</resources>
