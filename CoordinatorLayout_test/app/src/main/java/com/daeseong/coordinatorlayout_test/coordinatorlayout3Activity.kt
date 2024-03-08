@@ -27,6 +27,9 @@ class coordinatorlayout3Activity : AppCompatActivity() {
             }
         }
 
+        //시작시 축소된 상태
+        aB1.setExpanded(false)
+
         web1 = findViewById(R.id.web1)
         web1.settings.javaScriptEnabled = true
         web1.webViewClient = WebViewClient()

@@ -1,10 +1,10 @@
 package com.daeseong.coordinatorlayout_test
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.AppBarLayout
 
 class coordinatorlayout1Activity : AppCompatActivity() {
@@ -26,6 +26,9 @@ class coordinatorlayout1Activity : AppCompatActivity() {
                 Log.e(tag, "툴바가 축소된 상태")
             }
         }
+
+        //시작시 축소된 상태
+        aB1.setExpanded(false)
 
         web1 = findViewById(R.id.web1)
         web1.settings.javaScriptEnabled = true
