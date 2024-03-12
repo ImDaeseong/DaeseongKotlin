@@ -1,6 +1,5 @@
 package com.daeseong.paging3_test.fun2
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +30,6 @@ class ItemAdapter : PagingDataAdapter<Item, ItemAdapter.ItemViewHolder>(ITEM_COM
         private val tv4: TextView = itemView.findViewById(R.id.tv4)
 
         fun bind(item: Item) {
-            //Log.e(tag, "item.html_url:" + item.html_url)
             tv1.text = item.id.toString()
             tv2.text = item.name
             tv3.text = item.full_name

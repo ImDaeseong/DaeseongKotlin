@@ -195,17 +195,17 @@ class Main7Activity : AppCompatActivity() {
                 ++nIndex
 
                 val sUrl = String.format("%s&q=%s:created:>%s&PAGE=%d", ConstantsUrl.sUrl3, sSearchkey, getOneDayago(), nIndex)
-                //Log.e(TAG, sUrl);
+                //Log.e(TAG, sUrl)
 
                 val sResult = GetDataString(sUrl)
-                //Log.e(TAG, sResult);
+                //Log.e(TAG, sResult)
 
                 //데이터 조회 완료시 프로그래스 숨김
                 runOnUiThread {
                     progressbar1.visibility = View.GONE
                 }
 
-                //Log.e(TAG, "데이터 조회 종료");
+                //Log.e(TAG, "데이터 조회 종료")
                 try {
 
                     if (nTotalPage > -1) {
@@ -218,7 +218,7 @@ class Main7Activity : AppCompatActivity() {
                 } catch (ex: java.lang.Exception) {
                 }
 
-                //Log.e(TAG, "데이터 조회");
+                //Log.e(TAG, "데이터 조회")
                 try {
 
                     if (!TextUtils.isEmpty(sResult)) {
@@ -227,6 +227,9 @@ class Main7Activity : AppCompatActivity() {
 
                         nTotalCount = jsonObject.getInt("total_count")
                         nTotalPage = nTotalCount / nPageSize + 1
+
+                        //Log.e(TAG, "nTotalCount:$nTotalCount")
+                        //Log.e(TAG, "nTotalPage:$nTotalPage")
 
                         val jsonArray = jsonObject.getJSONArray("items")
                         for (i in 0 until jsonArray.length()) {

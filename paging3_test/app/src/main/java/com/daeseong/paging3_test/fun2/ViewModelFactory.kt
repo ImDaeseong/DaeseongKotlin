@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 
 class ViewModelFactory : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ItemViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ItemViewModel() as T
