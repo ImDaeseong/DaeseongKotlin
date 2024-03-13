@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         findViewById<Button>(R.id.button5).setOnClickListener(this)
         findViewById<Button>(R.id.button6).setOnClickListener(this)
         findViewById<Button>(R.id.button7).setOnClickListener(this)
+        findViewById<Button>(R.id.button8).setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.button5 -> Main5Activity::class.java
             R.id.button6 -> Main6Activity::class.java
             R.id.button7 -> Main7Activity::class.java
+            R.id.button8 -> Main8Activity::class.java
             else -> null
         }
 

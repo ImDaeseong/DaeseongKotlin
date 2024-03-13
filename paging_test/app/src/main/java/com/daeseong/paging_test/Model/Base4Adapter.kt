@@ -24,8 +24,6 @@ class Base4Adapter : BaseAdapter() {
     }
 
     override fun getItem(i: Int): itemData {
-
-        Log.e(tag, list[i].toString())
         return list[i]
     }
 

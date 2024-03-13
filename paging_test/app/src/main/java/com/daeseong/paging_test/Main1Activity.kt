@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.daeseong.paging_test.Common.DateTime.getOneDayago
 import com.daeseong.paging_test.Common.GetStringTask
 import com.daeseong.paging_test.Common.HttpUtil.GetDataBitmap
 
@@ -18,12 +17,12 @@ class Main1Activity : AppCompatActivity() {
 
     private val tag = Main1Activity::class.java.simpleName
 
-    private var tv1: TextView? = null
-    private var button1: Button? = null
-    private var iv1: ImageView? = null
-    private var sResult = ""
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
+    private lateinit var iv1: ImageView
+    private lateinit var sResult: String
 
-    private var sUrl = ""
+    private lateinit var sUrl: String
     private val sSearchkey = "android"
 
     private var thread: HandlerThread? = null
@@ -92,16 +91,17 @@ class Main1Activity : AppCompatActivity() {
     private fun downloadImg(sUrl: String) {
 
         Thread {
+
             try {
 
                 val bitmap = GetDataBitmap(sUrl)
                 runOnUiThread {
-
-                    iv1!!.setImageBitmap(bitmap)
+                    iv1.setImageBitmap(bitmap)
                 }
             } catch (ex: java.lang.Exception) {
                 Log.e(tag, ex.message.toString())
             }
+
         }.start()
     }
 
@@ -109,10 +109,11 @@ class Main1Activity : AppCompatActivity() {
 
         try {
 
-            sUrl = String.format("%s&q=%s:created:>%s", ConstantsUrl.sUrl1, sSearchkey, getOneDayago())
+            sUrl = String.format("%s&q=%s", ConstantsUrl.sUrl1, sSearchkey)
             sResult = GetStringTask().execute(sUrl)!!
+
             runOnUiThread {
-                tv1!!.text = sResult
+                tv1.text = sResult
             }
 
         } catch (ex: java.lang.Exception) {

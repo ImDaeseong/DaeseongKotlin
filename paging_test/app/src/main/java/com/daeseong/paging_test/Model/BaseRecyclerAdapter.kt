@@ -12,9 +12,7 @@ import com.daeseong.paging_test.R
 
 class BaseRecyclerAdapter(context: Context, var list: ArrayList<SearchApi.itemData> = ArrayList()) : RecyclerView.Adapter<BaseRecyclerAdapter.MyViewHolder>() {
 
-    companion object {
-        private const val tag = "BaseRecyclerAdapter"
-    }
+    private val tag = BaseRecyclerAdapter::class.java.simpleName
 
     private val inflater = LayoutInflater.from(context)
 

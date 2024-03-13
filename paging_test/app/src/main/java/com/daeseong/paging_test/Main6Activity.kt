@@ -9,13 +9,13 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.daeseong.paging_test.API.SearchApi
 import com.daeseong.paging_test.API.SearchApi.itemData
-import com.daeseong.paging_test.Common.DateTime.getOneDayago
 import com.daeseong.paging_test.Common.HttpUtil.GetDataString
 import com.daeseong.paging_test.Model.BaseRecyclerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -23,7 +23,7 @@ import org.json.JSONObject
 
 class Main6Activity : AppCompatActivity() {
 
-    private val TAG = Main6Activity::class.simpleName
+    private val tag = Main6Activity::class.simpleName
 
     private lateinit var swl1: SwipeRefreshLayout
     private lateinit var nsv1: NestedScrollView
@@ -63,7 +63,7 @@ class Main6Activity : AppCompatActivity() {
         //당겨서 새로고침
         swl1 = findViewById(R.id.swl1)
         swl1.setDistanceToTriggerSync(500) //스와이프 민감도 설정(기본:120)
-        swl1.setColorSchemeColors(resources.getColor(R.color.white), resources.getColor(R.color.white), resources.getColor(R.color.white))
+        swl1.setColorSchemeColors(ContextCompat.getColor(this, R.color.white), ContextCompat.getColor(this, R.color.white), ContextCompat.getColor(this, R.color.white))
         swl1.setOnRefreshListener {
 
             try {
@@ -161,7 +161,7 @@ class Main6Activity : AppCompatActivity() {
             }
 
         } catch (ex: java.lang.Exception) {
-            Log.e(TAG, ex.message.toString())
+            Log.e(tag, ex.message.toString())
         }
     }
 
@@ -191,20 +191,20 @@ class Main6Activity : AppCompatActivity() {
                     progressbar1.visibility = View.VISIBLE
                 }
 
-                ++nIndex
+                ++ nIndex
 
-                val sUrl = String.format("%s&q=%s:created:>%s&PAGE=%d", ConstantsUrl.sUrl3, sSearchkey, getOneDayago(), nIndex)
-                //Log.e(TAG, sUrl);
+                val sUrl = String.format("%s&q=%s&page=%d", ConstantsUrl.sUrl3, sSearchkey, nIndex)
+                //Log.e(tag, sUrl)
 
                 val sResult = GetDataString(sUrl)
-                //Log.e(TAG, sResult);
+                //Log.e(tag, sResult)
 
                 //데이터 조회 완료시 프로그래스 숨김
                 runOnUiThread {
                     progressbar1.visibility = View.GONE
                 }
 
-                //Log.e(TAG, "데이터 조회 종료");
+                //Log.e(tag, "데이터 조회 종료")
                 try {
 
                     if (nTotalPage > -1) {
@@ -217,7 +217,7 @@ class Main6Activity : AppCompatActivity() {
                 } catch (ex: java.lang.Exception) {
                 }
 
-                //Log.e(TAG, "데이터 조회");
+                //Log.e(tag, "데이터 조회")
                 try {
 
                     if (!TextUtils.isEmpty(sResult)) {
@@ -271,18 +271,17 @@ class Main6Activity : AppCompatActivity() {
                 } catch (ex: java.lang.Exception) {
                 }
 
-                //BaseRecyclerAdapter 추가
                 runOnUiThread {
                     try {
 
                         if (nTotalCount == 0) {
 
-                            //Log.e(TAG, "데이터 조회 0 인 경우");
+                            //Log.e(tag, "데이터 조회 0 인 경우")
                             handler.sendEmptyMessage(RESULT_PASING_SEARCHEND)
 
                         } else {
 
-                            //Log.e(TAG, "조회 데이터 추가");
+                            //Log.e(tag, "조회 데이터 추가")
                             adapter.addAll(list!!)
                         }
                     } catch (ex: java.lang.Exception) {

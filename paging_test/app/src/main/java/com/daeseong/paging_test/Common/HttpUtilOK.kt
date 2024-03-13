@@ -6,13 +6,19 @@ import okhttp3.Request
 
 object HttpUtilOK {
 
-    private val tag = HttpUtilOK::class.java.simpleName
+    private val client = OkHttpClient()
 
     fun getData(address: String?, callback: Callback?) {
-        val client = OkHttpClient()
+        if (address.isNullOrEmpty() || callback == null) return
+
         val request = Request.Builder()
             .url(address)
             .build()
+
         client.newCall(request).enqueue(callback)
+    }
+
+    fun cancelAll() {
+        client.dispatcher.cancelAll()
     }
 }

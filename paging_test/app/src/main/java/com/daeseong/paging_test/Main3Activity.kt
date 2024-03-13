@@ -12,24 +12,21 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.daeseong.paging_test.API.SearchApi
 import com.daeseong.paging_test.API.SearchApi.itemData
-import com.daeseong.paging_test.Common.DateTime.getOneDayago
 import com.daeseong.paging_test.Common.GetStringTask
 import org.json.JSONObject
 
 class Main3Activity : AppCompatActivity() {
 
-    companion object {
-        private val tag = Main3Activity::class.java.simpleName
-    }
+    private val tag = Main3Activity::class.java.simpleName
 
-    private var tv1: TextView? = null
-    private var button1: Button? = null
-    private var button2: Button? = null
-    private var button3: Button? = null
-    private var button4: Button? = null
-    private var button5: Button? = null
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private lateinit var button3: Button
+    private lateinit var button4: Button
+    private lateinit var button5: Button
 
-    private var sResult: String? = ""
+    private var sResult: String? = null
 
     private var nTotalPage = 0 // 총 페이지
     private var nTotalCount = 0 // 데이터 개수
@@ -52,9 +49,16 @@ class Main3Activity : AppCompatActivity() {
 
         tv1 = findViewById<View>(R.id.tv1) as TextView
         button1 = findViewById<View>(R.id.button1) as Button
-        button1!!.setOnClickListener {
+        button1.setOnClickListener {
+
+            tv1.text = ""
 
             try {
+
+                //페이지가 너무 많으면 테스트용이므로 10 페이지까지만 테스트
+                if(nTotalPage > 0) {
+                    nTotalPage = 10
+                }
 
                 for (i in 1..nTotalPage) {
                     handler!!.sendEmptyMessageDelayed(i, i.toLong())
@@ -66,24 +70,33 @@ class Main3Activity : AppCompatActivity() {
         }
 
         button2 = findViewById<View>(R.id.button2) as Button
-        button2!!.setOnClickListener {
+        button2.setOnClickListener {
+
+            tv1.text = ""
             parsingDataResult(1)
         }
 
         button3 = findViewById<View>(R.id.button3) as Button
-        button3!!.setOnClickListener {
+        button3.setOnClickListener {
+
+            tv1.text = ""
             parsingDataResult(2)
         }
 
         button4 = findViewById<View>(R.id.button4) as Button
-        button4!!.setOnClickListener {
+        button4.setOnClickListener {
+
+            tv1.text = ""
             parsingDataResult(3)
         }
 
         button5 = findViewById<View>(R.id.button5) as Button
-        button5!!.setOnClickListener {
+        button5.setOnClickListener {
+
+            tv1.text = ""
             parsingDataResult(4)
         }
+
     }
 
     override fun onDestroy() {
@@ -102,8 +115,12 @@ class Main3Activity : AppCompatActivity() {
                 override fun handleMessage(msg: Message) {
                     super.handleMessage(msg)
 
-                    Log.e(tag, msg.what.toString())
-                    Log.e(tag, (msg.obj as String))
+                    var sMsg = msg.what.toString()
+                    //Log.e(tag, ":$sMsg")
+
+                    var sResult = msg.obj.toString()
+                    tv1.post { tv1.text = sResult }
+
                 }
             }
 
@@ -177,6 +194,7 @@ class Main3Activity : AppCompatActivity() {
                     item.setItem(ID, NAME, HTMLURL, Createdat)
                     list.add(item)
                 }
+
                 SearchApi.getInstance().setMap(nIndex, list)
             }
 
@@ -199,6 +217,9 @@ class Main3Activity : AppCompatActivity() {
             }
 
         } else if (nIndex == 2) {
+
+            Log.e(tag, "nIndex:$nIndex")
+
             for (key in map.keys) {
                 for (i in map[key]!!.indices) {
                     Log.e(tag, "$key " + map[key]!![i].NAME)
@@ -232,9 +253,11 @@ class Main3Activity : AppCompatActivity() {
 
         try {
 
-            sUrl = String.format("%s&q=%s:created:>%s", ConstantsUrl.sUrl1, sSearchkey, getOneDayago())
+            sUrl = String.format("%s&q=%s", ConstantsUrl.sUrl1, sSearchkey)
             sResult = GetStringTask().execute(sUrl)
+
             if (!TextUtils.isEmpty(sResult)) {
+
                 val jsonObject = JSONObject(sResult)
                 if (jsonObject.has("total_count")) {
                     nTotalCount = jsonObject.getInt("total_count")
@@ -256,8 +279,13 @@ class Main3Activity : AppCompatActivity() {
             try {
 
                 val i = message.what
-                sUrl = String.format("%s&q=%s:created:>%s&PAGE=%d", ConstantsUrl.sUrl2, sSearchkey, getOneDayago(), i)
+
+                sUrl = String.format("%s&q=%s&page=%d", ConstantsUrl.sUrl2, sSearchkey, i)
+                //Log.e(tag, "sUrl:$sUrl")
+
                 sResult = GetStringTask().execute(sUrl)
+                //Log.e(tag, "sResult:$sResult")
+
                 parsingData(i, sResult)
 
                 val msg = Message()
@@ -271,4 +299,5 @@ class Main3Activity : AppCompatActivity() {
             return false
         }
     }
+
 }

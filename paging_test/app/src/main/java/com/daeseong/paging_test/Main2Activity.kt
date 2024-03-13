@@ -1,14 +1,11 @@
 package com.daeseong.paging_test
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.daeseong.paging_test.Common.DateTime
-import com.daeseong.paging_test.Common.HttpUtilOK.getData
+import com.daeseong.paging_test.Common.HttpUtilOK
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -18,8 +15,8 @@ class Main2Activity : AppCompatActivity() {
 
     private val tag = Main1Activity::class.java.simpleName
 
-    private var tv1: TextView? = null
-    private var button1: Button? = null
+    private lateinit var tv1: TextView
+    private lateinit var button1: Button
 
     private var sResult = ""
 
@@ -30,42 +27,40 @@ class Main2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-        tv1 = findViewById<View>(R.id.tv1) as TextView
-        button1 = findViewById<View>(R.id.button1) as Button
-        button1!!.setOnClickListener {
+        tv1 = findViewById<TextView>(R.id.tv1)
+        button1 = findViewById<Button>(R.id.button1)
+        button1.setOnClickListener {
 
             try {
 
-                sUrl = String.format("%s&q=%s:created:>%s", ConstantsUrl.sUrl1, sSearchkey, DateTime.getOneDayago() )
-                getData(this@Main2Activity, sUrl)
+                sUrl = String.format("%s&q=%s", ConstantsUrl.sUrl1, sSearchkey )
+                getDataInfo(sUrl, tv1)
 
-            } catch (ex: java.lang.Exception) {
+            } catch (ex: Exception) {
                 Log.e(tag, ex.message.toString())
             }
         }
     }
 
-    private fun getData(context: Context, sUrl: String) {
+    override fun onDestroy() {
+        super.onDestroy()
+        HttpUtilOK.cancelAll()
+    }
 
-        getData(sUrl, object : Callback {
+    private fun getDataInfo(sUrl: String, tv: TextView) {
+
+        val callback = object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val sResult = response.body?.string() ?: ""
+                Log.e(tag, "sResult: $sResult")
+                tv.post { tv.text = sResult }
+            }
 
             override fun onFailure(call: Call, e: IOException) {
-
-                Log.e(tag, "getData onFailure")
+                Log.e(tag, "onFailure: ${e.message}")
             }
-
-            override fun onResponse(call: Call, response: Response) {
-
-                try {
-                    sResult = response.body().string()
-                    runOnUiThread { tv1!!.text = sResult }
-                } catch (ex: Exception) {
-                    Log.e(tag, ex.message.toString())
-                }
-
-            }
-        })
-
+        }
+        HttpUtilOK.getData(sUrl, callback)
     }
 
 }
