@@ -50,7 +50,6 @@ class Main7Activity : AppCompatActivity() {
 
     private var list: MutableList<SearchApi.itemData>? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -225,20 +224,21 @@ class Main7Activity : AppCompatActivity() {
 
                         val jsonObject = JSONObject(sResult)
 
-                        nTotalCount = jsonObject.getInt("total_count")
-                        nTotalPage = nTotalCount / nPageSize + 1
-
+                        if (nTotalCount == 0) {
+                            nTotalCount = jsonObject.getInt("total_count")
+                            nTotalPage = nTotalCount / nPageSize + 1
+                        }
                         //Log.e(tag, "nTotalCount:$nTotalCount")
                         //Log.e(tag, "nTotalPage:$nTotalPage")
 
+                        if (list == null) {
+                            list = ArrayList()
+                        } else {
+                            list!!.clear()
+                        }
+
                         val jsonArray = jsonObject.getJSONArray("items")
                         for (i in 0 until jsonArray.length()) {
-
-                            if (list == null) {
-                                list = ArrayList()
-                            } else {
-                                list!!.clear()
-                            }
 
                             val JSonObj = jsonArray.getJSONObject(i)
 
@@ -275,22 +275,23 @@ class Main7Activity : AppCompatActivity() {
                 } catch (ex: java.lang.Exception) {
                 }
 
-                //BaseRecyclerAdapter 추가
+                //Adapterd 데이터 추가
                 runOnUiThread {
                     try {
 
                         if (nTotalCount == 0) {
 
-                            //Log.e(tag, "데이터 조회 0 인 경우")
+                            Log.e(tag, "데이터 조회 0 인 경우")
                             handler.sendEmptyMessage(RESULT_PASING_SEARCHEND)
 
                         } else {
 
-                            //Log.e(tag, "조회 데이터 추가")
+                            Log.e(tag, "조회 데이터 추가")
                             adapter.addAll(list!!)
                             handler.sendEmptyMessage(RESULT_PASING_SEARCH)
                         }
                     } catch (ex: java.lang.Exception) {
+                        Log.e(tag, "Exception:" + ex.message.toString())
                     }
                 }
             })

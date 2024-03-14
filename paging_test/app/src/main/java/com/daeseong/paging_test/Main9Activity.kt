@@ -1,9 +1,6 @@
 package com.daeseong.paging_test
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Message
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -18,12 +15,15 @@ import com.daeseong.paging_test.API.SearchApi
 import com.daeseong.paging_test.Common.HttpUtil.GetDataString
 import com.daeseong.paging_test.Model.BaseRecyclerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-class Main8Activity : AppCompatActivity() {
+class Main9Activity : AppCompatActivity() {
 
-    private val tag = Main8Activity::class.simpleName
+    private val tag = Main9Activity::class.simpleName
 
     private lateinit var swl1: SwipeRefreshLayout
     private lateinit var nsv1: NestedScrollView
@@ -42,21 +42,16 @@ class Main8Activity : AppCompatActivity() {
     private var nPageSize = 1   // 페이지에 보여줄 개수
     private var sSearchkey = "android"
 
-    private lateinit var thread: HandlerThread
-    private lateinit var handler: Handler
-
     //paging 처리
-    private val RESULT_PASING_SEARCH = 1
-    private val RESULT_PASING_SEARCHEND = 2
     private var bSearchFlag = false
 
     private var list: MutableList<SearchApi.itemData>? = null
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main8)
-
-        initThread()
+        setContentView(R.layout.activity_main9)
 
         init()
 
@@ -73,10 +68,12 @@ class Main8Activity : AppCompatActivity() {
         super.onDestroy()
 
         try {
-            list!!.clear()
+            list?.clear()
             adapter.clear()
-            StopThread()
-        } catch (ex: java.lang.Exception) {
+
+            // 액티비티 종료 시 코루틴도 함께 종료
+            coroutineScope.coroutineContext.cancel()
+        } catch (ex: Exception) {
         }
     }
 
@@ -89,7 +86,7 @@ class Main8Activity : AppCompatActivity() {
 
     private fun init() {
 
-        //프로그래서 초기화
+        //프로그래스 바 초기화
         progressbar1 = findViewById(R.id.progressbar1)
         progressbar1.visibility = View.GONE
 
@@ -175,59 +172,24 @@ class Main8Activity : AppCompatActivity() {
         })
     }
 
-
-    private fun initThread() {
-
-        try {
-
-            thread = HandlerThread("Main8Activity_paging")
-            thread.start()
-            handler = object : Handler(thread.looper) {
-                override fun handleMessage(msg: Message) {
-                    super.handleMessage(msg)
-                    when (msg.what) {
-                        //RESULT_PASING_SEARCH -> requestSearchPaging()
-                        RESULT_PASING_SEARCHEND -> resultEndPaging()
-                        else -> {}
-                    }
-                }
-            }
-
-        } catch (ex: java.lang.Exception) {
-            Log.e(tag, ex.message.toString())
-        }
-    }
-
-    private fun StopThread() {
-
-        try {
-            if (thread != null) {
-                thread.looper.quit()
-                thread.quit()
-            }
-        } catch (ex: java.lang.Exception) {
-        } finally {
-            handler.removeCallbacksAndMessages(null)
-            thread.interrupt()
-        }
-    }
-
-    //조회
+    //조회 - GetDataString 사용
     private fun requestSearchPaging() {
 
         try {
 
-            handler.post(Runnable {
+            //데이터 조회시 프로그래스 보임
+            runOnUiThread {
+                progressbar1.visibility = View.VISIBLE
+            }
 
-                //데이터 조회시 프로그래스 보임
-                runOnUiThread {
-                    progressbar1.visibility = View.VISIBLE
-                }
+            ++nIndex
 
-                ++nIndex
+            val sUrl = String.format("%s&q=%s&page=%d", ConstantsUrl.sUrl2, sSearchkey, nIndex)
+            Log.e(tag, sUrl)
 
-                val sUrl = String.format("%s&q=%s&page=%d", ConstantsUrl.sUrl2, sSearchkey, nIndex)
-                Log.e(tag, sUrl)
+
+            // 코루틴 스코프 생성
+            coroutineScope.launch(Dispatchers.IO) {
 
                 val sResult = GetDataString(sUrl)
                 //Log.e(tag, sResult)
@@ -240,11 +202,9 @@ class Main8Activity : AppCompatActivity() {
                 //Log.e(tag, "데이터 조회 종료")
                 try {
 
-                    if (nTotalPage > -1) {
-                        if (nIndex > nTotalPage) {
-                            handler.sendEmptyMessage(RESULT_PASING_SEARCHEND)
-                            return@Runnable
-                        }
+                    if (nTotalPage > -1 && nIndex > nTotalPage) {
+                        resultEndPaging()
+                        return@launch
                     }
 
                 } catch (ex: java.lang.Exception) {
@@ -318,7 +278,7 @@ class Main8Activity : AppCompatActivity() {
                     if (nTotalCount == 0) {
 
                         Log.e(tag, "데이터 조회 0 인 경우")
-                        handler.sendEmptyMessage(RESULT_PASING_SEARCHEND)
+                        resultEndPaging()
 
                     } else {
 
@@ -333,8 +293,7 @@ class Main8Activity : AppCompatActivity() {
                     }
                 } catch (ex: java.lang.Exception) {
                 }
-            })
-
+            }
         } catch (ex: java.lang.Exception) {
 
             runOnUiThread {
@@ -360,5 +319,4 @@ class Main8Activity : AppCompatActivity() {
         } catch (ex: java.lang.Exception) {
         }
     }
-
 }
