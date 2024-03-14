@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 
 class Permission6Activity : AppCompatActivity() {
 
-    private val TAG = Permission6Activity::class.java.simpleName
+    private val tag = Permission6Activity::class.java.simpleName
 
     private lateinit var button1: Button
     private lateinit var requestPermissions: ActivityResultLauncher<Array<String>>
@@ -36,7 +36,7 @@ class Permission6Activity : AppCompatActivity() {
         button1 = findViewById(R.id.button1)
         button1.setOnClickListener {
 
-            //Log.e(TAG, "필수 권한만 체크하고 선택 권한은 무시")
+            //Log.e(tag, "필수 권한만 체크하고 선택 권한은 무시")
 
             var result = false
 
@@ -55,9 +55,9 @@ class Permission6Activity : AppCompatActivity() {
             }
 
             if (result) {
-                Log.e(TAG, "이미 권한 소유")
+                Log.e(tag, "이미 권한 소유")
             } else {
-                //Log.e(TAG, "권한 체크")
+                //Log.e(tag, "권한 체크")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     requestPermissions.launch(PERMISSIONS33)
                 } else {
@@ -85,9 +85,9 @@ class Permission6Activity : AppCompatActivity() {
                 }
 
                 if (bPermissions) {
-                    Log.e(TAG, "전체 퍼미션 허용")
+                    Log.e(tag, "전체 퍼미션 허용")
                 } else {
-                    Log.e(TAG, "퍼미션 요청 거절 상태")
+                    Log.e(tag, "퍼미션 요청 거절 상태")
                 }
             }
     }

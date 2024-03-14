@@ -13,7 +13,8 @@ import androidx.core.app.ActivityCompat
 
 class Permission4Activity : AppCompatActivity() {
 
-    private val TAG = Permission4Activity::class.java.simpleName
+    private val tag = Permission4Activity::class.java.simpleName
+
     private lateinit var button1: Button
     private lateinit var permissResultLauncher: ActivityResultLauncher<Array<String>>
 
@@ -34,7 +35,7 @@ class Permission4Activity : AppCompatActivity() {
                 if (ActivityCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                     permissResultLauncher.launch(PERMISSIONS33)
                 } else {
-                    Log.e(TAG, "이미 권한 소유")
+                    Log.e(tag, "이미 권한 소유")
                 }
 
             } else {
@@ -42,7 +43,7 @@ class Permission4Activity : AppCompatActivity() {
                 if (ActivityCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     permissResultLauncher.launch(PERMISSIONS)
                 } else {
-                    Log.e(TAG, "이미 권한 소유")
+                    Log.e(tag, "이미 권한 소유")
                 }
             }
         }
@@ -53,9 +54,9 @@ class Permission4Activity : AppCompatActivity() {
             try {
                 for ((permission, isGranted) in result) {
                     if (isGranted) {
-                        Log.e(TAG, permission)
+                        Log.e(tag, permission)
                     } else {
-                        Log.e(TAG, "$permission 권한 미소유")
+                        Log.e(tag, "$permission 권한 미소유")
                     }
                 }
             } catch (e: Exception) {

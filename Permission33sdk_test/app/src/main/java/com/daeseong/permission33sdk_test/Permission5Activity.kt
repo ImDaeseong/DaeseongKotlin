@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 
 class Permission5Activity : AppCompatActivity() {
 
-    private val TAG = Permission5Activity::class.java.simpleName
+    private val tag = Permission5Activity::class.java.simpleName
 
     private lateinit var button1: Button
     private lateinit var requestPermissions: ActivityResultLauncher<Array<String>>
@@ -21,6 +21,7 @@ class Permission5Activity : AppCompatActivity() {
         Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
     private val PERMISSIONS33 = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.READ_MEDIA_IMAGES,
@@ -58,7 +59,7 @@ class Permission5Activity : AppCompatActivity() {
         if (!allPermissionsGranted) {
             requestPermissions.launch(permissions)
         } else {
-            Log.e(TAG, "권한이 이미 허용되었습니다.")
+            Log.e(tag, "권한이 이미 허용되었습니다.")
         }
     }
 
@@ -74,67 +75,67 @@ class Permission5Activity : AppCompatActivity() {
                         /*
                         PERMISSIONS.contains(permission) -> {
                             if (isGranted) {
-                                Log.e(TAG, "$permission 권한 허용")
+                                Log.e(tag, "$permission 권한 허용")
                             } else {
-                                Log.e(TAG, "$permission 권한 거부")
+                                Log.e(tag, "$permission 권한 거부")
                             }
                         }
                         PERMISSIONS33.contains(permission) -> {
                             if (isGranted) {
-                                Log.e(TAG, "$permission 권한 허용")
+                                Log.e(tag, "$permission 권한 허용")
                             } else {
-                                Log.e(TAG, "$permission 권한 거부")
+                                Log.e(tag, "$permission 권한 거부")
                             }
                         }
                         */
 
                         Manifest.permission.CAMERA == permission -> {
                             if (isGranted) {
-                                Log.e(TAG, "CAMERA 권한 허용")
+                                Log.e(tag, "CAMERA 권한 허용")
                             } else {
-                                Log.e(TAG, "CAMERA 권한 거부")
+                                Log.e(tag, "CAMERA 권한 거부")
                             }
                         }
                         Manifest.permission.READ_EXTERNAL_STORAGE == permission -> {
                             if (isGranted) {
-                                Log.e(TAG, "READ_EXTERNAL_STORAGE 권한 허용")
+                                Log.e(tag, "READ_EXTERNAL_STORAGE 권한 허용")
                             } else {
-                                Log.e(TAG, "READ_EXTERNAL_STORAGE 권한 거부")
+                                Log.e(tag, "READ_EXTERNAL_STORAGE 권한 거부")
                             }
                         }
                         Manifest.permission.WRITE_EXTERNAL_STORAGE == permission -> {
                             if (isGranted) {
-                                Log.e(TAG, "WRITE_EXTERNAL_STORAGE 권한 허용")
+                                Log.e(tag, "WRITE_EXTERNAL_STORAGE 권한 허용")
                             } else {
-                                Log.e(TAG, "WRITE_EXTERNAL_STORAGE 권한 거부")
+                                Log.e(tag, "WRITE_EXTERNAL_STORAGE 권한 거부")
                             }
                         }
                         Manifest.permission.READ_MEDIA_IMAGES == permission -> {
                             if (isGranted) {
-                                Log.e(TAG, "READ_MEDIA_IMAGES 권한 허용")
+                                Log.e(tag, "READ_MEDIA_IMAGES 권한 허용")
                             } else {
-                                Log.e(TAG, "READ_MEDIA_IMAGES 권한 거부")
+                                Log.e(tag, "READ_MEDIA_IMAGES 권한 거부")
                             }
                         }
                         Manifest.permission.READ_MEDIA_VIDEO == permission -> {
                             if (isGranted) {
-                                Log.e(TAG, "READ_MEDIA_VIDEO 권한 허용")
+                                Log.e(tag, "READ_MEDIA_VIDEO 권한 허용")
                             } else {
-                                Log.e(TAG, "READ_MEDIA_VIDEO 권한 거부")
+                                Log.e(tag, "READ_MEDIA_VIDEO 권한 거부")
                             }
                         }
                         Manifest.permission.READ_MEDIA_AUDIO == permission -> {
                             if (isGranted) {
-                                Log.e(TAG, "READ_MEDIA_AUDIO 권한 허용")
+                                Log.e(tag, "READ_MEDIA_AUDIO 권한 허용")
                             } else {
-                                Log.e(TAG, "READ_MEDIA_AUDIO 권한 거부")
+                                Log.e(tag, "READ_MEDIA_AUDIO 권한 거부")
                             }
                         }
                         Manifest.permission.POST_NOTIFICATIONS == permission -> {
                             if (isGranted) {
-                                Log.e(TAG, "POST_NOTIFICATIONS 권한 허용")
+                                Log.e(tag, "POST_NOTIFICATIONS 권한 허용")
                             } else {
-                                Log.e(TAG, "POST_NOTIFICATIONS 권한 거부")
+                                Log.e(tag, "POST_NOTIFICATIONS 권한 거부")
                             }
                         }
                     }
@@ -149,16 +150,16 @@ class Permission5Activity : AppCompatActivity() {
                     when (permission) {
                         Manifest.permission.CAMERA -> {
                             if (isGranted) {
-                                Log.e(TAG, "CAMERA 권한 허용")
+                                Log.e(tag, "CAMERA 권한 허용")
                             } else {
-                                Log.e(TAG, "CAMERA 권한 거부")
+                                Log.e(tag, "CAMERA 권한 거부")
                             }
                         }
                         Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_EXTERNAL_STORAGE -> {
                             if (isGranted) {
-                                Log.e(TAG, "이미지 읽기 권한 허용")
+                                Log.e(tag, "이미지 읽기 권한 허용")
                             } else {
-                                Log.e(TAG, "이미지 읽기 권한 거부")
+                                Log.e(tag, "이미지 읽기 권한 거부")
                             }
                         }
                     }

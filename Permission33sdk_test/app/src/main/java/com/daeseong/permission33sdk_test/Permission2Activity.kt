@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Permission2Activity : AppCompatActivity() {
 
-    private val TAG = Permission2Activity::class.java.simpleName
+    private val tag = Permission2Activity::class.java.simpleName
 
     private lateinit var button1: Button
     private lateinit var requestPermissions: ActivityResultLauncher<Array<String>>
@@ -42,7 +42,7 @@ class Permission2Activity : AppCompatActivity() {
                 if (!bPermissResult) {
                     requestPermissions.launch(PERMISSIONS33)
                 } else {
-                    Log.e(TAG, "PERMISSIONS33 권한 소요")
+                    Log.e(tag, "PERMISSIONS33 권한 소요")
                 }
 
             } else {
@@ -57,7 +57,7 @@ class Permission2Activity : AppCompatActivity() {
                 if (!bPermissResult) {
                     requestPermissions.launch(PERMISSIONS)
                 } else {
-                    Log.e(TAG, "PERMISSIONS 권한 소요")
+                    Log.e(tag, "PERMISSIONS 권한 소요")
                 }
             }
         }
@@ -79,9 +79,9 @@ class Permission2Activity : AppCompatActivity() {
                 }
 
                 if (bCamera && bImage) {
-                    Log.e(TAG, "PERMISSIONS 권한 소유")
+                    Log.e(tag, "PERMISSIONS 권한 소유")
                 } else {
-                    Log.e(TAG, "PERMISSIONS 권한 미소유")
+                    Log.e(tag, "PERMISSIONS 권한 미소유")
                 }
             }
     }

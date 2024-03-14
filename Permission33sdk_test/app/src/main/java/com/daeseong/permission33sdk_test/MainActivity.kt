@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = MainActivity::class.simpleName
+    private val tag = MainActivity::class.simpleName
 
     private lateinit var button1: Button
     private lateinit var button2: Button
@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button5: Button
     private lateinit var button6: Button
     private lateinit var button7: Button
+    private lateinit var button8: Button
+    private lateinit var button9: Button
 
     private val PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
     private val PERMISSIONS33 = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.POST_NOTIFICATIONS)
@@ -72,18 +74,41 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, Permission7Activity::class.java)
             startActivity(intent)
         }
+
+        button8 = findViewById(R.id.button8)
+        button8.setOnClickListener {
+            val intent = Intent(this@MainActivity, Permission8Activity::class.java)
+            startActivity(intent)
+        }
+
+        button9 = findViewById(R.id.button9)
+        button9.setOnClickListener {
+            val intent = Intent(this@MainActivity, Permission9Activity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun init() {
 
+        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) PERMISSIONS33 else PERMISSIONS
+
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+                Log.e(tag, "$permission 권한 없음")
+            } else {
+                Log.e(tag, "권한 이미 있음")
+            }
+        }
+
+        /*
         //sdk 33 이상
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
             for (permission in PERMISSIONS33) {
                 if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
-                    Log.e(TAG, "$permission 미허용 상태")
+                    Log.e(tag, "$permission 미허용 상태")
                 } else {
-                    Log.e(TAG, "$permission 허용 상태")
+                    Log.e(tag, "$permission 허용 상태")
                 }
             }
 
@@ -97,6 +122,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        */
 
     }
 }

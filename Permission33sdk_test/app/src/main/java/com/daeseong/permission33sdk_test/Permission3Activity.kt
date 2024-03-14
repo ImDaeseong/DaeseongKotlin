@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat
 
 class Permission3Activity : AppCompatActivity() {
 
-    private val TAG = Permission3Activity::class.simpleName
+    private val tag = Permission3Activity::class.simpleName
 
     private lateinit var button1: Button
     private lateinit var permissResultLauncher: ActivityResultLauncher<String>
@@ -32,11 +32,11 @@ class Permission3Activity : AppCompatActivity() {
                 if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                     permissResultLauncher.launch(POST_NOTIFICATIONS)
                 } else {
-                    Log.e(TAG, "POST_NOTIFICATIONS 권한 소유")
+                    Log.e(tag, "POST_NOTIFICATIONS 권한 소유")
                 }
 
             } else {
-                Log.e(TAG, "sdk 33 이하")
+                Log.e(tag, "sdk 33 이하")
             }
         }
 
@@ -45,9 +45,9 @@ class Permission3Activity : AppCompatActivity() {
     private fun initResultPermission() {
         permissResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
             if (result) {
-                Log.e(TAG, "POST_NOTIFICATIONS 권한 소유")
+                Log.e(tag, "POST_NOTIFICATIONS 권한 소유")
             } else {
-                Log.e(TAG, "POST_NOTIFICATIONS 권한 미소유")
+                Log.e(tag, "POST_NOTIFICATIONS 권한 미소유")
             }
         }
     }

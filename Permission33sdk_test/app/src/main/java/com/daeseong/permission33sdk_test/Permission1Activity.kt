@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat
 
 class Permission1Activity : AppCompatActivity() {
 
-    private val TAG = Permission1Activity::class.simpleName
+    private val tag = Permission1Activity::class.simpleName
 
     private lateinit var imageView1: ImageView
     private lateinit var button1: Button

@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 
 class Permission7Activity : AppCompatActivity() {
 
-    private val TAG = Permission7Activity::class.java.simpleName
+    private val tag = Permission7Activity::class.java.simpleName
 
     private lateinit var button1: Button
     private lateinit var requestPermissions: ActivityResultLauncher<Array<String>>
