@@ -5,15 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".Spinner4Activity">
+    tools:context=".Spinner5Activity">
 
     <Spinner
         android:id="@+id/sp1"
         android:layout_width="200dp"
         android:layout_height="30dp"
-        android:spinnerMode="dropdown"
-        android:background="@drawable/custom_spinner_bg"
-        android:popupBackground="@drawable/custom_spinner_dropdown_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
