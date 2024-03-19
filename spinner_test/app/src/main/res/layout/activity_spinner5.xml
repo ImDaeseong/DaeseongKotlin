@@ -7,13 +7,31 @@
     android:background="#FFFFFF"
     tools:context=".Spinner5Activity">
 
-    <Spinner
-        android:id="@+id/sp1"
-        android:layout_width="200dp"
-        android:layout_height="30dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiL1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="선택하세요"
+        android:background="#FFFFFF"
+        app:boxBackgroundColor="#C3C6CC"
+        app:boxStrokeColor="#FFFFFF"
+        app:hintTextColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <AutoCompleteTextView
+            android:id="@+id/atv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#FFFFFF"
+            android:imeOptions="actionDone"
+            android:inputType="none"
+            android:popupBackground="#FF0000" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

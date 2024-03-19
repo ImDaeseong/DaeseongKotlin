@@ -13,4 +13,10 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="ComboBoxStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:popupBackground">@color/white</item>
+        <item name="android:dropDownVerticalOffset">30dp</item>
+    </style>
+
 </resources>
