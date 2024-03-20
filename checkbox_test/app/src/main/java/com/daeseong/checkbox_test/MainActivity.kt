@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button1: Button
     private lateinit var button2: Button
     private lateinit var button3: Button
+    private lateinit var button4: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         button1 = findViewById(R.id.button1)
         button2 = findViewById(R.id.button2)
         button3 = findViewById(R.id.button3)
+        button4 = findViewById(R.id.button4)
 
         button1.setOnClickListener {
             callActivity<Check1Activity>()
@@ -31,6 +33,10 @@ class MainActivity : AppCompatActivity() {
 
         button3.setOnClickListener {
             callActivity<Check3Activity>()
+        }
+
+        button4.setOnClickListener {
+            callActivity<Check4Activity>()
         }
     }
 

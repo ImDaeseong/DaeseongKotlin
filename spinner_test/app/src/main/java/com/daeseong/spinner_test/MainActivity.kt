@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var button4: Button
     private lateinit var button5: Button
     private lateinit var button6: Button
+    private lateinit var button7: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

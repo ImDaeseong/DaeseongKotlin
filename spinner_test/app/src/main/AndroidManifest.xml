@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spinner_test"
         tools:targetApi="31">
+
         <activity
             android:name=".Spinner6Activity"
             android:exported="false">
