@@ -20,7 +20,7 @@ class FloatingView1(viewGroup: ViewGroup) {
 
         cLClose = floatingView.findViewById(R.id.cLClose)
         cLClose.setOnClickListener(object : OnSingleClickListener() {
-            override fun onSingleClick(view: View?) {
+            override fun onSingleClick(view: View) {
                 floatingView.visibility = View.GONE
             }
         })

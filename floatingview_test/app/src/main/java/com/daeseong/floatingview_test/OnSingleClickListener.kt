@@ -2,18 +2,19 @@ package com.daeseong.floatingview_test
 
 import android.view.View
 
-abstract class OnSingleClickListener(private var delayTime: Long = 500) : View.OnClickListener {
+abstract class OnSingleClickListener(private val delayTime: Long = 500) : View.OnClickListener {
 
-    private var lastTime: Long = 0
+    private var lastClickTime: Long = 0
 
     override fun onClick(view: View) {
-        if (System.currentTimeMillis() - lastTime < delayTime) {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastClickTime < delayTime) {
             return
         }
 
         onSingleClick(view)
-        lastTime = System.currentTimeMillis()
+        lastClickTime = currentTime
     }
 
-    abstract fun onSingleClick(view: View?)
+    abstract fun onSingleClick(view: View)
 }
