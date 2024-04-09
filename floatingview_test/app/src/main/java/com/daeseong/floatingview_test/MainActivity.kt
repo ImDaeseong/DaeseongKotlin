@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -28,6 +29,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button2.setOnClickListener(this)
         button3.setOnClickListener(this)
         button4.setOnClickListener(this)
+
+        topFloating()
+        bottomFloating()
     }
 
     override fun onClick(v: View?) {
@@ -41,5 +45,42 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             intent?.let { startActivity(it) }
         }
+    }
+
+
+    //화면 하단 플로팅뷰
+    private fun bottomFloating() {
+
+        try {
+            val rootView = findViewById<ViewGroup>(android.R.id.content)
+            val floatingImgBottomLayout = FloatingImgBottomLayout(this)
+            floatingImgBottomLayout.show(rootView)
+
+            val floatingView = floatingImgBottomLayout.getFloatingView()
+
+            floatingView.setOnClickListener(object : OnSingleClickListener()  {
+                override fun onSingleClick(view: View) {
+                    try {
+                        startActivity(Intent(this@MainActivity, FloatinView1Activity::class.java))
+                        floatingImgBottomLayout.hide()
+                    } catch (ex:Exception) {
+                    }
+                }
+            })
+        } catch (ex:Exception) {
+        }
+    }
+
+    private fun topFloating() {
+
+        val rootView = findViewById<ViewGroup>(android.R.id.content)
+        val floatingImgTopLayout = FloatingImgTopLayout(this)
+        floatingImgTopLayout.show(rootView, R.id.cL1)
+
+        /*
+        val rootView = findViewById<ViewGroup>(android.R.id.content)
+        val floatingDoubleImgTopLayout = FloatingDoubleImgTopLayout(this)
+        floatingDoubleImgTopLayout.show(rootView, R.id.cL1)
+        */
     }
 }
