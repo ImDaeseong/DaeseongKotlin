@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var button2: Button
     private lateinit var button3: Button
     private lateinit var button4: Button
+    private lateinit var button5: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +22,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button2 = findViewById(R.id.button2)
         button3 = findViewById(R.id.button3)
         button4 = findViewById(R.id.button4)
+        button5 = findViewById(R.id.button5)
 
         button1.setOnClickListener(this)
         button2.setOnClickListener(this)
         button3.setOnClickListener(this)
         button4.setOnClickListener(this)
+        button5.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.button2 -> startActivity(Intent(this, coordinatorlayout2Activity::class.java))
             R.id.button3 -> startActivity(Intent(this, coordinatorlayout3Activity::class.java))
             R.id.button4 -> startActivity(Intent(this, coordinatorlayout4Activity::class.java))
+            R.id.button5 -> startActivity(Intent(this, coordinatorlayout5Activity::class.java))
         }
     }
 }
