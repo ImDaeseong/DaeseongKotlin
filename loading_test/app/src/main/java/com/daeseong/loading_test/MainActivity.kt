@@ -14,9 +14,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btn1: Button
     private lateinit var btn2: Button
     private lateinit var btn3: Button
+    private lateinit var btn4: Button
 
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var loadingDialog1: LoadingDialog1
+    private lateinit var loadingDialog2: LoadingDialog2
     private lateinit var loadingOverlay: LoadingOverlay
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         loadingDialog = LoadingDialog(this)
         loadingDialog1 = LoadingDialog1(this)
+        loadingDialog2 = LoadingDialog2(this)
 
         btn1 = findViewById(R.id.btn1)
         btn1.setOnClickListener {
@@ -44,6 +47,11 @@ class MainActivity : AppCompatActivity() {
         btn3 = findViewById(R.id.btn3)
         btn3.setOnClickListener {
             showLoading2()
+        }
+
+        btn4 = findViewById(R.id.btn4)
+        btn4.setOnClickListener {
+            loadingDialog2.show()
         }
     }
 
