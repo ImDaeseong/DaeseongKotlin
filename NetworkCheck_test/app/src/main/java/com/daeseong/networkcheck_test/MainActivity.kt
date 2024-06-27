@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
                 val signalLevel = getWifiSignalLevel(this)
                 val isCommunicationPoor = rssi < -70
 
+                //wifi
                 /*
                     -30dBm ~ -50dBm: 매우 강한 신호
                     -51dBm ~ -60dBm: 강한 신호
