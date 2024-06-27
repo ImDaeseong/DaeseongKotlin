@@ -13,6 +13,13 @@
         android:theme="@style/Theme.Textviewscroll_text"
         tools:targetApi="31">
         <activity
+            android:name=".TextViewScroll5Activity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".TextViewScroll4Activity"
             android:exported="false">
             <meta-data

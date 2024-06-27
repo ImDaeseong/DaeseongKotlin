@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button2: Button
     private lateinit var button3: Button
     private lateinit var button4: Button
+    private lateinit var button5: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +40,12 @@ class MainActivity : AppCompatActivity() {
         button4 = findViewById(R.id.button4)
         button4.setOnClickListener {
             val intent = Intent(this@MainActivity, TextViewScroll4Activity::class.java)
+            startActivity(intent)
+        }
+
+        button5 = findViewById(R.id.button5)
+        button5.setOnClickListener {
+            val intent = Intent(this@MainActivity, TextViewScroll5Activity::class.java)
             startActivity(intent)
         }
 
