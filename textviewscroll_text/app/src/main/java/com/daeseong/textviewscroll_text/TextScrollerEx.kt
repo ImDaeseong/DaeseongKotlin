@@ -21,6 +21,8 @@ class TextScrollerEx(private val textView1: TextView, private val textView2: Tex
     private var isAnimating = false // 애니메이션 진행 중 여부
     private lateinit var animator: ValueAnimator
 
+    private var isDirectUp = true
+
     init {
         setupViews()
         startAnimation()
@@ -78,8 +80,18 @@ class TextScrollerEx(private val textView1: TextView, private val textView2: Tex
         val visibleTextView = getVisibleTextView()
         val invisibleTextView = getInvisibleTextView()
 
-        visibleTextView.translationY = -value * visibleTextView.height
-        invisibleTextView.translationY = (1 - value) * invisibleTextView.height
+        if (isDirectUp) {
+
+            //Log.e(tag, "스크롤 위로")
+            visibleTextView.translationY = -value * visibleTextView.height
+            invisibleTextView.translationY = (1 - value) * invisibleTextView.height
+
+        } else {
+
+            //Log.e(tag, "스크롤 아래로")
+            visibleTextView.translationY = value * visibleTextView.height
+            invisibleTextView.translationY = -((1 - value)) * invisibleTextView.height
+        }
     }
 
     // 다음 텍스트 내용 설정
@@ -98,13 +110,65 @@ class TextScrollerEx(private val textView1: TextView, private val textView2: Tex
         val invisibleTextView = getInvisibleTextView()
 
         visibleTextView.visibility = View.INVISIBLE
-        visibleTextView.translationY = visibleTextView.height.toFloat()
-        invisibleTextView.translationY = 0f
+        invisibleTextView.visibility = View.VISIBLE
+
+        if (isDirectUp) {
+
+            //Log.e(tag, "스크롤 위로")
+            visibleTextView.translationY = visibleTextView.height.toFloat()
+            invisibleTextView.translationY = 0f
+
+        } else {
+
+            //Log.e(tag, "스크롤 아래로")
+            visibleTextView.translationY = -visibleTextView.height.toFloat()
+            invisibleTextView.translationY = 0f
+        }
 
         currentIndex = (currentIndex + 1) % UrlApi.getInstance().getItems().size
-
         isTextView1Visible = !isTextView1Visible
     }
+
+    /*
+    // TextView 교체
+    private fun swapTextViews() {
+
+        val visibleTextView = getVisibleTextView()
+        val invisibleTextView = getInvisibleTextView()
+
+        if (isDirectUp) {
+
+            //Log.e(tag, "스크롤 위로")
+
+            //val visibleTextView = getVisibleTextView()
+            //val invisibleTextView = getInvisibleTextView()
+
+            visibleTextView.visibility = View.INVISIBLE
+            visibleTextView.translationY = visibleTextView.height.toFloat()
+            invisibleTextView.translationY = 0f
+
+            //currentIndex = (currentIndex + 1) % UrlApi.getInstance().getItems().size
+            //isTextView1Visible = !isTextView1Visible
+
+        } else {
+
+            //Log.e(tag, "스크롤 아래로")
+
+            //val visibleTextView = getVisibleTextView()
+            //val invisibleTextView = getInvisibleTextView()
+
+            visibleTextView.visibility = View.INVISIBLE
+            visibleTextView.translationY = -visibleTextView.height.toFloat()
+            invisibleTextView.translationY = 0f
+
+            //currentIndex = (currentIndex + 1) % UrlApi.getInstance().getItems().size
+            //isTextView1Visible = !isTextView1Visible
+        }
+
+        currentIndex = (currentIndex + 1) % UrlApi.getInstance().getItems().size
+        isTextView1Visible = !isTextView1Visible
+    }
+    */
 
     // 현재 보이는 TextView 반환
     private fun getVisibleTextView(): TextView {
@@ -140,5 +204,9 @@ class TextScrollerEx(private val textView1: TextView, private val textView2: Tex
             animator.cancel()
             isAnimating = false
         }
+    }
+
+    fun setDirect(isDirectUp: Boolean) {
+        this.isDirectUp = isDirectUp
     }
 }
