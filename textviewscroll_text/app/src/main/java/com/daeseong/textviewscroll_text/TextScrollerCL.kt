@@ -70,13 +70,18 @@ class TextScrollerCL(private val view1: View, private val view2: View) {
 
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator) {
-                    isAnimating = true
-                    getInvisibleView()?.let { view ->
 
-                        // 다음 텍스트 설정
-                        updateNextText(view, (currentIndex + 1) % urlApi.getItems().size)
-                        // 뷰를 보이게 설정
-                        view.visibility = View.VISIBLE
+                    isAnimating = true
+                    val itemCount = urlApi.getItems().size
+                    if (itemCount > 0) {
+                        getInvisibleView()?.let { view ->
+
+                            // 다음 텍스트 설정
+                            updateNextText(view, (currentIndex + 1) % itemCount)
+
+                            // 뷰를 보이게 설정
+                            view.visibility = View.VISIBLE
+                        }
                     }
                 }
 
