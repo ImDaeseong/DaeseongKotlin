@@ -8,7 +8,6 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 
-
 class TextScrollerEx(private val textView1: TextView, private val textView2: TextView) {
 
     private val tag = TextScrollerEx::class.java.simpleName
@@ -125,50 +124,12 @@ class TextScrollerEx(private val textView1: TextView, private val textView2: Tex
             invisibleTextView.translationY = 0f
         }
 
-        currentIndex = (currentIndex + 1) % UrlApi.getInstance().getItems().size
-        isTextView1Visible = !isTextView1Visible
-    }
-
-    /*
-    // TextView 교체
-    private fun swapTextViews() {
-
-        val visibleTextView = getVisibleTextView()
-        val invisibleTextView = getInvisibleTextView()
-
-        if (isDirectUp) {
-
-            //Log.e(tag, "스크롤 위로")
-
-            //val visibleTextView = getVisibleTextView()
-            //val invisibleTextView = getInvisibleTextView()
-
-            visibleTextView.visibility = View.INVISIBLE
-            visibleTextView.translationY = visibleTextView.height.toFloat()
-            invisibleTextView.translationY = 0f
-
-            //currentIndex = (currentIndex + 1) % UrlApi.getInstance().getItems().size
-            //isTextView1Visible = !isTextView1Visible
-
-        } else {
-
-            //Log.e(tag, "스크롤 아래로")
-
-            //val visibleTextView = getVisibleTextView()
-            //val invisibleTextView = getInvisibleTextView()
-
-            visibleTextView.visibility = View.INVISIBLE
-            visibleTextView.translationY = -visibleTextView.height.toFloat()
-            invisibleTextView.translationY = 0f
-
-            //currentIndex = (currentIndex + 1) % UrlApi.getInstance().getItems().size
-            //isTextView1Visible = !isTextView1Visible
+        val items = UrlApi.getInstance().getItems()
+        if (items.isNotEmpty()) {
+            currentIndex = (currentIndex + 1) % items.size
         }
-
-        currentIndex = (currentIndex + 1) % UrlApi.getInstance().getItems().size
         isTextView1Visible = !isTextView1Visible
     }
-    */
 
     // 현재 보이는 TextView 반환
     private fun getVisibleTextView(): TextView {

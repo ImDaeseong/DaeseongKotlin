@@ -8,7 +8,6 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 
-
 class TextScroller(private val textView1: TextView, private val textView2: TextView) {
 
     private val tag = TextScroller::class.java.simpleName
