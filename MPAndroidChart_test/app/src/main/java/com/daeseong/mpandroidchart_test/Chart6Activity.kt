@@ -47,14 +47,17 @@ class Chart6Activity : AppCompatActivity() {
 
         val dataSet1 = LineDataSet(arrayList1, "arrayList1").apply {
             color = Color.RED
+            valueTextColor = Color.BLACK
         }
 
         val dataSet2 = LineDataSet(arrayList2, "arrayList2").apply {
             color = Color.BLUE
+            valueTextColor = Color.BLACK
         }
 
         val dataSet3 = LineDataSet(arrayList3, "arrayList3").apply {
             color = Color.GREEN
+            valueTextColor = Color.BLACK
         }
 
         val scatterData = LineData(dataSet1, dataSet2, dataSet3)

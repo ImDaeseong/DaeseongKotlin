@@ -17,6 +17,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var button7: Button
     private lateinit var button8: Button
     private lateinit var button9: Button
+    private lateinit var button10: Button
+    private lateinit var button11: Button
+    private lateinit var button12: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button7 = findViewById(R.id.button7)
         button8 = findViewById(R.id.button8)
         button9 = findViewById(R.id.button9)
+        button10 = findViewById(R.id.button10)
+        button11 = findViewById(R.id.button11)
+        button12 = findViewById(R.id.button12)
 
         button1.setOnClickListener(this)
         button2.setOnClickListener(this)
@@ -41,6 +47,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button7.setOnClickListener(this)
         button8.setOnClickListener(this)
         button9.setOnClickListener(this)
+        button10.setOnClickListener(this)
+        button11.setOnClickListener(this)
+        button12.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -55,6 +64,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 R.id.button7 -> Intent(this, Chart7Activity::class.java)
                 R.id.button8 -> Intent(this, Chart8Activity::class.java)
                 R.id.button9 -> Intent(this, Chart9Activity::class.java)
+                R.id.button10 -> Intent(this, Chart10Activity::class.java)
+                R.id.button11 -> Intent(this, Chart11Activity::class.java)
+                R.id.button12 -> Intent(this, Chart12Activity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }

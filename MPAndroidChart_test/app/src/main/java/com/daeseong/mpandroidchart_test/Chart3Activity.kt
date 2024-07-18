@@ -41,11 +41,13 @@ class Chart3Activity : AppCompatActivity() {
 
         val dataSet = CandleDataSet(arrayList1, "arrayList1")
         dataSet.setDrawIcons(false)
+        dataSet.color = Color.rgb(80, 80, 80)
         dataSet.shadowColor = Color.DKGRAY
-        dataSet.decreasingColor = Color.RED // 하락 캔들 색상
-        dataSet.increasingColor = Color.GREEN // 상승 캔들 색상
+        dataSet.shadowWidth = 0.7f
         dataSet.neutralColor = Color.BLUE // 중립 캔들 색상
+        dataSet.decreasingColor = Color.RED // 하락 캔들 색상
         dataSet.decreasingPaintStyle = Paint.Style.FILL // 하락 캔들 스타일
+        dataSet.increasingColor = Color.GREEN // 상승 캔들 색상
         dataSet.increasingPaintStyle = Paint.Style.FILL // 상승 캔들 스타일
 
         val candleData = CandleData(dataSet)
