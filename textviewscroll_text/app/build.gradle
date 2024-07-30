@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.daeseong.textviewscroll_text'
-    compileSdk 33
+    compileSdk 34//33
 
     defaultConfig {
         applicationId "com.daeseong.textviewscroll_text"
-        minSdk 23
-        targetSdk 33
+        minSdk 26//23
+        targetSdk 34//33
         versionCode 1
         versionName "1.0"
 
