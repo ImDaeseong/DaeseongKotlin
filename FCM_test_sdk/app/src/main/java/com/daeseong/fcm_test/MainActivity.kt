@@ -3,11 +3,11 @@ package com.daeseong.fcm_test
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -16,16 +16,6 @@ class MainActivity : AppCompatActivity() {
     private val tag = MainActivity::class.java.simpleName
 
     private lateinit var permissResultLauncher: ActivityResultLauncher<String>
-
-    private fun initPermission() {
-        permissResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
-            if (result) {
-                Log.e(tag, "POST_NOTIFICATIONS 권한 소유")
-            } else {
-                Log.e(tag, "POST_NOTIFICATIONS 권한 미소유")
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +57,16 @@ class MainActivity : AppCompatActivity() {
 
         } catch (ex: Exception) {
             Log.e(tag, ex.message.toString())
+        }
+    }
+
+    private fun initPermission() {
+        permissResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+            if (result) {
+                Log.e(tag, "POST_NOTIFICATIONS 권한 소유")
+            } else {
+                Log.e(tag, "POST_NOTIFICATIONS 권한 미소유")
+            }
         }
     }
 

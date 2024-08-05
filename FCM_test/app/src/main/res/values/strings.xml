@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name">fcm_test</string>
-    <string name="channel_id">daeseong_01</string>
+    <string name="app_name">FCM_test</string>
 </resources>
