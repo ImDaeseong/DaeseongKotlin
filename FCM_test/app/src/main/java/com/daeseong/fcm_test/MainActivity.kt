@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,19 @@ import com.google.firebase.messaging.FirebaseMessaging
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
+
+    companion object {
+        private var mainActivity: MainActivity? = null
+
+        fun getMainActivity(): MainActivity? {
+            return mainActivity
+        }
+
+        fun setMainActivity(activity: MainActivity?) {
+            mainActivity = activity
+        }
+    }
+
 
     private val channelId by lazy { getString(R.string.default_notification_channel_id) }
 
@@ -37,7 +51,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setMainActivity(this)
+
         init()
+
+        initBadge()
 
         initPermission()
 
@@ -52,6 +70,11 @@ class MainActivity : AppCompatActivity() {
         } else {
             Log.e(tag, "sdk 33 이하")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        setMainActivity(null)
     }
 
     private fun init() {
@@ -83,4 +106,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initBadge() {
+
+        //메인 실행시니깐 뱃지 개수는 0
+        val badgeCount = 0
+        val intent = Intent("android.intent.action.BADGE_COUNT_UPDATE").apply {
+            putExtra("badge_count", badgeCount)
+            putExtra("badge_count_package_name", packageName)
+            putExtra("badge_count_class_name", MainActivity::class.java.name)
+        }
+        sendBroadcast(intent)
+        SharedPreferencesUtil.setValue(this, "BADGE", badgeCount)
+    }
 }
