@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        createNotificationChannel()
-
         init()
 
         initPermission()
@@ -56,22 +54,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createNotificationChannel() {
+    private fun init() {
 
-        val channel = NotificationChannel(
-            channelId,
-            "fcm_testPush",
-            NotificationManager.IMPORTANCE_DEFAULT
-        ).apply {
+        val channel = NotificationChannel(channelId,"fcm_testPush", NotificationManager.IMPORTANCE_DEFAULT).apply {
             description = "fcm_test Push"
         }
 
-        val notificationManager: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
-    }
-
-    private fun init() {
 
         try {
 
