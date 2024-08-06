@@ -1,6 +1,9 @@
 package com.daeseong.fcm_test
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +17,9 @@ import com.google.firebase.messaging.FirebaseMessaging
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
+
+    private val channelId by lazy { getString(R.string.default_notification_channel_id) }
+
 
     private lateinit var permissResultLauncher: ActivityResultLauncher<String>
 
@@ -31,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        createNotificationChannel()
+
         init()
 
         initPermission()
@@ -46,6 +54,21 @@ class MainActivity : AppCompatActivity() {
         } else {
             Log.e(tag, "sdk 33 이하")
         }
+    }
+
+    private fun createNotificationChannel() {
+
+        val channel = NotificationChannel(
+            channelId,
+            "fcm_testPush",
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+            description = "fcm_test Push"
+        }
+
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     private fun init() {
