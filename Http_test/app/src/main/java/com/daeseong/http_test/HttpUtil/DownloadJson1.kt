@@ -1,53 +1,43 @@
 import android.app.ProgressDialog
-import android.os.AsyncTask
 import com.daeseong.http_test.ImageTextView2Activity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadJson1(private val imageTextView2Activity: ImageTextView2Activity) : AsyncTask<Void, Void, String>() {
+class DownloadJson1(private val imageTextView2Activity: ImageTextView2Activity) {
 
     private val url1 = "https://api.bithumb.com/public/ticker/BTC"
 
-    private val progressDialog: ProgressDialog = ProgressDialog.show(imageTextView2Activity, "접속중...", "데이터 다운로드중...", true)
+    suspend fun downloadJson() {
 
-    override fun doInBackground(vararg params: Void?): String? {
+        val progressDialog = ProgressDialog.show(imageTextView2Activity, "접속중...", "데이터 다운로드중...", true)
 
-        var httpURLConnection: HttpURLConnection? = null
-        val stringBuilder = StringBuilder()
+        val result = withContext(Dispatchers.IO) {
 
-        try {
+            val stringBuilder = StringBuilder()
+            try {
+                val url = URL(url1)
+                val connection = url.openConnection() as HttpURLConnection
+                connection.connect()
 
-            val url = URL(url1)
-            httpURLConnection = url.openConnection() as HttpURLConnection
-            httpURLConnection.connect()
-
-            val resCode: Int = httpURLConnection.responseCode
-            if (resCode == HttpURLConnection.HTTP_OK) {
-                val inputStream = BufferedInputStream(httpURLConnection.inputStream)
-                val reader = BufferedReader(InputStreamReader(inputStream))
-
-                var line: String?
-                while (reader.readLine().also { line = it } != null) {
-                    stringBuilder.append(line)
+                if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                    val inputStream = BufferedInputStream(connection.inputStream)
+                    val reader = BufferedReader(InputStreamReader(inputStream))
+                    reader.forEachLine { stringBuilder.append(it) }
+                    reader.close()
                 }
-                inputStream.close()
+                connection.disconnect()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            httpURLConnection?.disconnect()
+            stringBuilder.toString()
         }
 
-        return stringBuilder.toString()
-    }
-
-    override fun onPostExecute(s: String) {
-        super.onPostExecute(s)
-
         progressDialog.dismiss()
-        imageTextView2Activity.loadJsonData(s)
+        imageTextView2Activity.loadJsonData(result)
     }
 }

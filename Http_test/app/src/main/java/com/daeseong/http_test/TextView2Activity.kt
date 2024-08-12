@@ -18,18 +18,17 @@ class TextView2Activity : AppCompatActivity() {
 
         textView1 = findViewById(R.id.textView1)
 
-        if (isConnection()) {
+        if (isConnected()) {
             val url1 = "https://api.bithumb.com/public/ticker/BTC"
             downloadJson = DownloadJson(textView1)
             downloadJson.execute(url1)
         } else {
-            textView1.text = "not connect"
+            textView1.text = "Not connected"
         }
     }
 
-    private fun isConnection(): Boolean {
+    private fun isConnected(): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo?.isConnected == true && networkInfo.isAvailable
+        return connectivityManager.activeNetworkInfo?.isConnected == true
     }
 }

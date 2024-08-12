@@ -1,14 +1,31 @@
-import android.os.AsyncTask
 import android.widget.TextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadJson(private val textView: TextView) : AsyncTask<String?, Void?, String?>() {
+class DownloadJson(private val textView: TextView) {
 
-    override fun doInBackground(vararg params: String?): String? {
-        val urlText = params[0]
+    fun execute(urlText: String?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = downloadJson(urlText)
 
+            withContext(Dispatchers.Main) {
+                try {
+                    result?.let {
+                        textView.text = it
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private suspend fun downloadJson(urlText: String?): String? {
         return try {
             val url = URL(urlText)
             val connection = url.openConnection() as HttpURLConnection
@@ -26,18 +43,6 @@ class DownloadJson(private val textView: TextView) : AsyncTask<String?, Void?, S
         } catch (e: IOException) {
             e.printStackTrace()
             null
-        }
-    }
-
-    override fun onPostExecute(s: String?) {
-        super.onPostExecute(s)
-
-        try {
-            s?.let {
-                textView.text = it
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 }

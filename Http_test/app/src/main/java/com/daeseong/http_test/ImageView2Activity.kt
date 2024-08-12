@@ -20,9 +20,9 @@ class ImageView2Activity : AppCompatActivity() {
         imageView1 = findViewById(R.id.imageView1)
 
         if (isConnectionAvailable()) {
-            val url1 = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
+            val url = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
             val downloadImage1 = DownloadImage1(this)
-            downloadImage1.execute(url1)
+            downloadImage1.execute(url)
         }
     }
 
@@ -33,7 +33,8 @@ class ImageView2Activity : AppCompatActivity() {
 
     private fun isConnectionAvailable(): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo?.isConnected == true && networkInfo.isAvailable
+        return connectivityManager.activeNetworkInfo?.run {
+            isConnected && isAvailable
+        } ?: false
     }
 }

@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 
 class TextView1Activity : AppCompatActivity() {
 
-    private lateinit var downloadText: DownloadText
     private lateinit var textView1: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +19,7 @@ class TextView1Activity : AppCompatActivity() {
 
         if (isConnection()) {
             val url1 = "https://api.bithumb.com/public/ticker/BTC"
-            downloadText = DownloadText(textView1)
+            val downloadText = DownloadText(textView1)
             downloadText.execute(url1)
         } else {
             textView1.text = "not connect"

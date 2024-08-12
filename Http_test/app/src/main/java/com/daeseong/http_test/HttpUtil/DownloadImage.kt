@@ -1,47 +1,56 @@
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.AsyncTask
 import android.widget.ImageView
-import java.io.IOException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadImage(private val imageView: ImageView) : AsyncTask<String?, Void, Bitmap?>() {
+class DownloadImage(private val imageView: ImageView) {
 
-    override fun doInBackground(vararg params: String?): Bitmap? {
+    private var job: Job? = null
 
-        val urlImage = params[0]
-        var bitmap: Bitmap? = null
+    fun execute(urlImage: String) {
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val bitmap = withContext(Dispatchers.IO) {
+                var httpURLConnection: HttpURLConnection? = null
+                try {
+                    val url = URL(urlImage)
+                    httpURLConnection = url.openConnection() as HttpURLConnection
+                    httpURLConnection.apply {
+                        allowUserInteraction = false
+                        instanceFollowRedirects = true
+                        requestMethod = "GET"
+                        connect()
+                    }
 
-        try {
-            val url = URL(urlImage)
-            val httpURLConnection = url.openConnection() as HttpURLConnection
-            httpURLConnection.allowUserInteraction = false
-            httpURLConnection.instanceFollowRedirects = true
-            httpURLConnection.requestMethod = "GET"
-            httpURLConnection.connect()
-
-            val resCode: Int = httpURLConnection.responseCode
-            if (resCode == HttpURLConnection.HTTP_OK) {
-                val inputStream: InputStream = httpURLConnection.inputStream
-                bitmap = BitmapFactory.decodeStream(inputStream)
-                inputStream.close()
+                    val responseCode = httpURLConnection.responseCode
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        val inputStream: InputStream = httpURLConnection.inputStream
+                        val bitmap = BitmapFactory.decodeStream(inputStream)
+                        inputStream.close()
+                        bitmap
+                    } else {
+                        null
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                } finally {
+                    httpURLConnection?.disconnect()
+                }
             }
 
-            httpURLConnection.disconnect()
-        } catch (e: IOException) {
-            e.printStackTrace()
+            bitmap?.let {
+                imageView.setImageBitmap(it)
+            }
         }
-
-        return bitmap
     }
 
-    override fun onPostExecute(bitmap: Bitmap?) {
-        super.onPostExecute(bitmap)
-
-        bitmap?.let {
-            imageView.setImageBitmap(it)
-        }
+    fun cancel() {
+        job?.cancel()
     }
 }

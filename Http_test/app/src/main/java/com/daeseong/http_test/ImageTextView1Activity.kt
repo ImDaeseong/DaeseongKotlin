@@ -3,12 +3,13 @@ package com.daeseong.http_test
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
@@ -29,7 +30,8 @@ class ImageTextView1Activity : AppCompatActivity() {
 
     private fun loadData() {
 
-        GlobalScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
+
             val url1 = "https://api.bithumb.com/public/ticker/BTC"
             val result = getUrlData(url1)
             withContext(Dispatchers.Main) {
@@ -38,31 +40,38 @@ class ImageTextView1Activity : AppCompatActivity() {
         }
     }
 
-    private suspend fun getUrlData(sUrl: String): String {
-
-        val sData = StringBuilder()
+    private suspend fun getUrlData(sUrl: String): String = withContext(Dispatchers.IO) {
 
         try {
 
             val url = URL(sUrl)
-            val connection = url.openConnection() as java.net.HttpURLConnection
-            connection.connectTimeout = TimeUnit.SECONDS.toMillis(10).toInt()
-            connection.useCaches = false
-
-            if (connection.responseCode == java.net.HttpURLConnection.HTTP_OK) {
-                val isr = InputStreamReader(connection.inputStream)
-                val br = BufferedReader(isr)
-                var line: String?
-                while (br.readLine().also { line = it } != null) {
-                    sData.append(line).append("\n")
-                }
-                br.close()
-                isr.close()
+            val connection = (url.openConnection() as HttpURLConnection).apply {
+                connectTimeout = TimeUnit.SECONDS.toMillis(10).toInt()
+                useCaches = false
             }
-            connection.disconnect()
+
+            if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                connection.inputStream.use { inputStream ->
+                    InputStreamReader(inputStream).use { isr ->
+                        BufferedReader(isr).use { br ->
+                            buildString {
+                                var line: String?
+                                while (br.readLine().also { line = it } != null) {
+                                    append(line).append("\n")
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                "Error: ${connection.responseCode}"
+            }.also {
+                connection.disconnect()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
+            "Error: ${e.message}"
         }
-        return sData.toString()
     }
+
 }

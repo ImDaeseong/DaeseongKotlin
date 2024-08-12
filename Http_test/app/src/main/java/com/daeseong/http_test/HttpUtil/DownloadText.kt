@@ -1,15 +1,26 @@
-import android.os.AsyncTask
 import android.widget.TextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadText(private val textView: TextView) : AsyncTask<String?, Void?, String?>() {
+class DownloadText(private val textView: TextView) {
 
-    override fun doInBackground(vararg params: String?): String? {
+    fun execute(urlText: String?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = downloadText(urlText)
+            withContext(Dispatchers.Main) {
+                result?.let {
+                    textView.text = it
+                }
+            }
+        }
+    }
 
-        val urlText = params[0]
-
+    private suspend fun downloadText(urlText: String?): String? {
         return try {
             val url = URL(urlText)
             val connection = url.openConnection() as HttpURLConnection
@@ -27,18 +38,6 @@ class DownloadText(private val textView: TextView) : AsyncTask<String?, Void?, S
         } catch (e: IOException) {
             e.printStackTrace()
             null
-        }
-    }
-
-    override fun onPostExecute(s: String?) {
-        super.onPostExecute(s)
-
-        try {
-            s?.let {
-                textView.text = it
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 }
