@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.daeseong.spannable_test'
-    compileSdk 33//32
+    compileSdk 34//33//32
 
     defaultConfig {
         applicationId "com.daeseong.spannable_test"
-        minSdk 23
-        targetSdk 33//32
+        minSdk 26//23
+        targetSdk 34//33//32
         versionCode 1
         versionName "1.0"
 
