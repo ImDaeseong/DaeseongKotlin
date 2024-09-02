@@ -7,31 +7,35 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 object RxUtil {
 
-    //convert AsyncTask<String, Void, String>
-    fun getDataString(sUrl: String?): Observable<String?> {
-        return Observable.fromCallable {
-            try {
-                HttpUtil.getDataString(sUrl)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
+    fun getDataString(sUrl: String?): Observable<String> {
+        return if (sUrl.isNullOrEmpty()) {
+            Observable.just("")
+        } else {
+            Observable.fromCallable<String> {
+                HttpUtil.getDataString(sUrl) ?: ""
             }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn {
+                    it.printStackTrace()
+                    ""
+                }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
     }
 
-    //convert AsyncTask<String, Void, Bitmap>
-    fun getDataBitmap(sUrl: String?): Observable<Bitmap?> {
-        return Observable.fromCallable {
-            try {
-                HttpUtil.getDataBitmap(sUrl!!)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
+    fun getDataBitmap(sUrl: String?): Observable<Bitmap> {
+        return if (sUrl.isNullOrEmpty()) {
+            Observable.error(NullPointerException("null"))
+        } else {
+            Observable.fromCallable<Bitmap> {
+                HttpUtil.getDataBitmap(sUrl) ?: throw NullPointerException("null")
             }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn {
+                    it.printStackTrace()
+                    Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+                }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
     }
 }
