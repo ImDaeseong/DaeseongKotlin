@@ -9,52 +9,73 @@ import kotlin.math.abs
 
 class SwipeGridView : GridView {
 
-    private val SWIPE_THRESHOLD = 30
-    private val SWIPE_VELOCITY_THRESHOLD = 1
+    companion object {
+        private const val SWIPE_THRESHOLD = 30
+        private const val SWIPE_VELOCITY_THRESHOLD = 1
+    }
 
-    private var gestureDetector: GestureDetector? = null
+    private lateinit var gestureDetector: GestureDetector
     private var swipeFrameListener: OnSwipeFrameListener? = null
 
     constructor(context: Context) : super(context) {
-        init()
+        initGesture(context)
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init()
+        initGesture(context)
     }
 
-    private fun init() {
-
+    private fun initGesture(context: Context) {
         gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
 
             override fun onDown(motionEvent: MotionEvent): Boolean {
+                // 터치 이벤트를 계속 수신하려면 true 반환
                 return true
             }
 
-            override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-                var result = false
+            override fun onFling(
+                e1: MotionEvent?,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                // e1 또는 e2가 null인 경우 false 반환하여 제스처 인식을 중지
+                if (e1 == null || e2 == null) return false
+
                 val diffX = e2.x - e1.x
                 val diffY = e2.y - e1.y
-                if (abs(diffX) > abs(diffY)) {
-                    if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffX > 0) {
-                            swipeFrameListener?.swipeRight()
-                        } else {
-                            swipeFrameListener?.swipeLeft()
-                        }
-                        result = true
-                    }
+
+                return if (abs(diffX) > abs(diffY)) {
+                    handleHorizontalSwipe(diffX, velocityX)
                 } else {
-                    if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffY < 0) {
-                            swipeFrameListener?.swipeUp()
-                        } else {
-                            swipeFrameListener?.swipeDown()
-                        }
-                        result = true
-                    }
+                    handleVerticalSwipe(diffY, velocityY)
                 }
-                return result
+            }
+
+            private fun handleHorizontalSwipe(diffX: Float, velocityX: Float): Boolean {
+                return if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > 0) {
+                        swipeFrameListener?.swipeRight()
+                    } else {
+                        swipeFrameListener?.swipeLeft()
+                    }
+                    true
+                } else {
+                    false
+                }
+            }
+
+            private fun handleVerticalSwipe(diffY: Float, velocityY: Float): Boolean {
+                return if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffY > 0) {
+                        swipeFrameListener?.swipeDown()
+                    } else {
+                        swipeFrameListener?.swipeUp()
+                    }
+                    true
+                } else {
+                    false
+                }
             }
         })
     }
@@ -64,8 +85,8 @@ class SwipeGridView : GridView {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        gestureDetector?.onTouchEvent(event)
-        return true
+        // 제스처를 감지하지 못하면 super.onTouchEvent(event)를 호출
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
     }
 
     interface OnSwipeFrameListener {
