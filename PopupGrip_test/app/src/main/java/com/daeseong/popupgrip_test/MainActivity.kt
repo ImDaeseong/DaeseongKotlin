@@ -1,5 +1,6 @@
 package com.daeseong.popupgrip_test
 
+import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -29,18 +30,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         when (v?.id) {
             R.id.button1 -> {
                 val intent1 = Intent(this, Popup1Activity::class.java)
-                startActivity(intent1)
-                overridePendingTransition(R.anim.slide_in_bottom, 0)
+
+                val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_bottom, 0)
+                startActivity(intent1, options.toBundle())
+
+                //startActivity(intent1)
+                //overridePendingTransition(R.anim.slide_in_bottom, 0)
             }
             R.id.button2 -> {
                 val intent2 = Intent(this, Popup2Activity::class.java)
-                startActivity(intent2)
-                overridePendingTransition(R.anim.slide_in_bottom, 0)
+
+                val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_bottom, 0)
+                startActivity(intent2, options.toBundle())
+
+                //startActivity(intent2)
+                //overridePendingTransition(R.anim.slide_in_bottom, 0)
             }
             R.id.button3 -> {
                 val intent3 = Intent(this, Popup3Activity::class.java)
-                startActivity(intent3)
-                overridePendingTransition(R.anim.slide_in_bottom, 0)
+
+                val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_bottom, 0)
+                startActivity(intent3, options.toBundle())
+
+                //startActivity(intent3)
+                //overridePendingTransition(R.anim.slide_in_bottom, 0)
             }
         }
     }
