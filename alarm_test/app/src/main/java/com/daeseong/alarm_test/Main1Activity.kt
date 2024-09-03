@@ -42,24 +42,32 @@ class Main1Activity : AppCompatActivity() {
     }
 
     private fun setAlarm(isRepeat: Boolean) {
-
         destroyAlarm()
 
         alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         alarmIntent = Intent(this, AlarmReceiver::class.java)
         val requestCode = Random().nextInt()
-        alarmPendingIntent = PendingIntent.getBroadcast(this, requestCode, alarmIntent!!, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        calendar.add(Calendar.SECOND, 5)
+        alarmIntent?.let {
+            alarmPendingIntent = PendingIntent.getBroadcast(this, requestCode, it,PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        } ?: run {
+            Log.e(tag, "PendingIntent가 null입니다.")
+            return
+        }
 
-        if (isRepeat) {
-            // 반복 설정
-            alarmManager?.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 5000, alarmPendingIntent)
-        } else {
-            // 한번만 설정
-            alarmManager?.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmPendingIntent)
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            add(Calendar.SECOND, 5)
+        }
+
+        alarmManager?.let { manager ->
+            alarmPendingIntent?.let { pendingIntent ->
+                if (isRepeat) {
+                    manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis,5000, pendingIntent)
+                } else {
+                    manager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+                }
+            }
         }
 
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -67,11 +75,11 @@ class Main1Activity : AppCompatActivity() {
         Log.e(tag, "설정된 알람 시간: $formattedTime")
     }
 
+
     private fun destroyAlarm() {
-        if (alarmPendingIntent != null) {
-            alarmManager?.cancel(alarmPendingIntent)
-            alarmPendingIntent?.cancel()
-            alarmManager = null
+        alarmPendingIntent?.let {
+            alarmManager?.cancel(it)
+            it.cancel()
             alarmPendingIntent = null
         }
     }

@@ -14,7 +14,7 @@ class Main2Activity : AppCompatActivity() {
     private val tag = Main2Activity::class.java.simpleName
 
     private var alarmManager: AlarmManager? = null
-    private var alarmpendingIntent: PendingIntent? = null
+    private var alarmPendingIntent: PendingIntent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,13 +33,23 @@ class Main2Activity : AppCompatActivity() {
 
         alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(this, AlarmReceiver::class.java)
-        alarmpendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        calendar.add(Calendar.SECOND, 5)
+        alarmPendingIntent = PendingIntent.getBroadcast(this,0, alarmIntent,PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        alarmManager?.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmpendingIntent)
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            add(Calendar.SECOND, 5)
+        }
+
+        alarmManager?.let { manager ->
+            alarmPendingIntent?.let { pendingIntent ->
+                manager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+            } ?: run {
+                Log.e(tag, "PendingIntent가 null입니다.")
+            }
+        } ?: run {
+            Log.e(tag, "AlarmManager가 null입니다.")
+        }
 
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val formattedTime = simpleDateFormat.format(calendar.time)
@@ -47,11 +57,10 @@ class Main2Activity : AppCompatActivity() {
     }
 
     private fun destroyAlarm() {
-        if (alarmpendingIntent != null) {
-            alarmManager?.cancel(alarmpendingIntent)
-            alarmpendingIntent?.cancel()
-            alarmManager = null
-            alarmpendingIntent = null
+        alarmPendingIntent?.let {
+            alarmManager?.cancel(it)
+            it.cancel()
+            alarmPendingIntent = null
         }
     }
 }

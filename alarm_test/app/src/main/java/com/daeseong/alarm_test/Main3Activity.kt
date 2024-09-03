@@ -14,8 +14,7 @@ class Main3Activity : AppCompatActivity() {
     private val tag = Main3Activity::class.java.simpleName
 
     private var alarmManager: AlarmManager? = null
-    private var alarmpendingIntent: PendingIntent? = null
-    private var alarmIntent: Intent? = null
+    private var alarmPendingIntent: PendingIntent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,38 +32,52 @@ class Main3Activity : AppCompatActivity() {
         destroyAlarm()
 
         alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        calendar.set(Calendar.HOUR_OF_DAY, 14)
-        calendar.set(Calendar.MINUTE, 50)
-        calendar.set(Calendar.SECOND, 0)
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, 14)
+            set(Calendar.MINUTE, 50)
+            set(Calendar.SECOND, 0)
+        }
 
-        alarmIntent = Intent(this, AlarmReceiver::class.java)
+        val alarmIntent = Intent(this, AlarmReceiver::class.java)
         val requestCode = 123
 
-        alarmpendingIntent = PendingIntent.getBroadcast(this, requestCode, alarmIntent!!, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        alarmPendingIntent = PendingIntent.getBroadcast(this, requestCode, alarmIntent,PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        alarmManager?.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmpendingIntent)
+        alarmManager?.let { manager ->
+            alarmPendingIntent?.let { pendingIntent ->
 
-        // 1분마다 반복
-        //alarmManager?.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 1000 * 60 * 1, alarmpendingIntent)
+                // 단일 알람 설정
+                manager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
 
-        // 20분마다 반복
-        //alarmManager?.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 1000 * 60 * 20, alarmpendingIntent)
+                /*
+                // 1분마다 반복
+                manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 1000 * 60 * 1, pendingIntent)
+                */
 
-        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        val sTime: String = simpleDateFormat.format(calendar.time)
+                /*
+                // 20분마다 반복
+                manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 1000 * 60 * 20, pendingIntent)
+                */
+
+            } ?: run {
+                Log.e(tag, "PendingIntent가 null입니다.")
+            }
+        } ?: run {
+            Log.e(tag, "AlarmManager가 null입니다.")
+        }
+
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val sTime = simpleDateFormat.format(calendar.time)
         Log.e(tag, "설정된 알람 시간: $sTime")
     }
 
     private fun destroyAlarm() {
-        if (alarmpendingIntent != null) {
-            alarmpendingIntent?.let {
-                alarmManager?.cancel(it)
-                it.cancel()
-            }
-            alarmManager = null
-            alarmpendingIntent = null
+        alarmPendingIntent?.let {
+            alarmManager?.cancel(it)
+            it.cancel()
         }
+        alarmPendingIntent = null
+        alarmManager = null
     }
 }
