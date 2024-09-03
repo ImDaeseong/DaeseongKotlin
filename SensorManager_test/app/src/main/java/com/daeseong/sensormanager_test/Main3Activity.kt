@@ -9,6 +9,8 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.abs
+import kotlin.math.atan2
 
 class Main3Activity : AppCompatActivity() {
 
@@ -54,16 +56,12 @@ class Main3Activity : AppCompatActivity() {
     private fun initSensor() {
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
 
-        accelerometerSensor.let {
-            sensorManager.registerListener(sensorEventListener, it, SensorManager.SENSOR_DELAY_NORMAL)
-        }
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
+        sensorManager.registerListener(sensorEventListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
 
-        lightSensor.let {
-            sensorManager.registerListener(sensorEventListener, it, SensorManager.SENSOR_DELAY_NORMAL)
-        }
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)!!
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     private fun destroySensors() {
@@ -71,11 +69,11 @@ class Main3Activity : AppCompatActivity() {
     }
 
     private fun handleAccelerometerSensor(event: SensorEvent) {
-        val angleX = Math.toDegrees(Math.atan2(event.values[0].toDouble(), event.values[2].toDouble()))
-        val angleY = Math.toDegrees(Math.atan2(event.values[1].toDouble(), event.values[2].toDouble()))
+        val angleX = Math.toDegrees(atan2(event.values[0].toDouble(), event.values[2].toDouble()))
+        val angleY = Math.toDegrees(atan2(event.values[1].toDouble(), event.values[2].toDouble()))
 
         runOnUiThread {
-            if (Math.abs(angleX) > 170 && Math.abs(angleY) > 170) {
+            if (abs(angleX) > 170 && abs(angleY) > 170) {
                 startActivity(Intent(this@Main3Activity, LockActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 })
@@ -87,7 +85,7 @@ class Main3Activity : AppCompatActivity() {
     }
 
     private fun handleLightSensor(event: SensorEvent) {
-        val lightValue = Math.abs(event.values[0])
+        val lightValue = abs(event.values[0])
 
         runOnUiThread {
             tvLight.text = if (lightValue == 0f) "뒤면" else "앞면"
