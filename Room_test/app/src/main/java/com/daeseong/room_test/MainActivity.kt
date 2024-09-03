@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         alarmDao = AppDatabase.getInstance(this).alarmDao()
 
-        //전체 개수 조회
+        // 전체 개수 조회
         updateRowCount()
     }
 
@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun add() {
-
         getCompletable {
             val title = editTitle.text.toString()
             val content = editContent.text.toString()
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val alarm = Alarm(title = title, content = content, regDate = Date())
             alarmDao.insert(alarm)
 
-            // 입력 데이타가 10개가 넘으면 가장 처음 입력한 데이타 삭제
+            // 입력 데이터가 10개가 넘으면 가장 오래된 데이터 삭제
             val rowCount = alarmDao.getRowCount()
             if (rowCount > 10) {
                 alarmDao.deleteOldest()
@@ -77,21 +76,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::onComplete, this::onError)
+            .subscribe(::onComplete, ::onError)
     }
 
     private fun read() {
-
         getObservable {
             alarmDao.getAll()
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::onReadSuccess, this::onError)
+            .subscribe(::onReadSuccess, ::onError)
     }
 
     private fun update() {
-
         getCompletable {
             val title = editTitle.text.toString()
             val content = editContent.text.toString()
@@ -106,7 +103,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::onComplete, this::onError)
+            .subscribe(::onComplete, ::onError)
     }
 
     private fun delete() {
@@ -117,7 +114,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::onComplete, this::onError)
+            .subscribe(::onComplete, ::onError)
     }
 
     private fun updateRowCount() {
@@ -126,7 +123,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::onRowCount, this::onError)
+            .subscribe(::onRowCount, ::onError)
     }
 
     private fun getCompletable(runnable: () -> Unit): Completable {
@@ -134,12 +131,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             try {
                 runnable.invoke()
             } catch (e: Exception) {
-                Log.e(tag, e.message.toString())
+                Log.e(tag, e.message.orEmpty())
             }
         }
     }
 
-    private fun <T> getObservable(callable: () -> T): Observable<T> {
+    private fun <T : Any> getObservable(callable: () -> T): Observable<T> {
         return Observable.fromCallable {
             try {
                 callable.invoke()
@@ -150,7 +147,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun onComplete() {
-
         editTitle.setText("")
         editContent.setText("")
         editTitle.requestFocus()
@@ -162,14 +158,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun onReadSuccess(alarmList: List<Alarm>) {
         val sMsg = StringBuilder()
         for (alarm in alarmList) {
-            val line = String.format("id:%d title:%s content:%s regDate:%s%n", alarm.id, alarm.title, alarm.content, formatDate(alarm.regDate))
+            val line = String.format("id:%d title:%s content:%s regDate:%s%n",
+                alarm.id, alarm.title, alarm.content, formatDate(alarm.regDate))
             sMsg.append(line)
         }
         textResult.text = sMsg.toString()
     }
 
     private fun onError(throwable: Throwable) {
-        Log.e(tag, throwable.message.toString())
+        Log.e(tag, throwable.message.orEmpty())
     }
 
     private fun onRowCount(rowCount: Int) {
