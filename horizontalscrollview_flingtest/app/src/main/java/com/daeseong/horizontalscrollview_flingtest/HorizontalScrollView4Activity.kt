@@ -22,7 +22,7 @@ class HorizontalScrollView4Activity : AppCompatActivity() {
     private lateinit var image2: RoundedImageView
     private lateinit var image3: RoundedImageView
 
-    private var imgList: MutableList<RoundedImageView> = mutableListOf()
+    private val imgList: MutableList<RoundedImageView> = mutableListOf()
     private lateinit var gestureDetector: GestureDetector
     private lateinit var layoutParams: LinearLayout.LayoutParams
 
@@ -39,8 +39,9 @@ class HorizontalScrollView4Activity : AppCompatActivity() {
 
     private fun init() {
 
-        //제스처 이벤트
-        gestureDetector = GestureDetector(applicationContext, MyGestureDetector())
+        // 제스처 이벤트를 위한 GestureDetector 초기화
+        gestureDetector = GestureDetector(this, MyGestureDetector())
+
         hsc = findViewById(R.id.hsc)
         image1 = findViewById(R.id.image1)
         image2 = findViewById(R.id.image2)
@@ -51,29 +52,10 @@ class HorizontalScrollView4Activity : AppCompatActivity() {
             refreshInit()
         }
 
-        //해상도 사이즈
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        nWidth = displayMetrics.widthPixels - dip2px(39F)
-        nImgHeight = (320 * (nWidth.toFloat() / 960)).toInt()
-        layoutParams = LinearLayout.LayoutParams(nWidth, nImgHeight)
+        // 해상도 사이즈 및 레이아웃 초기화
+        updateDimensionsAndImages()
 
-        //이미지 설정
-        for (i in 0..2) {
-            when (i) {
-                0 -> {
-                    setupImage(image1, 0, R.drawable.a)
-                }
-                1 -> {
-                    setupImage(image2, 10, R.drawable.b)
-                }
-                2 -> {
-                    setupImage(image3, 10, R.drawable.a)
-                }
-            }
-        }
-
-        //이미지 리스트
+        // 이미지 리스트 초기화
         imgList.addAll(listOf(image1, image2, image3))
 
         hsc.setOnTouchListener { _, event ->
@@ -81,53 +63,43 @@ class HorizontalScrollView4Activity : AppCompatActivity() {
         }
     }
 
+    private fun updateDimensionsAndImages() {
+
+        // 이미지 크기 계산
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        nWidth = displayMetrics.widthPixels - dip2px(39F)
+        nImgHeight = (320 * (nWidth.toFloat() / 960)).toInt()
+
+        layoutParams = LinearLayout.LayoutParams(nWidth, nImgHeight)
+
+        // 이미지 설정
+        setupImage(image1, 0, R.drawable.a)
+        setupImage(image2, 10, R.drawable.b)
+        setupImage(image3, 10, R.drawable.a)
+    }
+
     private fun setupImage(imageView: RoundedImageView, margin: Int, resourceId: Int) {
+
         layoutParams.setMargins(margin, 0, 0, 0)
         imageView.apply {
             adjustViewBounds = true
             scaleType = ImageView.ScaleType.FIT_XY
-            this.layoutParams = layoutParams
+            layoutParams = this@HorizontalScrollView4Activity.layoutParams
             clipToOutline = true
             setImageResource(resourceId)
         }
     }
 
-    private fun prevImage() {
-        hsc.smoothScrollTo(hsc.scrollX - nWidth, 0)
-    }
-
-    private fun nextImage() {
-        hsc.smoothScrollTo(hsc.scrollX + nWidth, 0)
-    }
-
     private fun refreshInit() {
 
-        //이미지 개수
-        imgList!!.clear()
+        // 이미지 개수 초기화
+        imgList.clear()
 
-        //해상도 사이즈
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        nWidth = displayMetrics.widthPixels - dip2px(39F)
-        nImgHeight = (320 * (nWidth.toFloat() / 960)).toInt()
-        layoutParams = LinearLayout.LayoutParams(nWidth, nImgHeight)
+        // 해상도 사이즈 및 레이아웃 초기화
+        updateDimensionsAndImages()
 
-        //이미지 설정
-        for (i in 0..2) {
-            when (i) {
-                0 -> {
-                    setupImage(image1, 0, R.drawable.b)
-                }
-                1 -> {
-                    setupImage(image2, 10, R.drawable.a)
-                }
-                2 -> {
-                    setupImage(image3, 10, R.drawable.b)
-                }
-            }
-        }
-
-        //이미지 리스트
+        // 이미지 리스트 초기화
         imgList.addAll(listOf(image1, image2, image3))
     }
 
@@ -135,15 +107,16 @@ class HorizontalScrollView4Activity : AppCompatActivity() {
         val hitRect = Rect()
         var position = 0
         var rightCounter = 0
-        for ((i, img) in imgList.withIndex()) {
+
+        imgList.forEachIndexed { i, img ->
             if (img.getLocalVisibleRect(hitRect)) {
                 if (direction == "left") {
                     position = i
-                    break
+                    return@forEachIndexed // 더 이상 필요 없으므로 루프 종료
                 } else if (direction == "right") {
                     rightCounter++
                     position = i
-                    if (rightCounter == 2) break
+                    if (rightCounter == 2) return@forEachIndexed // 두 번째 이미지까지 찾았으므로 루프 종료
                 }
             }
         }
@@ -151,26 +124,25 @@ class HorizontalScrollView4Activity : AppCompatActivity() {
     }
 
     private fun dip2px(dpValue: Float): Int {
-        val scale: Float = resources.displayMetrics.density
+        val scale = resources.displayMetrics.density
         return (dpValue * scale + 0.5f).toInt()
     }
 
-
     inner class MyGestureDetector : GestureDetector.SimpleOnGestureListener() {
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
 
-            selectIndex = if (e1.x < e2.x) {
-                getVisibleViews("left")
-            } else {
-                getVisibleViews("right")
+            val direction = if (e1?.x ?: 0f < e2.x) "left" else "right"
+            selectIndex = getVisibleViews(direction)
+
+            if (selectIndex in imgList.indices) {
+                hsc.smoothScrollTo(imgList[selectIndex].left, 0)
             }
 
-            hsc.smoothScrollTo(imgList[selectIndex].left, 0)
             return true
         }
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
-            Log.e(tag, "selectIndex:$selectIndex")
+            Log.d(tag, "현재 보이는 이미지 인덱스: $selectIndex")
             return super.onSingleTapUp(e)
         }
     }

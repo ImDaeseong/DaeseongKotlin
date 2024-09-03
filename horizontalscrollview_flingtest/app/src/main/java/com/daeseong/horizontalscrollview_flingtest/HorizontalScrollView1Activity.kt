@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.HorizontalScrollView
@@ -24,14 +23,12 @@ class HorizontalScrollView1Activity : AppCompatActivity() {
     private lateinit var image2: ImageView
     private lateinit var image3: ImageView
 
-    private var imgList: ArrayList<ImageView> = ArrayList()
-    private var gestureDetector: GestureDetector? = null
+    private val imgList = ArrayList<ImageView>()
+    private lateinit var gestureDetector: GestureDetector
     private var layoutParams: LinearLayout.LayoutParams? = null
 
-    private var nWidth: Int = 0
-    private var nHeight: Int = 0
-    private var nImgHeight: Int = 0
-    private var selectIndex = 0
+    private var nWidth = 0
+    private var nImgHeight = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,14 +46,15 @@ class HorizontalScrollView1Activity : AppCompatActivity() {
 
     private fun init() {
 
-        //제스처 이벤트
-        gestureDetector = GestureDetector(applicationContext, MyGestureDetector())
+        // 제스처 감지를 위한 GestureDetector 초기화
+        gestureDetector = GestureDetector(this, MyGestureDetector())
+
         hsc = findViewById(R.id.hsc)
         image1 = findViewById(R.id.image1)
         image2 = findViewById(R.id.image2)
         image3 = findViewById(R.id.image3)
-
         btnRefresh = findViewById(R.id.btnrefresh)
+
         btnRefresh.setOnClickListener {
             refreshInit()
         }
@@ -64,96 +62,67 @@ class HorizontalScrollView1Activity : AppCompatActivity() {
         initImageList()
 
         hsc.setOnTouchListener { _, event ->
-            gestureDetector?.onTouchEvent(event) ?: false
+            gestureDetector.onTouchEvent(event)
         }
     }
 
     private fun initImageList() {
 
-        //이미지 개수
-        imgList.clear()
+        // 이미지 속성 초기화 및 이미지 목록에 추가
+        updateImageAttributes()
+        imgList.apply {
+            clear()
+            addAll(listOf(image1, image2, image3))
+        }
+    }
 
-        //해상도 사이즈
+    private fun updateImageAttributes() {
+
+        // 이미지 크기 계산
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         nWidth = displayMetrics.widthPixels - dip2px(this, 29F)
-        nHeight = displayMetrics.heightPixels
         nImgHeight = (320 * (nWidth.toFloat() / 960)).toInt()
         layoutParams = LinearLayout.LayoutParams(nWidth, nImgHeight)
 
-        //이미지 설정
-        setImageAttributes(image1, R.drawable.a)
-        setImageAttributes(image2, R.drawable.b)
-        setImageAttributes(image3, R.drawable.a)
-
-        //이미지 리스트
-        imgList.addAll(listOf(image1, image2, image3))
-    }
-
-    private fun setImageAttributes(imageView: ImageView, resourceId: Int) {
-        imageView.setImageResource(resourceId)
-        imageView.adjustViewBounds = true
-        imageView.scaleType = ImageView.ScaleType.FIT_XY
-        imageView.layoutParams = layoutParams
-        imageView.clipToOutline = true
-    }
-
-    private fun prevImage() {
-        hsc.smoothScrollTo(hsc.scrollX - nWidth, 0)
-    }
-
-    private fun nextImage() {
-        hsc.smoothScrollTo(hsc.scrollX + nWidth, 0)
+        // 이미지 속성 설정
+        listOf(image1 to R.drawable.a, image2 to R.drawable.b, image3 to R.drawable.a).forEach { (imageView, resourceId) ->
+            imageView.setImageResource(resourceId)
+            imageView.adjustViewBounds = true
+            imageView.scaleType = ImageView.ScaleType.FIT_XY
+            imageView.layoutParams = layoutParams
+            imageView.clipToOutline = true
+        }
     }
 
     private fun refreshInit() {
 
-        //이미지 개수
-        imgList!!.clear()
-
-        //해상도 사이즈
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        nWidth = displayMetrics.widthPixels - dip2px(this, 29F)
-        nHeight = displayMetrics.heightPixels
-        nImgHeight = (320 * (nWidth.toFloat() / 960)).toInt()
-        layoutParams = LinearLayout.LayoutParams(nWidth, nImgHeight)
-
-        //이미지 설정
-        image1!!.setImageResource(R.drawable.b)
-        image1!!.adjustViewBounds = true
-        image1!!.scaleType = ImageView.ScaleType.FIT_XY
-        image1!!.layoutParams = layoutParams
-        image2!!.setImageResource(R.drawable.a)
-        image2!!.adjustViewBounds = true
-        image2!!.scaleType = ImageView.ScaleType.FIT_XY
-        image2!!.layoutParams = layoutParams
-        image3!!.setImageResource(R.drawable.b)
-        image3!!.adjustViewBounds = true
-        image3!!.scaleType = ImageView.ScaleType.FIT_XY
-        image3!!.layoutParams = layoutParams
-
-        //이미지 리스트
-        imgList!!.add(image1!!)
-        imgList!!.add(image2!!)
-        imgList!!.add(image3!!)
+        // 이미지 목록 및 속성 새로 고침
+        updateImageAttributes()
+        imgList.apply {
+            clear()
+            addAll(listOf(image1, image2, image3))
+        }
     }
 
     private fun getVisibleViews(direction: String): Int {
         val hitRect = Rect()
-        var position = 0
-        var rightCounter = 0
+        var position = -1
 
-        for (i in imgList.indices) {
-            if (imgList[i].getLocalVisibleRect(hitRect)) {
-                if (direction == "left") {
-                    position = i
-                    break
+        imgList.forEachIndexed { index, imageView ->
+
+            if (imageView.getLocalVisibleRect(hitRect)) {
+
+                if (direction == "left" && position == -1) {
+
+                    // 왼쪽으로 스크롤할 때 첫 번째 보이는 이미지를 찾음
+                    position = index
                 } else if (direction == "right") {
-                    rightCounter++
-                    position = i
-                    if (rightCounter == 2) break
+
+                    // 오른쪽으로 스크롤할 때 마지막 보이는 이미지를 찾음
+                    position = index
                 }
+
             }
         }
 
@@ -165,31 +134,24 @@ class HorizontalScrollView1Activity : AppCompatActivity() {
         return (dpValue * scale + 0.5f).toInt()
     }
 
-    private fun px2dip(context: Context, pxValue: Float): Int {
-        val scale = context.resources.displayMetrics.density
-        return (pxValue / scale + 0.5f).toInt()
-    }
+    inner class MyGestureDetector : GestureDetector.SimpleOnGestureListener() {
 
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
 
-    inner class MyGestureDetector : SimpleOnGestureListener() {
+            // e1이 null일 수 있으므로 null 체크 후 x 좌표 비교
+            val direction = if (e1?.x ?: 0f < e2.x) "left" else "right"
+            val position = getVisibleViews(direction)
 
-        override fun onFling(
-            e1: MotionEvent, e2: MotionEvent,
-            velocityX: Float, velocityY: Float
-        ): Boolean {
-            selectIndex = if (e1.x < e2.x) {
-                getVisibleViews("left")
-            } else {
-                getVisibleViews("right")
+            if (position in imgList.indices) {
+                hsc.smoothScrollTo(imgList[position].left, 0)
             }
-
-            hsc.smoothScrollTo(imgList[selectIndex].left, 0)
             return true
         }
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
-            Log.e(tag, "selectIndex:$selectIndex")
+            Log.d(tag, "현재 보이는 이미지 인덱스: ${getVisibleViews("right")}")
             return super.onSingleTapUp(e)
         }
     }
+
 }
