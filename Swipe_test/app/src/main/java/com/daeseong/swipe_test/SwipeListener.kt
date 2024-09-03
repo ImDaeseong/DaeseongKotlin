@@ -4,10 +4,9 @@ import android.content.Context
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import kotlin.math.abs
 
-open class SwipeListener(context: Context) : OnTouchListener {
+open class SwipeListener(context: Context) : View.OnTouchListener {
 
     companion object {
         private const val SWIPE_THRESHOLD = 30
@@ -32,7 +31,9 @@ open class SwipeListener(context: Context) : OnTouchListener {
 
         override fun onDown(e: MotionEvent): Boolean = true
 
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean {
+
+            if (e1 == null) return false
 
             var result = false
             val diffX = e2.x - e1.x
@@ -50,5 +51,4 @@ open class SwipeListener(context: Context) : OnTouchListener {
             return result
         }
     }
-
 }
