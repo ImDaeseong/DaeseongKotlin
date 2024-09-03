@@ -51,7 +51,16 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, sMsg, Toast.LENGTH_SHORT).show()
                 }
             }
-            registerReceiver(broadcastReceiver, IntentFilter("LOCATION_UPDATE"))
+
+            val intentFilter = IntentFilter().apply {
+                addAction("LOCATION_UPDATE")
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(broadcastReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                registerReceiver(broadcastReceiver, intentFilter)
+            }
         }
 
         checkPermission()
@@ -67,18 +76,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == 1) {
-
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                //Log.e(tag, "위치 권한 없음")
-            } else {
-
-                //Log.e(tag, "위치 권한 있음")
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 runService()
+            } else {
+                Toast.makeText(this, "권한 없음", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -90,14 +95,14 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this, LocationService::class.java)
                     startForegroundService(intent)
                 } else {
-                    Log.e(tag, "startForegroundService 이미 실행중")
+                    Log.e(tag, "startForegroundService 이미 실행")
                 }
             } else {
                 if (LocationService.serviceIntent == null) {
                     val intent = Intent(this, LocationService::class.java)
                     startService(intent)
                 } else {
-                    Log.e(tag, "startService 이미 실행중")
+                    Log.e(tag, "startService 이미 실행")
                 }
             }
         } catch (ex: Exception) {
@@ -106,7 +111,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stopService() {
-
         try {
             val intent = Intent(this, LocationService::class.java)
             stopService(intent)
@@ -116,25 +120,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkPermission() {
+        val permissionsToRequest = mutableListOf<String>()
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
 
-            //Log.e(tag, "위치 권한 없음")
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                //Log.e(tag, "사용자가 위치 권한 취소시 권한 재요청")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
-            } else {
-
-                //Log.e(tag, "최초로 위치 권한 요청 첫실행")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.FOREGROUND_SERVICE_LOCATION)
             }
-        } else {
+        }
 
-            //Log.e(tag, "위치 권한 있음")
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), 1)
+        } else {
             runService()
         }
     }
-
 }
