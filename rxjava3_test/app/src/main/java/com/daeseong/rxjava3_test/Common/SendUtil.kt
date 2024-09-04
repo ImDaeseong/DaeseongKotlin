@@ -7,16 +7,20 @@ import java.net.InetAddress
 
 class SendUtil {
 
-    fun sendMessage(serverIP: String?, port: Int, sMsg: String): Observable<Boolean?>? {
+    fun sendMessage(serverIP: String, port: Int, sMsg: String): Observable<Boolean> {
         return Observable.fromCallable {
             try {
+
+                // 서버 IP
+                val address = InetAddress.getByName(serverIP)
+
+                // DatagramSocket을 use 블록으로 감싸 자동으로 자원 해제
                 DatagramSocket().use { datagramSocket ->
                     datagramSocket.broadcast = true
-                    val address = InetAddress.getByName(serverIP)
                     val bytesend: ByteArray = sMsg.toByteArray()
                     val sendPacket = DatagramPacket(bytesend, bytesend.size, address, port)
                     datagramSocket.send(sendPacket)
-                    return@fromCallable true
+                    true
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

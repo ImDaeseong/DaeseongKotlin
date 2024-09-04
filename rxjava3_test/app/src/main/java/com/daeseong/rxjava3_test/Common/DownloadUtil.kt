@@ -2,7 +2,8 @@ package com.daeseong.rxjava3_test.Common
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Single
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -12,8 +13,8 @@ import java.net.URL
 
 class DownloadUtil {
 
-    fun getData(sUrl: String): Observable<String> {
-        return Observable.fromCallable {
+    fun getData(sUrl: String): Single<String> {
+        return Single.fromCallable {
             try {
                 getJsonUrl(sUrl)
             } catch (e: Exception) {
@@ -23,10 +24,12 @@ class DownloadUtil {
         }
     }
 
-    fun getBitmap(sUrl: String?): Observable<Bitmap?>? {
-        return Observable.fromCallable {
+    fun getBitmap(sUrl: String): Maybe<Bitmap> {
+        return Maybe.fromCallable {
             try {
-                getBitmapUrl(sUrl!!)
+                getBitmapUrl(sUrl)?.let { bitmap ->
+                    bitmap
+                } ?: throw NoSuchElementException("Bitmap is null")
             } catch (e: Exception) {
                 e.printStackTrace()
                 null
@@ -43,7 +46,7 @@ class DownloadUtil {
         try {
             val url = URL(sUrl)
             httpURLConnection = url.openConnection() as HttpURLConnection
-            with(httpURLConnection) {
+            httpURLConnection.apply {
                 allowUserInteraction = false
                 instanceFollowRedirects = true
                 requestMethod = "GET"
@@ -54,9 +57,10 @@ class DownloadUtil {
             if (resCode == HttpURLConnection.HTTP_OK) {
                 inputStream = httpURLConnection.inputStream
                 bufferedReader = BufferedReader(InputStreamReader(inputStream))
-                var line: String?
-                while (bufferedReader.readLine().also { line = it } != null) {
-                    stringBuilder.append(line)
+                bufferedReader.use { reader ->
+                    reader.forEachLine { line ->
+                        stringBuilder.append(line)
+                    }
                 }
             }
         } catch (e: IOException) {
@@ -78,7 +82,7 @@ class DownloadUtil {
         try {
             val url = URL(urlImage)
             httpURLConnection = url.openConnection() as HttpURLConnection
-            with(httpURLConnection) {
+            httpURLConnection.apply {
                 allowUserInteraction = false
                 instanceFollowRedirects = true
                 requestMethod = "GET"

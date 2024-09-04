@@ -1,7 +1,7 @@
 package com.daeseong.rxjava3_test
 
-import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +18,7 @@ class Main5Activity : AppCompatActivity() {
 
     private val sUrl = "https://api.bithumb.com/public/ticker/BTC"
     private val sImgUrl = "https://cdn.pixabay.com/photo/2015/07/14/18/14/school-845196_960_720.png"
-    private lateinit var downloadUtil: DownloadUtil
+    private val downloadUtil by lazy { DownloadUtil() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,30 +27,34 @@ class Main5Activity : AppCompatActivity() {
         textView1 = findViewById(R.id.textView1)
         imageView1 = findViewById(R.id.imageView1)
 
-        downloadUtil = DownloadUtil()
+        fetchData()
+        fetchImage()
+    }
 
+    private fun fetchData() {
         downloadUtil.getData(sUrl)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { sResult: String? ->
-                    textView1.text = sResult
+                { result ->
+                    textView1.text = result
                 },
-                { throwable: Throwable? ->
-                    throwable?.printStackTrace()
+                { error ->
+                    Log.e(tag, "Error:", error)
                 }
             )
+    }
 
+    private fun fetchImage() {
         downloadUtil.getBitmap(sImgUrl)
-            ?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(
-                { bBitmap: Bitmap? ->
-                    //Log.e(tag, bBitmap.toString())
-                    imageView1.setImageBitmap(bBitmap)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { bitmap ->
+                    imageView1.setImageBitmap(bitmap)
                 },
-                { throwable: Throwable? ->
-                    throwable?.printStackTrace()
+                { error ->
+                    Log.e(tag, "Error:", error)
                 }
             )
     }
