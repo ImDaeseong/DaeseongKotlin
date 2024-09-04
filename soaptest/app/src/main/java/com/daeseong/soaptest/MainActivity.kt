@@ -7,7 +7,6 @@ import com.daeseong.util.SoapXml
 
 class MainActivity : AppCompatActivity() {
 
-    private var soapXml: SoapXml? = null
     private lateinit var textView1: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,11 +15,10 @@ class MainActivity : AppCompatActivity() {
 
         textView1 = findViewById(R.id.textView1)
 
+        val soapXml = SoapXml(textView1)
         try {
-            soapXml = SoapXml(textView1)
-            soapXml?.execute("검색어")
+            soapXml.execute("검색어") // "검색어"는 실제 검색어로 교체
         } catch (e: Exception) {
-            soapXml?.cancel(true)
             textView1.text = "Error"
             e.printStackTrace()
         }

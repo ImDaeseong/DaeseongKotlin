@@ -1,14 +1,17 @@
 package com.daeseong.util
 
-import android.os.AsyncTask
 import android.util.Log
 import android.widget.TextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ksoap2.SoapEnvelope
 import org.ksoap2.serialization.SoapObject
 import org.ksoap2.serialization.SoapSerializationEnvelope
 import org.ksoap2.transport.HttpTransportSE
 
-class SoapXml(private val textView: TextView) : AsyncTask<String?, Void?, String?>() {
+class SoapXml(private val textView: TextView) {
 
     companion object {
         private const val TAG = "SoapXml"
@@ -18,41 +21,35 @@ class SoapXml(private val textView: TextView) : AsyncTask<String?, Void?, String
         private const val SOAP_ACTION = "http://www.daeseong.com/findUserList"
     }
 
-    private var sResult: String? = null
-
-    override fun doInBackground(vararg params: String?): String? {
-
-        val soapObject = SoapObject(NAME_SPACE, METHOD_NAME)
-        soapObject.addProperty("keyword", params[0]) //파라미터 추가
-
-        val soapSerializationEnvelope = SoapSerializationEnvelope(SoapEnvelope.VER11)
-        soapSerializationEnvelope.dotNet = true //닷넷 사용 유무
-        soapSerializationEnvelope.setOutputSoapObject(soapObject)
-
-        val httpTransportSE = HttpTransportSE(SOAP_URL)
-
-        try {
-            httpTransportSE.call(SOAP_ACTION, soapSerializationEnvelope)
-
-            val soapbody = soapSerializationEnvelope.bodyIn as SoapObject
-            sResult = soapbody.toString()
-
-        } catch (ex: Exception) {
-            Log.e(TAG, "Exception: ${ex.message}")
-        }
-
-        return sResult
-    }
-
-    override fun onPostExecute(sResult: String?) {
-        super.onPostExecute(sResult)
-
-        try {
-            sResult?.let {
+    fun execute(keyword: String?) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                callSoapWebService(keyword)
+            }
+            result?.let {
                 textView.text = it
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        }
+    }
+
+    private suspend fun callSoapWebService(keyword: String?): String? {
+        val soapObject = SoapObject(NAME_SPACE, METHOD_NAME).apply {
+            addProperty("keyword", keyword) // 파라미터 추가
+        }
+
+        val envelope = SoapSerializationEnvelope(SoapEnvelope.VER11).apply {
+            dotNet = true // 닷넷 사용 유무
+            setOutputSoapObject(soapObject)
+        }
+
+        return try {
+            val httpTransportSE = HttpTransportSE(SOAP_URL)
+            httpTransportSE.call(SOAP_ACTION, envelope)
+
+            (envelope.bodyIn as? SoapObject)?.toString()
+        } catch (ex: Exception) {
+            Log.e(TAG, "Exception: ${ex.message}")
+            null
         }
     }
 }
