@@ -2,20 +2,19 @@ package com.daeseong.realm_test
 
 import android.app.Application
 import android.content.res.Configuration
-import io.realm.Realm
-import io.realm.RealmConfiguration
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
 
-class MyApplicaton : Application() {
+class MyApplication : Application() {
 
     companion object {
+        private lateinit var mInstance: MyApplication
 
-        private lateinit var mInstance: MyApplicaton
-
-        fun getInstance(): MyApplicaton {
+        fun getInstance(): MyApplication {
             return mInstance
         }
 
-        private var realm: Realm? = null
+        private lateinit var realmConfiguration: RealmConfiguration
     }
 
     override fun onCreate() {
@@ -28,18 +27,16 @@ class MyApplicaton : Application() {
         super.onConfigurationChanged(newConfig)
     }
 
+    // Realm 초기화 함수
     private fun initRealm() {
-        Realm.init(this)
-        val realmConfiguration = RealmConfiguration.Builder()
-            .allowWritesOnUiThread(true) // UI Thread realm 접근 가능
+        realmConfiguration = RealmConfiguration.Builder(schema = setOf(Lotto::class))
+            .name("Lotto") // 데이터베이스 이름
             .deleteRealmIfMigrationNeeded() // db 변경사항 있을시 저장 데이터 모두 삭제
-            .name("Lotto")
             .build()
-        Realm.setDefaultConfiguration(realmConfiguration)
-        realm = Realm.getInstance(realmConfiguration)
     }
 
     fun getRealm(): Realm {
-        return realm!!
+        // Realm Kotlin에서는 매번 새로운 Realm 인스턴스를 생성하는 것이 권장
+        return Realm.open(realmConfiguration)
     }
 }

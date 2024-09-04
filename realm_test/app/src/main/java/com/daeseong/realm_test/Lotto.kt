@@ -1,18 +1,18 @@
 package com.daeseong.realm_test
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
-open class Lotto : RealmObject() {
+class Lotto : RealmObject {
     @PrimaryKey
-    var _rIndex = 0
+    var _rIndex: Int = 0
 
     var date: String? = null
-    var part1 = 0
-    var part2 = 0
-    var part3 = 0
-    var part4 = 0
-    var part5 = 0
-    var part6 = 0
-    var bonus = 0
+    var part1: Int = 0
+    var part2: Int = 0
+    var part3: Int = 0
+    var part4: Int = 0
+    var part5: Int = 0
+    var part6: Int = 0
+    var bonus: Int = 0
 }
