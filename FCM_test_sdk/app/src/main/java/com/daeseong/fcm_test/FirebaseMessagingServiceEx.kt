@@ -14,24 +14,25 @@ class FirebaseMessagingServiceEx : FirebaseMessagingService() {
 
     private val tag = FirebaseMessagingServiceEx::class.java.simpleName
 
-    lateinit var sTitle:String
-    lateinit var SMsg:String
+    //lateinit var sTitle:String
+    //lateinit var SMsg:String
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
+        Log.e(tag, "onMessageReceived: $remoteMessage")
+
         try {
 
-            if (remoteMessage.data.isNotEmpty()) {
-                Log.e(tag, "getData: " + remoteMessage.notification)
-            }
+            val sTitle = remoteMessage.notification?.title ?: ""
+            val SMsg = remoteMessage.notification?.body ?: ""
 
-            if (remoteMessage.notification != null) {
+            Log.d(tag, "sTitle: $sTitle")
+            Log.d(tag, "SMsg: $SMsg")
 
-                sTitle = remoteMessage.notification?.title.toString()
-                SMsg = remoteMessage.notification?.body.toString()
-                Log.e(tag, "getTitle:$SMsg")
-                Log.e(tag, "getBody:$SMsg")
+            if (remoteMessage.data.isEmpty()) {
                 sendNotification(sTitle, SMsg)
+            } else {
+                sendNotification(sTitle, SMsg, remoteMessage.data)
             }
 
         } catch (ex: Exception) {
@@ -39,7 +40,20 @@ class FirebaseMessagingServiceEx : FirebaseMessagingService() {
         }
     }
 
-    private fun sendNotification(sTitle: String, sMessage: String) {
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Log.e(tag, "onNewToken: $token")
+    }
+
+    private fun sendNotification(sTitle: String, sMessage: String, data: Map<String, String>? = null) {
+
+        data?.let {
+
+            Log.e(tag, "data: $it")
+
+            it["param1"]?.let { param1 -> Log.e(tag, "param1: $param1") }
+            it["param2"]?.let { param2 -> Log.e(tag, "param2: $param2") }
+        }
 
         val intent = Intent(this, PushActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
