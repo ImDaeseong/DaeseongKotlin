@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import HttpUtilOKObj
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -107,5 +108,49 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun getDataResult() {
+
+        val sUrl = "https://nid.naver.com/nidlogin.login"
+
+        HttpUtilOKObj.getDataResult(sUrl, object : Callback{
+
+            override fun onResponse(call: Call, response: Response) {
+
+                if (response.isSuccessful) {
+
+                } else {
+
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e(tag, e.message.toString());
+            }
+        })
+    }
+
+    private fun sendDataResult() {
+
+        val sUrl = "https://nid.naver.com/nidlogin.login"
+        val sParam : String = String.format("{\"id\":\"%s\",\"password\":\"%s\"}", "id", "password")
+
+        HttpUtilOKObj.sendDataResult(sUrl, sParam, object : Callback{
+
+            override fun onResponse(call: Call, response: Response) {
+
+                if (response.isSuccessful) {
+
+                } else {
+
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e(tag, e.message.toString());
+            }
+        })
+
     }
 }
