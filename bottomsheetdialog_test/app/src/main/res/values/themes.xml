@@ -53,5 +53,9 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="BottomPopupSlideTheme">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
 
 </resources>

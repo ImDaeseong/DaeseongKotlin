@@ -13,6 +13,8 @@ import androidx.core.animation.addListener
 
 class Main9Activity : AppCompatActivity() {
 
+    private val tag = Main9Activity::class.java.simpleName
+
     // UI 요소
     private lateinit var bottomSheet: ConstraintLayout
     private lateinit var button1: Button
