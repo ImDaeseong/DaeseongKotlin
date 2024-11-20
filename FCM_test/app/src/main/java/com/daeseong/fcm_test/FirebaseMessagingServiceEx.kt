@@ -23,16 +23,16 @@ class FirebaseMessagingServiceEx : FirebaseMessagingService() {
 
         try {
 
-            if (message.data.isNotEmpty()) {
-                Log.d(tag, "데이터 메시지: ${message.data}")
-            }
-
             if (message.notification != null) {
                 sTitle = message.notification?.title.toString()
                 SMsg = message.notification?.body.toString()
-                Log.e(tag, "getTitle:$SMsg")
-                Log.e(tag, "getBody:$SMsg")
-                sendNotification(sTitle, SMsg)
+                Log.e(tag, "sTitle:$sTitle")
+                Log.e(tag, "SMsg:$SMsg")
+            }
+
+            if (message.data.isNotEmpty()) {
+                Log.e(tag, "데이터 메시지: ${message.data}")
+                sendNotification(message)
             }
 
         } catch (ex: Exception) {
@@ -40,7 +40,11 @@ class FirebaseMessagingServiceEx : FirebaseMessagingService() {
         }
     }
 
-    private fun sendNotification(title: String, message: String) {
+    private fun sendNotification(message: RemoteMessage) {
+
+        val data: Map<String, String> = message.getData()
+        Log.e(tag, "data: $data")
+
 
         //클릭시 호출
         val intent = Intent(this, PushActivity::class.java)
@@ -48,8 +52,8 @@ class FirebaseMessagingServiceEx : FirebaseMessagingService() {
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_launcher_background)  // 실제 앱 아이콘
-            .setContentTitle(title)
-            .setContentText(message)
+            .setContentTitle(sTitle)
+            .setContentText(SMsg)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)

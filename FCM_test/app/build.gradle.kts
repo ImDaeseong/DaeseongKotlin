@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
+    id("com.google.gms.google-services") version "4.4.2" apply false
+    id("kotlin-kapt")
 }
 
 android {
@@ -64,9 +64,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //fcm
-    implementation (libs.firebase.crashlytics.ktx)
-    implementation (libs.firebase.inappmessaging.display.ktx)
-    implementation (libs.firebase.messaging.ktx)
-    implementation(platform(libs.google.firebase.bom))
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.messaging)
 
 }
+apply(plugin = "com.google.gms.google-services")

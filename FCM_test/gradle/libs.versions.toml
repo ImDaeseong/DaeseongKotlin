@@ -1,11 +1,7 @@
 [versions]
 agp = "8.5.2"
-firebaseAnalyticsKtx = "22.1.0"
-firebaseBom = "33.2.0"
-firebaseCrashlyticsKtx = "19.0.3"
-firebaseInappmessagingDisplayKtx = "21.0.0"
-firebaseMessaging = "24.0.1"
-firebaseMessagingKtx = "24.0.1"
+firebaseBom = "33.6.0"
+firebaseMessagingKtx = "24.1.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -13,19 +9,14 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
-activity = "1.9.1"
-constraintlayout = "2.1.4"
+activity = "1.9.3"
+constraintlayout = "2.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
-firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebaseAnalyticsKtx" }
-firebase-bom = { module = "com.google.firebase:firebase-bom" }
-firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
-firebase-inappmessaging-display-ktx = { module = "com.google.firebase:firebase-inappmessaging-display-ktx", version.ref = "firebaseInappmessagingDisplayKtx" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
-google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -37,4 +28,3 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
