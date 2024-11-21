@@ -64,8 +64,12 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //fcm
-    implementation(libs.firebase.bom)
-    implementation(libs.firebase.messaging)
+    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.google.firebase:firebase-messaging")
+
+    //fcm
+    //implementation(libs.firebase.bom)
+    //implementation(libs.firebase.messaging)
 
 }
 apply(plugin = "com.google.gms.google-services")

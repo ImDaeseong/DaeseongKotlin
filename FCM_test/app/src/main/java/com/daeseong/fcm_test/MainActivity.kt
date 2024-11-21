@@ -20,14 +20,14 @@ class MainActivity : AppCompatActivity() {
     private val tag = MainActivity::class.java.simpleName
 
     companion object {
-        private var mainActivity: MainActivity? = null
+        private var instance: MainActivity? = null
 
-        fun getMainActivity(): MainActivity? {
-            return mainActivity
+        fun getInstance(): MainActivity? {
+            return instance
         }
 
-        fun setMainActivity(activity: MainActivity?) {
-            mainActivity = activity
+        private fun setInstance(activity: MainActivity) {
+            instance = activity
         }
     }
 
@@ -49,15 +49,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        setMainActivity(this)
+        setInstance(this)
+
+        setContentView(R.layout.activity_main)
 
         init()
 
         initBadge()
 
         initPermission()
+
+        checkPushMessage()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
@@ -74,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        setMainActivity(null)
+        instance = null
     }
 
     private fun init() {
@@ -117,5 +120,16 @@ class MainActivity : AppCompatActivity() {
         }
         sendBroadcast(intent)
         SharedPreferencesUtil.setValue(this, "BADGE", badgeCount)
+    }
+
+    private fun checkPushMessage() {
+
+        intent.extras?.let { pushData ->
+            val type = pushData.getString("type").orEmpty()
+            val url = pushData.getString("url").orEmpty()
+
+            Log.e(tag, "type: $type")
+            Log.e(tag, "url: $url")
+        }
     }
 }

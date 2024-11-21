@@ -15,41 +15,53 @@ class FirebaseMessagingServiceEx : FirebaseMessagingService() {
 
     private val channelId by lazy { getString(R.string.default_notification_channel_id) }
 
-    lateinit var sTitle:String
-    lateinit var SMsg:String
-
+    //앱이 실행중인 상태
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        try {
-
-            if (message.notification != null) {
-                sTitle = message.notification?.title.toString()
-                SMsg = message.notification?.body.toString()
-                Log.e(tag, "sTitle:$sTitle")
-                Log.e(tag, "SMsg:$SMsg")
-            }
+        runCatching {
 
             if (message.data.isNotEmpty()) {
                 Log.e(tag, "데이터 메시지: ${message.data}")
-                sendNotification(message)
+                sendNotification(message.data)
             }
 
-        } catch (ex: Exception) {
-            Log.e(tag, ex.message.toString())
+        }.onFailure { exception ->
+            Log.e(tag, "Error", exception)
         }
     }
 
-    private fun sendNotification(message: RemoteMessage) {
+    //앱이 완전히 꺼진 상태에서 푸시메시지 전달받기
+    override fun handleIntent(intent: Intent?) {
 
-        val data: Map<String, String> = message.getData()
+        intent?.extras?.let { bundle ->
+            val remoteMessage = RemoteMessage(bundle)
+            if (remoteMessage.data.isNotEmpty()) {
+                sendNotification(remoteMessage.data)
+            }
+        }
+    }
+
+    private fun sendNotification(data: Map<String, String>) {
+
+        //val data: Map<String, String> = message.getData()
         Log.e(tag, "data: $data")
 
+        val sTitle = data["title"].orEmpty()
+        val SMsg = data["body"].orEmpty()
 
-        //클릭시 호출
-        val intent = Intent(this, PushActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this,0, intent,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val mainActivityInstance = MainActivity.getInstance()
+        val intent = mainActivityInstance?.let {
+            Intent(this, PushActivity::class.java)
+        } ?: Intent(this, MainActivity::class.java)
 
+        intent.apply {
+            putExtra("type", "1")
+            putExtra("url", "https://m.naver.com")
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_launcher_background)  // 실제 앱 아이콘
             .setContentTitle(sTitle)
@@ -64,17 +76,18 @@ class FirebaseMessagingServiceEx : FirebaseMessagingService() {
         initBadge()
     }
 
-
     private fun initBadge() {
 
-        val isRunning = MainActivity.getMainActivity() != null
+        val mainActivityInstance = MainActivity.getInstance()
 
-        val badgeCount = if (isRunning) {
-            //Log.e(tag, "MainActivity가 실행 중입니다. 뱃지 개수는 0")
-            0
-        } else {
+        val badgeCount = if (mainActivityInstance != null) {
+
             //Log.e(tag, "MainActivity가 백그라운드 상태입니다. 뱃지 개수 1 증가")
             SharedPreferencesUtil.getValue(this, "BADGE", 0) + 1
+
+        } else {
+            //Log.e(tag, "MainActivity가 실행 중입니다. 뱃지 개수는 0")
+            0
         }
 
         val intent = Intent("android.intent.action.BADGE_COUNT_UPDATE").apply {
@@ -84,7 +97,6 @@ class FirebaseMessagingServiceEx : FirebaseMessagingService() {
         }
         sendBroadcast(intent)
         SharedPreferencesUtil.setValue(this, "BADGE", badgeCount)
-
     }
 
 }

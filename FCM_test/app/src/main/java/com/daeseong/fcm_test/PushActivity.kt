@@ -1,5 +1,6 @@
 package com.daeseong.fcm_test
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -19,5 +20,22 @@ class PushActivity : AppCompatActivity() {
             finish()
         }
 
+        getPushData()
+
+        finish()
+    }
+
+    private fun getPushData() {
+
+        intent.extras?.let { pushData ->
+            val type = pushData.getString("type").orEmpty()
+            val url = pushData.getString("url").orEmpty()
+
+            val intent = Intent(this, MainActivity::class.java).apply {
+                putExtra("type", type)
+                putExtra("url", url)
+            }
+            startActivity(intent)
+        }
     }
 }
