@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button2: Button
     private lateinit var button3: Button
     private lateinit var button4: Button
+    private lateinit var button5: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +73,13 @@ class MainActivity : AppCompatActivity() {
                     sData = "전달할 추가 데이터"
                 )
             }
+        }
 
+        button5 = findViewById(R.id.button5)
+        button5.setOnClickListener {
+
+            //바로가기 비활성화
+            ShortCutUtil.removePinnedShortcut(this, "testID123")
         }
     }
 

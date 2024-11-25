@@ -26,17 +26,31 @@ object ShortCutUtil {
 
         val sShortcutId = "${context.packageName}_$sID"
 
-        // 이미 고정된 바로가기를 확인
-        val pinnedShortcuts = getPinnedShortcuts(context)
-        val existingShortcut = pinnedShortcuts.find {
-            it.id == sShortcutId
-        }
-
         //이미 존재하는지 여부 체크
         var bUpdate = false
-        if (existingShortcut != null) {
+        var existingShortcut: ShortcutInfo? = null
+
+        // 이미 고정된 바로가기를 확인
+        val pinnedShortcuts = getPinnedShortcuts(context)
+        for (shortcut in pinnedShortcuts) {
+            if (shortcut.id == sShortcutId) {
+                bUpdate = true
+                existingShortcut = shortcut
+                break
+            }
+        }
+
+        if (bUpdate) {
             Log.e(tag, "바로가기 이미 존재: $sShortcutId")
-            bUpdate = true
+
+            val shortcutManager = context.getSystemService(ShortcutManager::class.java)
+            if (existingShortcut?.isEnabled == false) {
+                try {
+                    Log.e(tag, "바로가기가 비활성화된 상태라면 활성화: $sShortcutId")
+                    shortcutManager?.enableShortcuts(listOf(sShortcutId))
+                } catch (ex: Exception) {
+                }
+            }
         }
 
         // 실행할 인텐트 생성
@@ -59,13 +73,11 @@ object ShortCutUtil {
         if (bUpdate) {
 
             Log.e(tag, "바로가기 업데이트: $sShortcutId")
-
             ShortcutManagerCompat.updateShortcuts(context, listOf(shortcutInfo ))
 
         } else {
 
             Log.e(tag, "바로가기 생성: $sShortcutId")
-
             ShortcutManagerCompat.requestPinShortcut(context, shortcutInfo, null)
         }
     }
@@ -81,5 +93,29 @@ object ShortCutUtil {
         val shortcutManager = context.getSystemService(ShortcutManager::class.java)
         val pinnedShortcuts = shortcutManager?.pinnedShortcuts ?: emptyList()
         return pinnedShortcuts.any { it.id == "${context.packageName}_$sID" }
+    }
+
+    //바로가기 비활성화 -보안상의 이유로 앱에서 바탕화면의 바로가기를 직접 삭제하는 것은 제한
+    fun removePinnedShortcut(context: Context, sID: String) {
+
+        val shortcutId = "${context.packageName}_$sID"
+
+        val shortcutManager = context.getSystemService(ShortcutManager::class.java)
+
+        if (isPinnedShortcuts(context, sID)) {
+
+            val shortcutsToRemove = listOf(shortcutId)
+
+            try {
+
+                // 바로가기 비활성화
+                shortcutManager?.apply {
+                    removeDynamicShortcuts(shortcutsToRemove)
+                    disableShortcuts(shortcutsToRemove)
+                }
+
+            } catch (e: Exception) {
+            }
+        }
     }
 }
