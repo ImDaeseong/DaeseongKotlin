@@ -21,6 +21,7 @@ class SplashActivity : AppCompatActivity() {
 
         val sPackageName = intent.getStringExtra("pkg")
         val sID = intent.getStringExtra("userId")
+        val sUserData = intent.getStringExtra("userData")
 
         sPackageName?.let { pkg ->
             if (pkg.isNotEmpty()) {
@@ -33,6 +34,13 @@ class SplashActivity : AppCompatActivity() {
             if (id.isNotEmpty()) {
                 Log.e(tag, "sID:$id")
                 Toast.makeText(this, id, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        sUserData?.let { userData ->
+            if (userData.isNotEmpty()) {
+                Log.e(tag, "userData:$userData")
+                Toast.makeText(this, userData, Toast.LENGTH_LONG).show()
             }
         }
 

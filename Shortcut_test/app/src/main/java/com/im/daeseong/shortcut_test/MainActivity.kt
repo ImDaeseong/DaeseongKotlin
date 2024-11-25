@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button1: Button
     private lateinit var button2: Button
     private lateinit var button3: Button
+    private lateinit var button4: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,27 @@ class MainActivity : AppCompatActivity() {
                 Log.e(tag, id.toString())
                 //Log.e(tag, id.id)
             }
+        }
+
+        button4 = findViewById(R.id.button4)
+        button4.setOnClickListener {
+
+            ShortCutUtil.checkShortCut(
+                context = this,
+                sPackageName = packageName,
+                sLabel = "바로가기",
+                sID = "testID123",
+                sData = "전달할 추가 데이터"
+            )
+
+            ShortCutUtil.checkShortCut(
+                context = this,
+                sPackageName = packageName,
+                sLabel = "바로가기 업데이트",
+                sID = "testID123",
+                sData = "전달할 추가 데이터 업데이트"
+            )
+
         }
     }
 
@@ -78,6 +100,7 @@ class MainActivity : AppCompatActivity() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra("pkg", sPackageName)
             putExtra("userId", sID)
+            putExtra("userData", "바로가기 정보 생성")
         }
 
         // 바로가기 정보 생성
@@ -114,6 +137,7 @@ class MainActivity : AppCompatActivity() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra("pkg", sPackageName + "업데이트")
             putExtra("userId", sID + "업데이트")
+            putExtra("userData", "바로가기 정보 업데이트")
         }
 
         // 바로가기 정보 생성
