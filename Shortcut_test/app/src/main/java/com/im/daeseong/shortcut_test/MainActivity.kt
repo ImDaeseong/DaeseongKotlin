@@ -50,21 +50,28 @@ class MainActivity : AppCompatActivity() {
         button4 = findViewById(R.id.button4)
         button4.setOnClickListener {
 
-            ShortCutUtil.checkShortCut(
-                context = this,
-                sPackageName = packageName,
-                sLabel = "바로가기",
-                sID = "testID123",
-                sData = "전달할 추가 데이터"
-            )
+            if( ShortCutUtil.isPinnedShortcuts(this, "testID123") ) {
 
-            ShortCutUtil.checkShortCut(
-                context = this,
-                sPackageName = packageName,
-                sLabel = "바로가기 업데이트",
-                sID = "testID123",
-                sData = "전달할 추가 데이터 업데이트"
-            )
+                //Log.e(tag, "바로가기 이미 존재")
+
+                ShortCutUtil.checkShortCut(
+                    context = this,
+                    sLabel = "바로가기 업데이트",
+                    sID = "testID123",
+                    sData = "전달할 추가 데이터 업데이트"
+                )
+
+            } else {
+
+                //Log.e(tag, "바로가기 생성")
+
+                ShortCutUtil.checkShortCut(
+                    context = this,
+                    sLabel = "바로가기",
+                    sID = "testID123",
+                    sData = "전달할 추가 데이터"
+                )
+            }
 
         }
     }

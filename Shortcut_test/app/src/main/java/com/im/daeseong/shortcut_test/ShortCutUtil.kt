@@ -13,18 +13,18 @@ object ShortCutUtil {
 
     private val tag = ShortCutUtil::class.java.simpleName
 
-    fun checkShortCut(context: Context, sPackageName: String, sLabel: String, sID:String, sData:String) {
+    fun checkShortCut(context: Context, sLabel: String, sID:String, sData:String) {
         if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
             Log.e(tag, "홈 화면에 바로가기 지원")
-            createShortCut(context, sPackageName, sLabel, sID, sData)
+            createShortCut(context, sLabel, sID, sData)
         } else {
             Log.e(tag, "홈 화면에 바로가기 미지원")
         }
     }
 
-    private fun createShortCut(context: Context, sPackageName: String, sLabel: String, sID:String, sData:String) {
+    private fun createShortCut(context: Context, sLabel: String, sID:String, sData:String) {
 
-        val sShortcutId = "${sPackageName}_$sID"
+        val sShortcutId = "${context.packageName}_$sID"
 
         // 이미 고정된 바로가기를 확인
         val pinnedShortcuts = getPinnedShortcuts(context)
@@ -43,7 +43,7 @@ object ShortCutUtil {
         val intent = Intent(context, SplashActivity::class.java).apply {
             action = Intent.ACTION_MAIN
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra("pkg", sPackageName)
+            putExtra("pkg", context.packageName)
             putExtra("userId", sID)
             putExtra("userData", sData)
         }
@@ -74,5 +74,12 @@ object ShortCutUtil {
     private fun getPinnedShortcuts(context: Context): List<ShortcutInfo> {
         val shortcutManager = context.getSystemService(ShortcutManager::class.java)
         return shortcutManager?.pinnedShortcuts ?: emptyList()
+    }
+
+    //바로가기 존재 여부
+    fun isPinnedShortcuts(context: Context, sID: String): Boolean {
+        val shortcutManager = context.getSystemService(ShortcutManager::class.java)
+        val pinnedShortcuts = shortcutManager?.pinnedShortcuts ?: emptyList()
+        return pinnedShortcuts.any { it.id == "${context.packageName}_$sID" }
     }
 }
