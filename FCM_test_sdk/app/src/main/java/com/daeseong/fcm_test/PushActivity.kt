@@ -12,20 +12,11 @@ class PushActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_push)
 
-
-        val pushData = intent.extras
-        if (pushData != null) {
-
-            val sTitle = pushData.getString("sTitle")
-            if (sTitle != null) {
-                Log.e(tag, sTitle)
-            }
-
-            val sMessage = pushData.getString("sMessage")
-            if (sMessage != null) {
-                Log.e(tag, sMessage)
-            }
+        intent.extras?.let { pushData ->
+            val text1 = pushData.getString("text1").orEmpty()
+            val text2 = pushData.getString("text2").orEmpty()
+            Log.e(tag, "text1:$text1")
+            Log.e(tag, "text2:$text2")
         }
-
     }
 }
