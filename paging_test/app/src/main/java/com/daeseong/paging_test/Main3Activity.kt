@@ -281,7 +281,7 @@ class Main3Activity : AppCompatActivity() {
                 val i = message.what
 
                 sUrl = String.format("%s&q=%s&page=%d", ConstantsUrl.sUrl2, sSearchkey, i)
-                //Log.e(tag, "sUrl:$sUrl")
+                Log.e(tag, "sUrl:$sUrl")
 
                 sResult = GetStringTask().execute(sUrl)
                 //Log.e(tag, "sResult:$sResult")
