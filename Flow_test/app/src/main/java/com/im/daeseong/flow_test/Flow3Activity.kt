@@ -6,31 +6,25 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
-class Flow1Activity : AppCompatActivity() {
-
-    // OkHttpClient 재사용을 위한 싱글톤
-    object HttpClient {
-        val client = OkHttpClient()
-    }
-
-    private val coroutine = CoroutineScope(Dispatchers.Main)
-
+class Flow3Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
-        setContentView(R.layout.activity_flow1)
+        setContentView(R.layout.activity_flow3)
 
         // 시스템 바 인셋 처리
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -41,12 +35,20 @@ class Flow1Activity : AppCompatActivity() {
 
         val tv1 = findViewById<TextView>(R.id.tv1)
 
-        //CoroutineScope 앱이 종료되지 전까지는 유지
-        coroutine.launch {
+        //lifecycleScope 는 액티비티 종료시 자동 종료
+        lifecycleScope.launch {
 
-            val data = getPages(1, 3)
-            withContext(Dispatchers.Main) {
-                tv1.text = data
+            try {
+
+                val data = getPages(1, 3)
+                withContext(Dispatchers.Main) {
+                    tv1.text = data
+                }
+
+            } catch (e:Exception) {
+                withContext(Dispatchers.Main) {
+                    tv1.text = ""
+                }
             }
 
         }
@@ -55,8 +57,7 @@ class Flow1Activity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        // CoroutineScope 종료 시 취소
-        coroutine.cancel()
+        // lifecycleScope에서 자동으로 취소됨
     }
 
     suspend fun getPages(sStart: Int, sEnd: Int): String {
@@ -75,23 +76,25 @@ class Flow1Activity : AppCompatActivity() {
         return results.toString()
     }
 
-    private fun getData(sUrl: String): String {
-        val request = Request.Builder()
-            .url(sUrl)
-            .build()
+    suspend fun getData(sUrl: String): String {
 
-        return try {
+        return suspendCancellableCoroutine { continuation ->
 
-            val response: Response = HttpClient.client.newCall(request).execute()
-            if (response.isSuccessful) {
-                response.body?.string() ?: ""
-            } else {
-                ""
-            }
+            OkHttpUtil.getDataResult(sUrl, object : Callback {
 
-        } catch (e: IOException) {
-            e.printStackTrace()
-            ""
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        val result = response.body?.string() ?: ""
+                        continuation.resume(result)
+                    } else {
+                        continuation.resumeWithException(Exception(""))
+                    }
+                }
+
+                override fun onFailure(call: Call, e: IOException) {
+                    continuation.resumeWithException(e)
+                }
+            })
         }
     }
 

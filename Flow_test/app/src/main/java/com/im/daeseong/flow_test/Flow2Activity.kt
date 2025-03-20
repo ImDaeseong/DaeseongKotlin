@@ -42,6 +42,7 @@ class Flow2Activity : AppCompatActivity() {
             getPages(1, 3).collect { data ->
                 tv1.append(data)
             }
+
         }
     }
 
@@ -54,6 +55,7 @@ class Flow2Activity : AppCompatActivity() {
     fun getPages(sStart: Int, sEnd: Int): Flow<String> = flow {
 
         for (page in sStart..sEnd) {
+
             val data = withContext(Dispatchers.IO) {
                 getData("https://api.github.com/search/repositories?sort=stars&per_page=10&q=android&page=$page")
             }
@@ -64,18 +66,20 @@ class Flow2Activity : AppCompatActivity() {
     }
 
     private fun getData(sUrl: String): String {
+
         val request = Request.Builder()
             .url(sUrl)
             .build()
 
         return try {
-            val response: Response = HttpClient.client.newCall(request).execute()
 
+            val response: Response = HttpClient.client.newCall(request).execute()
             if (response.isSuccessful) {
                 response.body?.string() ?: ""
             } else {
                 ""
             }
+
         } catch (e: IOException) {
             e.printStackTrace()
             ""

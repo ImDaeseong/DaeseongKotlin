@@ -34,5 +34,10 @@ class MainActivity : AppCompatActivity() {
         button2.setOnClickListener {
             startActivity(Intent(this, Flow2Activity::class.java))
         }
+
+        button3 = findViewById(R.id.button3)
+        button3.setOnClickListener {
+            startActivity(Intent(this, Flow3Activity::class.java))
+        }
     }
 }

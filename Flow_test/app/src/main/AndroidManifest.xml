@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Flow_test"
         tools:targetApi="31">
         <activity
+            android:name=".Flow3Activity"
+            android:exported="false" />
+        <activity
             android:name=".Flow2Activity"
             android:exported="false" />
         <activity
