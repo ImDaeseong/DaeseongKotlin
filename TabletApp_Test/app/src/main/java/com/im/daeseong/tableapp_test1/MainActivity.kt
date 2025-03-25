@@ -1,6 +1,7 @@
 package com.im.daeseong.tableapp_test1
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -24,6 +25,20 @@ class MainActivity : AppCompatActivity() {
         getDimsInfo()
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+            Log.d(tag, "가로 모드에서 레이아웃 변경")
+
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+            Log.d(tag, "세로 모드에서 레이아웃 변경")
+        }
+
+        Log.d(tag, "디스플레이 해상도: ${newConfig.screenWidthDp} x ${newConfig.screenHeightDp}")
+    }
 
     fun getDeviceInfo(context: Context) {
 
