@@ -1,11 +1,13 @@
 package com.im.daeseong.tableapp_test1
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +20,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
+        getAppVersion()
+        getOSVersion()
+        getANDROID()
+        getDeviceName()
 
         getDeviceInfo(this)
         getHardwareInfo()
@@ -38,6 +45,39 @@ class MainActivity : AppCompatActivity() {
         }
 
         Log.d(tag, "디스플레이 해상도: ${newConfig.screenWidthDp} x ${newConfig.screenHeightDp}")
+    }
+
+    fun getAppVersion()  {
+
+        val versionName: String = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getPackageInfo(packageName, 0).versionName.toString()
+        } else {
+            val flags = PackageManager.GET_SIGNING_CERTIFICATES
+            packageManager.getPackageInfo(packageName, flags).versionName.toString()
+        }
+        Log.d(tag, "앱 버전: $versionName")
+    }
+
+    fun getOSVersion() {
+        val osVerSion = "Android : " + Build.VERSION.RELEASE
+        Log.d(tag, "안드로이드 OS: $osVerSion")
+    }
+
+    fun getANDROID() {
+        val androidID = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        Log.d(tag, "IMEI: $androidID")
+    }
+
+    fun getDeviceName() {
+
+        val manufacturer = Build.MANUFACTURER.replaceFirstChar { it.uppercase() }
+        val model = Build.MODEL
+        val deviceName = if (model.startsWith(manufacturer, ignoreCase = true)) {
+            model.replaceFirstChar { it.uppercase() }
+        } else {
+            "$manufacturer $model"
+        }
+        Log.e(tag, "deviceName : $deviceName")
     }
 
     fun getDeviceInfo(context: Context) {
