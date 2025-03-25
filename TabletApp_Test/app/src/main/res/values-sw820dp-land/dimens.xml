@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--12인치 이상 태블릿 대응 가로 모드 -->
+<resources>
+    <dimen name="text_size">28sp</dimen>
+    <dimen name="padding">32dp</dimen>
+    <dimen name="image_size">250dp</dimen>
+    <dimen name="bgimage_size">350dp</dimen>
+</resources>

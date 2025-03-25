@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 8 ~ 10 인치 이상 태블릿  -->
+<resources>
+    <dimen name="text_size">24sp</dimen>
+    <dimen name="padding">24dp</dimen>
+    <dimen name="image_size">200dp</dimen>
+    <dimen name="bgimage_size">300dp</dimen>
+</resources>
