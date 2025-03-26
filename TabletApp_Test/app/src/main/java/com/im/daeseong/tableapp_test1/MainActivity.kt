@@ -30,6 +30,12 @@ class MainActivity : AppCompatActivity() {
         getHardwareInfo()
         getDrawableInfo()
         getDimsInfo()
+
+        if (isTablet(this)) {
+            Log.d(tag, "태블릿")
+        } else {
+            Log.d(tag, "스마트폰")
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -47,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(tag, "디스플레이 해상도: ${newConfig.screenWidthDp} x ${newConfig.screenHeightDp}")
     }
 
-    fun getAppVersion()  {
+    private fun getAppVersion()  {
 
         val versionName: String = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             packageManager.getPackageInfo(packageName, 0).versionName.toString()
@@ -58,17 +64,17 @@ class MainActivity : AppCompatActivity() {
         Log.d(tag, "앱 버전: $versionName")
     }
 
-    fun getOSVersion() {
+    private fun getOSVersion() {
         val osVerSion = "Android : " + Build.VERSION.RELEASE
         Log.d(tag, "안드로이드 OS: $osVerSion")
     }
 
-    fun getANDROID() {
+    private fun getANDROID() {
         val androidID = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         Log.d(tag, "IMEI: $androidID")
     }
 
-    fun getDeviceName() {
+    private fun getDeviceName() {
 
         val manufacturer = Build.MANUFACTURER.replaceFirstChar { it.uppercase() }
         val model = Build.MODEL
@@ -80,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         Log.e(tag, "deviceName : $deviceName")
     }
 
-    fun getDeviceInfo(context: Context) {
+    private fun getDeviceInfo(context: Context) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val windowMetrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
@@ -91,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getHardwareInfo() {
+    private fun getHardwareInfo() {
         val manufacturer = Build.MANUFACTURER
         val model = Build.MODEL
         val device = Build.DEVICE
@@ -105,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(tag, "Android SDK: $sdkVersion")
     }
 
-    fun getDrawableInfo() {
+    private fun getDrawableInfo() {
 
         val bg: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bg)
         val icon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon)
@@ -120,7 +126,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(tag, "icon Size: ${iconWidth}x${iconHeight}")
     }
 
-    fun getDimsInfo() {
+    private fun getDimsInfo() {
 
         val textSize = resources.getDimension(R.dimen.text_size)
         val padding = resources.getDimension(R.dimen.padding)
@@ -132,4 +138,14 @@ class MainActivity : AppCompatActivity() {
         Log.d(tag, "이미지 크기: $imageSize")
         Log.d(tag, "배경 이미지 크기: $bgImageSize")
     }
+
+    private fun isTablet(context: Context): Boolean {
+
+        val config = context.resources.configuration
+
+        return config.smallestScreenWidthDp >= 600 ||
+                (config.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK in
+                        listOf(Configuration.SCREENLAYOUT_SIZE_LARGE, Configuration.SCREENLAYOUT_SIZE_XLARGE))
+    }
+
 }
