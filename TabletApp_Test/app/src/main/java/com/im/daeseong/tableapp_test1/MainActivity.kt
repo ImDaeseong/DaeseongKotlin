@@ -11,10 +11,18 @@ import android.provider.Settings
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.im.daeseong.tableapp_test1.Control.LoadingDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.simpleName
+
+    private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +44,15 @@ class MainActivity : AppCompatActivity() {
         } else {
             Log.d(tag, "스마트폰")
         }
+
+        loadingDialog = LoadingDialog(this)
+        showLoading()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        hideLoading()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -148,4 +165,22 @@ class MainActivity : AppCompatActivity() {
                         listOf(Configuration.SCREENLAYOUT_SIZE_LARGE, Configuration.SCREENLAYOUT_SIZE_XLARGE))
     }
 
+    private fun showLoading() {
+
+        if(!loadingDialog.isShowing()){
+            loadingDialog.show()
+        }
+    }
+
+    private fun hideLoading() {
+
+        lifecycleScope.launch {
+            delay(1000)
+            withContext(Dispatchers.Main) {
+                if(loadingDialog.isShowing()){
+                    loadingDialog.dismiss()
+                }
+            }
+        }
+    }
 }
